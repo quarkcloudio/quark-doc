@@ -1,2 +1,1 @@
-# quark-doc
-quark-doc
+'# Hello VuePress!' 
