@@ -1,7 +1,7 @@
 module.exports = ({
     dest: '../../quarkdoc',
-    title: 'Quark 文档',
-    description: 'quark documents',
+    title: 'Quark',
+    description: '一个基于 Antd + Laravel 的高质量开发框架。',
     head: [
         ['link', { rel: 'icon', href: `/logo.png` }],
         ['link', { rel: 'manifest', href: '/manifest.json' }],
@@ -20,6 +20,7 @@ module.exports = ({
         smoothScroll: true,
         editLinkText: '在 GitHub 上编辑此页',
         lastUpdated: '上次更新',
+        logo: '/logo.png',
         nav: [
             {
                 text: '指南',
@@ -29,16 +30,16 @@ module.exports = ({
         sidebar: {
             '/guide/' : [
                 {
-                    title: '指南',   // 必要的
-                    collapsable: false, // 可选的, 默认值是 true,
+                    title: '指南',
+                    collapsable: false,
                     children: [
                         '',
                         'getting-started'
                     ]
                 },
                 {
-                    title: '深入',   // 必要的
-                    collapsable: false, // 可选的, 默认值是 true,
+                    title: '深入',
+                    collapsable: false,
                     children: [
                         '',
                         'getting-started'
