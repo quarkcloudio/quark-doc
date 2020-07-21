@@ -23,26 +23,47 @@ module.exports = ({
         logo: '/logo.png',
         nav: [
             {
-                text: '指南',
-                link: '/guide/'
+                text: 'CMS文档',
+                link: '/quark-cms/'
+            },
+            {
+                text: 'Admin文档',
+                link: '/quark-admin/'
+            },
+            {
+                text: 'UI文档',
+                link: '/quark-ui/'
             },
         ],
         sidebar: {
-            '/guide/' : [
+            '/quark-cms/' : [
                 {
-                    title: '指南',
+                    title: 'CMS文档',
                     collapsable: false,
                     children: [
                         '',
-                        'getting-started'
+                        'installation'
                     ]
                 },
+            ],
+            '/quark-admin/' : [
                 {
-                    title: '深入',
+                    title: 'Admin文档',
                     collapsable: false,
                     children: [
                         '',
-                        'getting-started'
+                        'installation',
+                        'model-grid'
+                    ]
+                },
+            ],
+            '/quark-ui/' : [
+                {
+                    title: 'UI文档',
+                    collapsable: false,
+                    children: [
+                        '',
+                        'installation'
                     ]
                 },
             ]
