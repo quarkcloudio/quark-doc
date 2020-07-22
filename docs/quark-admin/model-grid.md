@@ -23,30 +23,30 @@ use Quark;
 
 $grid = Quark::grid(new Movie)->title('电影列表');
 
-// 第一列显示id字段，并将这一列设置为可排序列
+//第一列显示id字段，并将这一列设置为可排序列
 $grid->column('id', 'ID')->sortable();
 
-// 第二列显示title字段
+//第二列显示title字段
 $grid->column('title', '标题');
 
-// 第三列显示director字段
+//第三列显示director字段
 $grid->column('director');
 
-// 第四列显示为describe字段
+//第四列显示为describe字段
 $grid->column('describe');
 
-// 第五列显示为rate字段
+//第五列显示为rate字段
 $grid->column('rate');
 
-// 第六列显示released字段
+//第六列显示released字段
 $grid->column('released', '上映?');
 
-// 下面为三个时间字段的列显示
+//下面为三个时间字段的列显示
 $grid->column('release_at');
 $grid->column('created_at');
 $grid->column('updated_at');
 
-// search($callback)方法用来设置表格的搜索框
+//search($callback)方法用来设置表格的搜索框
 $grid->search(function($search) {
 
     $search->where('title', '搜索内容',function ($query) {
@@ -64,7 +64,7 @@ $grid->search(function($search) {
 
 ## 表格添加列
 ``` php
-// 直接通过字段名`username`添加列
+//直接通过字段名`username`添加列
 $grid->column('username', '用户名');
 ```
 
@@ -78,7 +78,17 @@ $grid->column('sex','性别')->using(['1'=>'男','2'=>'女']);
 
 通过下面的调用，会在这一列的每一行文字前面出现一个二维码icon，点击它可以展开一个小弹框，里面会显示这一列值的二维码编码图形
 ``` php
-$grid->column('link','二维码')->qrcode(); // qrcode($content=null,$width=150,$height=150)
+$grid->column('link','二维码')->qrcode(); //qrcode($content=null,$width=150,$height=150)
+```
+
+**显示图片**
+
+默认picture字段保存的是pictures表里面的id。
+``` php
+$grid->column('picture','图片')->image();
+
+//设置服务器和宽高
+$grid->column('picture')->image('http://xxx.com', 100, 100);
 ```
 
 ## 添加数据查询条件
@@ -100,7 +110,7 @@ $grid->model()后面可以直接调用Eloquent的查询方法来给表格数据�
 
 ## 设置每页显示行数
 ``` php
-// 默认为每页20条
+//默认为每页20条
 $grid->paginate(15);
 ```
 
