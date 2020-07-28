@@ -2,7 +2,7 @@
 home: true
 heroImage: /hero.png
 actionText: 快速上手 →
-actionLink: /guide/
+actionLink: /quark-cms/
 features:
 - title: 简洁至上
   details: 借助 Laravel 的优雅，通过富有表达力的代码构建CURD页面。
