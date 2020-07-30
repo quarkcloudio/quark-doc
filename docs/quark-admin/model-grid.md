@@ -304,109 +304,49 @@ $search->where(function ($query) {
 ```
 
 **表单类型**
-text
-表单类型默认是text input，可以设置placeholder：
 
-$filter->equal('column')->placeholder('请输入。。。');
-也可以通过下面的一些方法来限制用户输入格式：
+**text**
 
-select
-$filter->equal('column')->select(['key' => 'value'...]);
+**表单类型默认是text input，可以设置placeholder：**
+``` php
+$search->equal('column')->placeholder('请输入。。。');
+```
 
-// 或者从api获取数据，api的格式参考model-form的select组件
-$filter->equal('column')->select('api/users');
-multipleSelect
-一般用来配合in和notIn两个需要查询数组的查询类型使用，也可以在where类型的查询中使用：
+**也可以通过下面的一些方法来限制用户输入格式：**
 
-$filter->in('column')->multipleSelect(['key' => 'value'...]);
+**select**
 
-// 或者从api获取数据，api的格式参考model-form的multipleSelect组件
-$filter->in('column')->multipleSelect('api/users');
-radio
-比较常见的场景是选择分类
+``` php
+$search->equal('column')->select(['key' => 'value'...]);
+```
 
-$filter->equal('released')->radio([
-    ''   => 'All',
-    0    => 'Unreleased',
-    1    => 'Released',
-]);
-checkbox
-比较常见的场景是配合whereIn来做范围筛选
+**multipleSelect**
 
-$filter->in('gender')->checkbox([
-    'm'    => 'Male',
-    'f'    => 'Female',
-]);
-datetime
-通过日期时间组件来查询，$options的参数和值参考bootstrap-datetimepicker
+**一般用来配合in和notIn两个需要查询数组的查询类型使用，也可以在where类型的查询中使用：**
+``` php
+$search->in('column')->multipleSelect(['key' => 'value'...]);
+```
 
-$filter->equal('column')->datetime($options);
+**datetime**
 
-// `date()` 相当于 `datetime(['format' => 'YYYY-MM-DD'])`
-$filter->equal('column')->date();
-
-// `time()` 相当于 `datetime(['format' => 'HH:mm:ss'])`
-$filter->equal('column')->time();
-
-// `day()` 相当于 `datetime(['format' => 'DD'])`
-$filter->equal('column')->day();
-
-// `month()` 相当于 `datetime(['format' => 'MM'])`
-$filter->equal('column')->month();
-
-// `year()` 相当于 `datetime(['format' => 'YYYY'])`
-$filter->equal('column')->year();
-复杂查询过滤器
-您可以使用$this->input()来触发复杂的自定义查询：
-
-$filter->where(function ($query) {
-    switch ($this->input) {
-        case 'yes':
-            // custom complex query if the 'yes' option is selected
-            $query->has('somerelationship');
-            break;
-        case 'no':
-            $query->doesntHave('somerelationship');
-            break;
-    }
-}, 'Label of the field', 'name_for_url_shortcut')->radio([
-    '' => 'All',
-    'yes' => 'Only with relationship',
-    'no' => 'Only without relationship',
-]);
-多列布局
-since v1.6.0
-
-如果过滤器太多，会把页面拉的很长，将会很影响页面的观感，这个版本将支持过滤器的多列布局, 比如6个过滤器分两列显示
-
-$filter->column(1/2, function ($filter) {
-    $filter->like('title');
-    $filter->between('rate');
-});
-
-$filter->column(1/2, function ($filter) {
-    $filter->equal('created_at')->datetime();
-    $filter->between('updated_at')->datetime();
-    $filter->equal('released')->radio([
-        1 => 'YES',
-        0 => 'NO',
-    ]);
-});
-默认会有一个主键字段的过滤器放在第一列，所有左右各三个过滤器一共6个过滤器
-
-column方法的第一个参数设置列宽度，可以设置为比例1/2或0.5，或者bootstrap的栅格列宽度比如6，如果三列的话可以设置为1/3或者4
+**通过日期时间组件来查询**
+``` php
+$search->equal('column')->datetime();
+```
 
 有时候对同一个字段要设置多中筛选方式，可以通过下面的方式实现
-
-$filter->group('rate', function ($group) {
+``` php
+$search->group('rate', function ($group) {
     $group->gt('大于');
     $group->lt('小于');
     $group->nlt('不小于');
     $group->ngt('不大于');
     $group->equal('等于');
 });
-有下面的几个方法可以调用
+```
 
+有下面的几个方法可以调用
+``` php
 // 等于
 $group->equal();
 
@@ -433,15 +373,167 @@ $group->where();
 
 // like查询
 $group->like();
+```
 
-// like查询
-$group->contains();
+默认搜索表单不是在高级搜索框里面的，用下面的方式可以把它放到高级搜索里面：
+``` php
+// 在`$search`实例上操作
+$search->advanced();
+```
+## 列过滤器
 
-// ilike查询
-$group->ilike();
+这个功能在表头给相应的列设置一个过滤器，可以更方便的根据这一列进行数据表格过滤操作：
+``` php
+$grid->column('status', '状态')->filter([
+    0 => '未知',
+    1 => '已下单',
+    2 => '已付款',
+    3 => '已取消',
+]);
+```
 
-// 以输入的内容开头
-$group->startWith();
+## 行内编辑
+数据表格有一系列方法，来帮助你列表里面直接对数据进行编辑。
 
-// 以输入的内容结尾
-$group->endWith();
+::: tip
+注意：每一个列编辑的设定，需要在form里面有一个相应的field
+:::
+
+editable
+
+用editable方法，可以让你在表格中点击数据，在弹出的对话框里面编辑保存数据，使用方法如下
+
+text输入
+``` php
+$grid->column('title', '标题')->editable();
+```
+
+select选择
+
+第二个参数是select选择的选项
+``` php
+$grid->column('title', '标题')->editable('select', [
+    1 => 'option1',
+    2 => 'option2',
+    3 => 'option3'
+]);
+```
+
+switch开关
+
+注意：在grid中对某字段设置了switch，同时需要在form里面对该字段设置同样的switch
+
+快速将列变成开关组件，使用方法如下：
+``` php
+$grid->column('status','状态')->editable('switch',[
+    'on'  => ['value' => 1, 'text' => '正常'],
+    'off' => ['value' => 0, 'text' => '禁用']
+])->width(100);
+```
+
+## 数据操作
+
+数据表格默认有2个头部操作，新增和刷新，可以通过下面的方式开启它们：
+``` php
+$grid->actions(function($action) {
+
+    $action->button('create', '新增');
+    
+    $action->button('refresh', '刷新');
+});
+```
+
+数据表格默认有3个行操作编辑、查看和删除，可以通过下面的方式开启它们：
+
+menu样式行操作
+``` php
+$grid->column('actions','操作')->width(100)->rowActions(function($rowAction) {
+
+    // 编辑
+    $rowAction->menu('edit', '编辑');
+
+    // 查看
+    $rowAction->menu('show', '显示');
+
+    // 删除
+    $rowAction->menu('delete', '删除')->model(function($model) {
+
+        // 模型操作
+        $model->delete();
+    })->withConfirm('确认要删除吗？','删除后数据将无法恢复，请谨慎操作！'); // 确认框
+});
+```
+
+button样式行操作
+``` php
+$grid->column('actions','操作')->width(360)->rowActions(function($rowAction) {
+
+    $rowAction->button('edit', '编辑')
+    ->type('primary')
+    ->size('small');
+
+    $rowAction->button('show', '显示')
+    ->type('default')
+    ->size('small');
+
+    $rowAction->button('delete', '删除')
+    ->type('default',true)
+    ->size('small')
+    ->model(function($model) {
+        $model->delete();
+    })->withConfirm('确认要删除吗？','删除后数据将无法恢复，请谨慎操作！');
+
+},'button');
+```
+
+使用下面设置批量操作方法
+
+select样式的批量操作
+``` php
+// select样式的批量操作
+$grid->batchActions(function($batch) {
+
+    $batch->option('', '批量操作');
+
+    $batch->option('resume', '启用')->model(function($model) {
+        $model->update(['status'=>1]);
+    });
+
+    $batch->option('forbid', '禁用')->model(function($model) {
+        $model->update(['status'=>0]);
+    });
+
+    $batch->option('delete', '删除')->model(function($model) {
+        $model->delete();
+    })->withConfirm('确认要删除吗？','删除后数据将无法恢复，请谨慎操作！');
+
+})->style('select',['width'=>120]);
+```
+
+button样式的批量操作
+``` php
+// button样式的批量操作
+$grid->batchActions(function($batch) {
+
+    $batch->button('resume', '启用')
+    ->type('default')
+    ->size('small')
+    ->model(function($model) {
+        $model->update(['status'=>1]);
+    });
+
+    $batch->button('forbid', '禁用')
+    ->type('default')
+    ->size('small')
+    ->model(function($model) {
+        $model->update(['status'=>0]);
+    });
+
+    $batch->button('delete', '删除')
+    ->type('default',true)
+    ->size('small')
+    ->model(function($model) {
+        $model->delete();
+    })->withConfirm('确认要删除吗？','删除后数据将无法恢复，请谨慎操作！');
+})->style('button');
+```

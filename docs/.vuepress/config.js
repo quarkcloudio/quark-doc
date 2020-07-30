@@ -53,7 +53,9 @@ module.exports = ({
                     children: [
                         '',
                         'installation',
-                        'model-grid'
+                        'model-grid',
+                        'model-form',
+                        'model-show'
                     ]
                 },
             ],
