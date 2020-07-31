@@ -42,7 +42,12 @@ module.exports = ({
                     collapsable: false,
                     children: [
                         '',
-                        'installation'
+                        'installation',
+                        'tags',
+                        'views',
+                        'tools',
+                        'qa',
+                        'helper',
                     ]
                 },
             ],
