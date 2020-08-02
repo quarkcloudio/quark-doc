@@ -14,9 +14,10 @@ module.exports = ({
         ['meta', { name: 'msapplication-TileColor', content: '#000000' }]
     ],
     themeConfig: {
-        repo: 'https://github.com/quarkcms/quark-doc.git',
+        repo: 'quarkcms/quark-doc',
         repoLabel: 'GitHub',
         editLinks: true,
+        docsDir: 'docs',
         smoothScroll: true,
         editLinkText: '在 GitHub 上编辑此页',
         lastUpdated: '上次更新',
