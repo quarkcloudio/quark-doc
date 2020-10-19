@@ -2,7 +2,7 @@
 
 ## 基于数据模型的表格
 
-Quark::grid()用于生成基于数据模型的表格，下面以movies表为例：
+Quark::table()用于生成基于数据模型的表格，下面以movies表为例：
 ``` sql
 movies
     id          - integer
@@ -21,33 +21,33 @@ movies
 use App\Models\Movie;
 use Quark;
 
-$grid = Quark::grid(new Movie)->title('电影列表');
+$table = Quark::table(new Movie)->title('电影列表');
 
 //第一列显示id字段，并将这一列设置为可排序列
-$grid->column('id', 'ID')->sortable();
+$table->column('id', 'ID')->sortable();
 
 //第二列显示title字段
-$grid->column('title', '标题');
+$table->column('title', '标题');
 
 //第三列显示director字段
-$grid->column('director');
+$table->column('director');
 
 //第四列显示为describe字段
-$grid->column('describe');
+$table->column('describe');
 
 //第五列显示为rate字段
-$grid->column('rate');
+$table->column('rate');
 
 //第六列显示released字段
-$grid->column('released', '上映?');
+$table->column('released', '上映?');
 
 //下面为三个时间字段的列显示
-$grid->column('release_at');
-$grid->column('created_at');
-$grid->column('updated_at');
+$table->column('release_at');
+$table->column('created_at');
+$table->column('updated_at');
 
 //search($callback)方法用来设置表格的搜索框
-$grid->search(function($search) {
+$table->search(function($search) {
 
     $search->where('title', '搜索内容',function ($query) {
         $query->where('title', 'like', "%{input}%");
@@ -65,53 +65,53 @@ $grid->search(function($search) {
 ## 表格添加列
 ``` php
 //直接通过字段名`username`添加列
-$grid->column('username', '用户名');
+$table->column('username', '用户名');
 ```
 
 ## 列的显示
 **内容映射**
 ``` php
-$grid->column('sex','性别')->using(['1'=>'男','2'=>'女']);
+$table->column('sex','性别')->using(['1'=>'男','2'=>'女']);
 ```
 
 **二维码**
 
 通过下面的调用，会在这一列的每一行文字前面出现一个二维码icon，点击它可以展开一个小弹框，里面会显示这一列值的二维码编码图形
 ``` php
-$grid->column('link','二维码')->qrcode(); //qrcode($content=null,$width=150,$height=150)
+$table->column('link','二维码')->qrcode(); //qrcode($content=null,$width=150,$height=150)
 ```
 
 **显示图片**
 
 默认picture字段保存的是pictures表里面的id。
 ``` php
-$grid->column('picture','图片')->image();
+$table->column('picture','图片')->image();
 
 //设置服务器和宽高
-$grid->column('picture')->image('http://xxx.com', 100, 100);
+$table->column('picture')->image('http://xxx.com', 100, 100);
 ```
 
 ## 添加数据查询条件
 默认情况下，表格的数据没有任何查询条件，可以使用model()方法来给当前表格数据添加查询条件：
 ``` php
-$grid->model()->where('id', '>', 100);
+$table->model()->where('id', '>', 100);
 
-$grid->model()->whereIn('id', [1, 2, 3]);
+$table->model()->whereIn('id', [1, 2, 3]);
 
-$grid->model()->whereBetween('votes', [1, 100]);
+$table->model()->whereBetween('votes', [1, 100]);
 
-$grid->model()->whereColumn('updated_at', '>', 'created_at');
+$table->model()->whereColumn('updated_at', '>', 'created_at');
 
-$grid->model()->orderBy('id', 'desc');
+$table->model()->orderBy('id', 'desc');
 
-$grid->model()->take(100);
+$table->model()->take(100);
 ```
-$grid->model()后面可以直接调用Eloquent的查询方法来给表格数据添加查询条件，更多查询方法参考Laravel文档.
+$table->model()后面可以直接调用Eloquent的查询方法来给表格数据添加查询条件，更多查询方法参考Laravel文档.
 
 ## 设置每页显示行数
 ``` php
 //默认为每页20条
-$grid->paginate(15);
+$table->paginate(15);
 ```
 
 ## 关联模型
@@ -148,24 +148,24 @@ class Profile extends Model
 }
 ```
 
-通过下面的代码可以关联在一个grid里面:
+通过下面的代码可以关联在一个table里面:
 ``` php
-$grid = new Grid(new User);
+$table = new table(new User);
 
-$grid->column('id', 'ID')->sortable();
+$table->column('id', 'ID')->sortable();
 
-$grid->column('name');
-$grid->column('email');
+$table->column('name');
+$table->column('email');
 
-$grid->column('profile.age');
-$grid->column('profile.gender');
+$table->column('profile.age');
+$table->column('profile.gender');
 ```
 
 ## 数据查询过滤
-model-grid提供了一系列的方法实现表格数据的查询过滤：
+model-table提供了一系列的方法实现表格数据的查询过滤：
 
 ``` php
-$grid->search(function($search) {
+$table->search(function($search) {
 
     $search->where('title', '搜索内容',function ($query) {
         $query->where('title', 'like', "%{input}%");
@@ -185,8 +185,8 @@ $grid->search(function($search) {
 
 通过点击筛选按钮展开显示，默认是不展开的，用下面的方式可以让它默认展开：
 ``` php
-// 在`$grid`实例上操作
-$grid->expand(true);
+// 在`$table`实例上操作
+$table->expand(true);
 ```
 
 可以把你最常用的查询定义为一个查询范围，它将会出现在筛选按钮的下拉菜单中，下面是几个例子：
@@ -384,7 +384,7 @@ $search->advanced();
 
 这个功能在表头给相应的列设置一个过滤器，可以更方便的根据这一列进行数据表格过滤操作：
 ``` php
-$grid->column('status', '状态')->filter([
+$table->column('status', '状态')->filter([
     0 => '未知',
     1 => '已下单',
     2 => '已付款',
@@ -405,14 +405,14 @@ editable
 
 text输入
 ``` php
-$grid->column('title', '标题')->editable();
+$table->column('title', '标题')->editable();
 ```
 
 select选择
 
 第二个参数是select选择的选项
 ``` php
-$grid->column('title', '标题')->editable('select', [
+$table->column('title', '标题')->editable('select', [
     1 => 'option1',
     2 => 'option2',
     3 => 'option3'
@@ -421,11 +421,11 @@ $grid->column('title', '标题')->editable('select', [
 
 switch开关
 
-注意：在grid中对某字段设置了switch，同时需要在form里面对该字段设置同样的switch
+注意：在table中对某字段设置了switch，同时需要在form里面对该字段设置同样的switch
 
 快速将列变成开关组件，使用方法如下：
 ``` php
-$grid->column('status','状态')->editable('switch',[
+$table->column('status','状态')->editable('switch',[
     'on'  => ['value' => 1, 'text' => '正常'],
     'off' => ['value' => 0, 'text' => '禁用']
 ])->width(100);
@@ -435,7 +435,7 @@ $grid->column('status','状态')->editable('switch',[
 
 数据表格默认有2个头部操作，新增和刷新，可以通过下面的方式开启它们：
 ``` php
-$grid->actions(function($action) {
+$table->actions(function($action) {
 
     $action->button('create', '新增');
     
@@ -447,7 +447,7 @@ $grid->actions(function($action) {
 
 menu样式行操作
 ``` php
-$grid->column('actions','操作')->width(100)->rowActions(function($rowAction) {
+$table->column('actions','操作')->width(100)->rowActions(function($rowAction) {
 
     // 编辑
     $rowAction->menu('edit', '编辑');
@@ -466,7 +466,7 @@ $grid->column('actions','操作')->width(100)->rowActions(function($rowAction) {
 
 button样式行操作
 ``` php
-$grid->column('actions','操作')->width(360)->rowActions(function($rowAction) {
+$table->column('actions','操作')->width(360)->rowActions(function($rowAction) {
 
     $rowAction->button('edit', '编辑')
     ->type('primary')
@@ -491,7 +491,7 @@ $grid->column('actions','操作')->width(360)->rowActions(function($rowAction) {
 select样式的批量操作
 ``` php
 // select样式的批量操作
-$grid->batchActions(function($batch) {
+$table->batchActions(function($batch) {
 
     $batch->option('', '批量操作');
 
@@ -513,7 +513,7 @@ $grid->batchActions(function($batch) {
 button样式的批量操作
 ``` php
 // button样式的批量操作
-$grid->batchActions(function($batch) {
+$table->batchActions(function($batch) {
 
     $batch->button('resume', '启用')
     ->type('default')
