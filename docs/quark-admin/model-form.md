@@ -429,7 +429,7 @@ $form->text('username','用户名')->creationRules(
 更新页面规则，只在更新表单提交时生效
 ``` php
 $form->text('username','用户名')->updateRules(
-    ["unique:admins,username,{{id}}"],
+    ["unique:admins,username,{id}"],
     ['unique'=>'用户名已经存在']
 );
 ```
@@ -439,7 +439,7 @@ $form->text('username','用户名')->updateRules(
 ``` php
 $form->text('username','用户名')
 ->creationRules(["unique:admins"],['unique'=>'用户名已经存在'])
-->updateRules(["unique:admins,username,{{id}}"],['unique'=>'用户名已经存在']);
+->updateRules(["unique:admins,username,{id}"],['unique'=>'用户名已经存在']);
 ```
 
 ## 模型表单回调

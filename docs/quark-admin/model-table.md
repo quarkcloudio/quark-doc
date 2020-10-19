@@ -54,8 +54,7 @@ $table->search(function($search) {
     })->placeholder('电影名称');
 
     $search->between('release_at', '上映时间')
-    ->datetime()
-    ->advanced();
+    ->datetime();
 })->expand(false);
 ```
 
@@ -174,12 +173,10 @@ $table->search(function($search) {
     $search->equal('status', '所选状态')
     ->select([''=>'全部',1=>'正常',2=>'已禁用'])
     ->placeholder('选择状态')
-    ->width(110)
-    ->advanced();
+    ->width(110);
 
     $search->between('created_at', '发布时间')
-    ->datetime()
-    ->advanced();
+    ->datetime();
 });
 ```
 
@@ -375,11 +372,6 @@ $group->where();
 $group->like();
 ```
 
-默认搜索表单不是在高级搜索框里面的，用下面的方式可以把它放到高级搜索里面：
-``` php
-// 在`$search`实例上操作
-$search->advanced();
-```
 ## 列过滤器
 
 这个功能在表头给相应的列设置一个过滤器，可以更方便的根据这一列进行数据表格过滤操作：
