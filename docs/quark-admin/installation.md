@@ -2,11 +2,17 @@
 
 ## 安装QuarkAdmin
 
-需要安装PHP7+ 和 Laravel5.5，首先确保安装好了laravel，并且数据库连接设置正确。
+需要安装PHP7.2+ 和 Laravel6.0，首先确保安装好了laravel，并且数据库连接设置正确。
 
 ``` bash
 # 安装依赖
 composer require quarkcms/quark-admin
+
+# 然后运行下面的命令来发布资源：
+php artisan quarkadmin:publish
+
+# 然后运行下面的命令来加载类库：
+composer dump-autoload
 
 # 然后运行下面的命令完成安装：
 php artisan quarkadmin:install
