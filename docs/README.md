@@ -4,11 +4,11 @@ heroImage: /hero.png
 actionText: 快速上手 →
 actionLink: /quark-cms/
 features:
-- title: 简洁至上
-  details: 借助 Laravel 的优雅，通过富有表达力的代码构建CURD页面。
-- title: Antd+Laravel 驱动
-  details: 开箱即用的高质量 React 组件，享受 Ant Design 的开发体验以及 Laravel 完美生态。
+- title: 简约至上
+  details: 借助 Laravel 的优雅，用简练的代码构建各种不同的管理页面。
+- title: 模块组件化
+  details: Ant Design Pro & Laravel 加持，享受便捷的模块化开发。
 - title: 文档丰富
-  details: 无论新手还是老司机，更清晰更规范的文档与示例都能让您轻松上手。
-footer: MIT Licensed | Copyright © 2020 tangtanglove
+  details: 无论新手还是老司机，清晰规范的文档都能让您快速上手。
+footer: MIT Licensed | Copyright © 2020 QuarkCMS
 ---

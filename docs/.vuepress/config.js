@@ -1,7 +1,7 @@
 module.exports = ({
     dest: '../../quarkdoc',
     title: 'Quark',
-    description: '一个基于 Antd + Laravel 的高质量开发框架。',
+    description: '一款由 Ant Design Pro & Laravel 驱动的开发框架',
     head: [
         ['link', { rel: 'icon', href: `/logo.png` }],
         ['link', { rel: 'manifest', href: '/manifest.json' }],
