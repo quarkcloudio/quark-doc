@@ -243,14 +243,17 @@ $table->model()后面可以直接调用Eloquent的查询方法来给表格数据
 
 ### 设置分页
 ``` php
-//默认为每页10条
+// 默认为每页10条
 $table->paginate(15);
+
+// 根据传参，动态设置每页数量
+$table->paginate(request('pageSize',10));
 ```
 
 ### 关联模型
 一对一，users表和profiles表通过profiles.user_id字段生成一对一关联
 ``` sql
-uers
+users
     id      - integer 
     name    - string
     email   - string
@@ -285,12 +288,6 @@ class Profile extends Model
 ``` php
 $table = new table(new User);
 
-$table->column('id', 'ID')->sortable();
-
-$table->column('name');
-$table->column('email');
-
-$table->column('profile.age');
 $table->column('profile.gender');
 ```
 
