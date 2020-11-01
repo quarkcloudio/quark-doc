@@ -1,76 +1,210 @@
-# 模型表格
+# 表格组件
 
-## 基于数据模型的表格
+## 简介
+通过 QuarkAdmin 的 Table 组件您可以创建一个漂亮、简洁、功能齐全的列表页。每个 Table 组件都可以对应一个「模型」用来与该表交互。你可以通过模型查询数据表中的数据，以及对数据的增、删、改、查。
 
-Quark::table()用于生成基于数据模型的表格，下面以movies表为例：
+**效果预览：**
+![table](./images/table.png)
+## 快速入门
+QuarkAdmin 的各组件初始化相对比较统一，用法如下：
+``` php
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\Link;
+use Quark;
+use QuarkCMS\QuarkAdmin\Http\Controllers\Controller;
+
+class LinkController extends Controller
+{
+    protected function table()
+    {
+        $table = Quark::table(new Link)->title($this->title);
+        ...
+        return $table;
+    }
+}
+```
+在所有Table组件使用的文档里，示例控制器都应继承`QuarkCMS\QuarkAdmin\Http\Controllers\Controller`类，`$table` 是指 `Quark::table()` 得到的实例，这里就不在每个页面单独写了。
+
+
+**<big>下面我们正式开启Table组件的使用旅程：</big>**
+
+第一步、首先我们先创建一张数据表，下面以友情链接（links）表为例：
 ``` sql
-movies
-    id          - integer
-    title       - string
-    director    - integer
-    describe    - string
-    rate        - tinyint
-    released    - enum(0, 1)
-    release_at  - timestamp
-    created_at  - timestamp
-    updated_at  - timestamp
+CREATE TABLE `links` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sort` int(11) DEFAULT '0',
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '标题',
+  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '访问地址',
+  `cover_id` longtext COLLATE utf8mb4_unicode_ci COMMENT '封面图',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-对应的数据模型为App\Models\Movie，用下面的代码生成表movies的数据表格：
+第二步、为对应的 links 数据表创建模型 `App\Models\Link` [示例代码](https://github.com/quarkcms/quark-cms/blob/master/app/Models/Link.php)
+
+第三步、用下面的代码生成友情链接表links的列表页 [示例代码](https://github.com/quarkcms/quark-cms/blob/master/app/Http/Controllers/Admin/LinkController.php#L19)：
 ``` php
-use App\Models\Movie;
+use App\Models\Link;
 use Quark;
 
-$table = Quark::table(new Movie)->title('电影列表');
+$table = Quark::table(new Link)->title($this->title);
+$table->column('id','ID');
+$table->column('title','标题')->editLink();
+$table->column('sort','排序')->sorter()->editable()->width('80');
+$table->column('url','链接');
+$table->column('cover_id','图片')->image();
+$table->column('created_at','添加时间');
+$table->column('status','状态')->editable('switch',[
+    'on'  => ['value' => 1, 'text' => '正常'],
+    'off' => ['value' => 0, 'text' => '禁用']
+])->width(100);
 
-//第一列显示id字段，并将这一列设置为可排序列
-$table->column('id', 'ID')->sortable();
+$table->model()->orderBy('sort', 'desc')->paginate(request('pageSize',10));
+```
+配置好相应的[路由]()、[菜单]()后，点开我们新添加的菜单就可以看到如下页面：
 
-//第二列显示title字段
-$table->column('title', '标题');
+![table](./images/table-link-demo.png)
 
-//第三列显示director字段
-$table->column('director');
+## 基本使用
 
-//第四列显示为describe字段
-$table->column('describe');
+**初始化表格**
 
-//第五列显示为rate字段
-$table->column('rate');
-
-//第六列显示released字段
-$table->column('released', '上映?');
-
-//下面为三个时间字段的列显示
-$table->column('release_at');
-$table->column('created_at');
-$table->column('updated_at');
-
-//search($callback)方法用来设置表格的搜索框
-$table->search(function($search) {
-
-    $search->where('title', '搜索内容',function ($query) {
-        $query->where('title', 'like', "%{input}%");
-    })->placeholder('电影名称');
-
-    $search->between('release_at', '上映时间')
-    ->datetime();
-})->expand(false);
+你可以通过Quark门面快速实例化一个Table对象，如有必要你可以传入一个Model实例，来给表格组件绑定一个模型（注意：绑定模型并不是必须的，这取决于你是否使用了Table组件提供的增、删、改、查等行为操作）
+``` php
+Quark::table(new Link);
 ```
 
-# 基础方法
-模型表格有以下的一些基础方法
+**设置表格标题**
 
-## 表格添加列
+可以通过`title()`方法来设置表格的标题
 ``` php
-//直接通过字段名`username`添加列
-$table->column('username', '用户名');
+$table->title('友情链接');
+```
+
+**设置表格工具栏**
+
+![table](./images/table-link-tools-demo.png)
+
+通过`options()`方法来控制表格的工具栏展示，设为 `false` 时不显示，工具栏默认设置为`[ 'fullScreen' => true, 'reload' => true ,'setting' => true ]`
+``` php
+// 不显示工具栏
+$table->options(false);
+
+// 不显示全屏
+$table->options(['fullScreen' => false, 'reload' => true ,'setting' => true]);
+```
+
+<span id="tableLayout">**设置表格 table-layout 属性**</span>
+
+表格元素的 `table-layout` 属性，设为 `fixed` 表示内容不会影响列的布局，参数：`'-'` | `'auto'` | `'fixed'`；
+
+当列开启[自动缩略](#自动缩略) 时，需要设置 `tableLayout` 属性为 `'fixed'`;
+``` php
+$table->tableLayout('fixed');
+```
+
+**设置表格列值为空时默认显示**
+
+通过`columnEmptyText()`方法来控制表格列值为空时的默认展示，默认设置为`'-'`
+``` php
+// 不显示工具栏
+$table->columnEmptyText('空');
+```
+
+**表格添加列**
+
+通过`column($attribute, $title)`方法来设置表格列的展示、字段绑定，参数`$attribute`为绑定的字段，`$title`为列的标题，更多关于列的操作可以查看下一节 [列的显示](#列的显示)：
+``` php
+$table->column('title', '标题');
+```
+
+**设置表格数据**
+
+如果表格没有绑定模型的话，你可以通过`datasource()`方法来给表格填充数据
+``` php
+$data = [
+  [
+    'id' => 1,
+    'name'=>'John Brown',
+    'age'=> 32,
+    'address'=> 'New York No. 1 Lake Park',
+    'status'=>1,
+  ],
+  [
+    'id' => 2,
+    'name' => 'John Brown',
+    'age'=> 32,
+    'address' => 'New York No. 1 Lake Park',
+    'status'=> 1,
+  ]
+]
+
+$table->datasource($data);
 ```
 
 ## 列的显示
-**内容映射**
+通过`column()`方法来设置列后，我们可以通过`column()`方法返回的实例，来控制列的不同展示：
+
+**列宽**
+
+通过`width()`方法来设置列的宽度
 ``` php
-$table->column('sex','性别')->using(['1'=>'男','2'=>'女']);
+$table->column('sex','性别')->width(100);
+```
+
+**对齐方式**
+
+可以用`align()`方法来设置列的对齐方式，可选 `'left'` | `'right'` | `'center'`，默认为：`'left'`
+``` php
+$table->column('sex','性别')->align('center');
+```
+
+**固定列**
+
+通过`fixed()`方法来设置列是否固定（IE 下无效），可选 true (等效于 left) left right
+``` php
+$table->column('sex','性别')->fixed();
+```
+<span id="自动缩略">**自动缩略**</span>
+
+通过`ellipsis()`方法来控制列内容超出宽度后是否展示缩略，注意当设置自动缩略时需要设置 [tableLayout](#tableLayout) 属性为 `'fixed'`
+``` php
+$table->column('sex','性别')->ellipsis();
+```
+
+**列提示信息**
+
+通过`tooltip()`方法来设置提示一些信息
+
+![table](./images/table-link-column-tooltip.png)
+``` php
+$table->column('url','链接')->tooltip('这是一个提示列');
+```
+
+**重置列的数据显示**
+
+通过`display()`方法，我们可以重置列的数据显示
+``` php
+$table->column('sex','性别')->display(function ($sex) {
+    if($sex == 1) {
+        return '男';
+    } else {
+        return '女';
+    }
+});
+```
+
+**内容映射**
+
+通过`using()`方法，我们可以根据每行数据列的值，来显示`using()`方法的参数中数组下标对应的值
+``` php
+$table->column('sex','性别')->using([1 => '男',2 => '女']);
 ```
 
 **二维码**
