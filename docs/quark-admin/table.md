@@ -3,7 +3,7 @@
 ## 简介
 通过 QuarkAdmin 的 Table 组件您可以创建一个漂亮、简洁、功能齐全的列表页。每个 Table 组件都可以对应一个「模型」用来与该表交互。你可以通过模型查询数据表中的数据，以及对数据的增、删、改、查。
 
-**效果预览：**
+#### 效果预览
 ![table](./images/table.png)
 ## 快速入门
 QuarkAdmin 的各组件初始化相对比较统一，用法如下：
@@ -29,7 +29,7 @@ class LinkController extends Controller
 在所有Table组件使用的文档里，示例控制器都应继承`QuarkCMS\QuarkAdmin\Http\Controllers\Controller`类，`$table` 是指 `Quark::table()` 得到的实例，这里就不在每个页面单独写了。
 
 
-**<big>下面我们正式开启Table组件的使用旅程：</big>**
+#### 下面我们正式开启Table组件的使用旅程：
 
 第一步、首先我们先创建一张数据表，下面以友情链接（links）表为例：
 ``` sql
@@ -73,21 +73,21 @@ $table->model()->orderBy('sort', 'desc')->paginate(request('pageSize',10));
 
 ## 基本使用
 
-**初始化表格**
+### 初始化表格
 
 你可以通过Quark门面快速实例化一个Table对象，如有必要你可以传入一个Model实例，来给表格组件绑定一个模型（注意：绑定模型并不是必须的，这取决于你是否使用了Table组件提供的增、删、改、查等行为操作）
 ``` php
 Quark::table(new Link);
 ```
 
-**设置表格标题**
+### 表格标题
 
 可以通过`title()`方法来设置表格的标题
 ``` php
 $table->title('友情链接');
 ```
 
-**设置表格工具栏**
+### 配置工具栏
 
 ![table](./images/table-link-tools-demo.png)
 
@@ -100,7 +100,7 @@ $table->options(false);
 $table->options(['fullScreen' => false, 'reload' => true ,'setting' => true]);
 ```
 
-<span id="tableLayout">**设置表格 table-layout 属性**</span>
+### 设置Layout属性
 
 表格元素的 `table-layout` 属性，设为 `fixed` 表示内容不会影响列的布局，参数：`'-'` | `'auto'` | `'fixed'`；
 
@@ -109,22 +109,21 @@ $table->options(['fullScreen' => false, 'reload' => true ,'setting' => true]);
 $table->tableLayout('fixed');
 ```
 
-**设置表格列值为空时默认显示**
+### 列值为空时默认显示
 
 通过`columnEmptyText()`方法来控制表格列值为空时的默认展示，默认设置为`'-'`
 ``` php
-// 不显示工具栏
 $table->columnEmptyText('空');
 ```
 
-**表格添加列**
+### 添加列
 
 通过`column($attribute, $title)`方法来设置表格列的展示、字段绑定，参数`$attribute`为绑定的字段，`$title`为列的标题，更多关于列的操作可以查看下一节 [列的显示](#列的显示)：
 ``` php
 $table->column('title', '标题');
 ```
 
-**设置表格数据**
+### 表格数据
 
 如果表格没有绑定模型的话，你可以通过`datasource()`方法来给表格填充数据
 ``` php
@@ -151,34 +150,34 @@ $table->datasource($data);
 ## 列的显示
 通过`column()`方法来设置列后，我们可以通过`column()`方法返回的实例，来控制列的不同展示：
 
-**列宽**
+### 列宽
 
 通过`width()`方法来设置列的宽度
 ``` php
 $table->column('sex','性别')->width(100);
 ```
 
-**对齐方式**
+### 对齐方式
 
 可以用`align()`方法来设置列的对齐方式，可选 `'left'` | `'right'` | `'center'`，默认为：`'left'`
 ``` php
 $table->column('sex','性别')->align('center');
 ```
 
-**固定列**
+### 固定列
 
 通过`fixed()`方法来设置列是否固定（IE 下无效），可选 true (等效于 left) left right
 ``` php
 $table->column('sex','性别')->fixed();
 ```
-<span id="自动缩略">**自动缩略**</span>
+### 自动缩略
 
-通过`ellipsis()`方法来控制列内容超出宽度后是否展示缩略，注意当设置自动缩略时需要设置 [tableLayout](#tableLayout) 属性为 `'fixed'`
+通过`ellipsis()`方法来控制列内容超出宽度后是否展示缩略，注意当设置自动缩略时需要设置 [tableLayout](#设置表格table-layout属性) 属性为 `'fixed'`
 ``` php
 $table->column('sex','性别')->ellipsis();
 ```
 
-**列提示信息**
+### 列提示信息
 
 通过`tooltip()`方法来设置提示一些信息
 
@@ -187,7 +186,7 @@ $table->column('sex','性别')->ellipsis();
 $table->column('url','链接')->tooltip('这是一个提示列');
 ```
 
-**重置列的数据显示**
+### 重置列的数据显示
 
 通过`display()`方法，我们可以重置列的数据显示
 ``` php
@@ -200,21 +199,21 @@ $table->column('sex','性别')->display(function ($sex) {
 });
 ```
 
-**内容映射**
+### 内容映射
 
 通过`using()`方法，我们可以根据每行数据列的值，来显示`using()`方法的参数中数组下标对应的值
 ``` php
 $table->column('sex','性别')->using([1 => '男',2 => '女']);
 ```
 
-**二维码**
+### 二维码
 
 通过下面的调用，会在这一列的每一行文字前面出现一个二维码icon，点击它可以展开一个小弹框，里面会显示这一列值的二维码编码图形
 ``` php
 $table->column('link','二维码')->qrcode(); //qrcode($content=null,$width=150,$height=150)
 ```
 
-**显示图片**
+### 显示图片
 
 默认picture字段保存的是pictures表里面的id。
 ``` php
@@ -224,7 +223,8 @@ $table->column('picture','图片')->image();
 $table->column('picture')->image('http://xxx.com', 100, 100);
 ```
 
-## 添加数据查询条件
+## 数据查询
+### 基本用法
 默认情况下，表格的数据没有任何查询条件，可以使用model()方法来给当前表格数据添加查询条件：
 ``` php
 $table->model()->where('id', '>', 100);
@@ -241,13 +241,13 @@ $table->model()->take(100);
 ```
 $table->model()后面可以直接调用Eloquent的查询方法来给表格数据添加查询条件，更多查询方法参考Laravel文档.
 
-## 设置每页显示行数
+### 设置分页
 ``` php
-//默认为每页20条
+//默认为每页10条
 $table->paginate(15);
 ```
 
-## 关联模型
+### 关联模型
 一对一，users表和profiles表通过profiles.user_id字段生成一对一关联
 ``` sql
 uers
@@ -294,7 +294,7 @@ $table->column('profile.age');
 $table->column('profile.gender');
 ```
 
-## 数据查询过滤
+## 配置搜索栏
 model-table提供了一系列的方法实现表格数据的查询过滤：
 
 ``` php
