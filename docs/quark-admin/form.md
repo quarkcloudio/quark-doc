@@ -56,17 +56,6 @@ $form->display('created_at', '创建时间');
 $form->display('updated_at', '修改时间');
 ```
 
-表单脚部
-使用下面的方法去掉form脚部的元素
-``` php
-
-// 去掉`重置`按钮
-$form->disableReset();
-
-// 去掉`提交`按钮
-$form->disableSubmit();
-```
-
 设置布局
 ``` php
 $layout['labelCol']['span'] = 4;
@@ -77,7 +66,7 @@ $form->layout($layout);
 
 设置表单提交的action
 ``` php
-$form->setAction('admin/users');
+$form->api('admin/users');
 ```
 
 判断当前表单页是创建页面还是更新页面
@@ -123,6 +112,8 @@ $form->text('title')->required();
 如果表单元素太多,会导致form页面太长, 这种情况下可以使用tab来分隔form:
 
 ``` php
+$form = new TabForm(new Movie);
+
 $form->tab('Basic info', function ($form) {
 
     $form->text('username');
@@ -305,7 +296,7 @@ $form->search($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Opt
 $form->search($column[, $label])->mode('multiple')->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 
 // 通过ajax获取数据
-$form->search($column[, $label])->ajax('/api/user/suggest');
+$form->search($column[, $label])->api('/api/user/suggest');
 ```
 
 搜索选择的接口代码示例
@@ -443,8 +434,7 @@ $form->text('username','用户名')
 ```
 
 ## 模型表单回调
-model-form目前提供了下面几个方法来接收回调函数：
-
+Form组件目前提供了下面几个方法来接收回调函数：
 ``` php
 //保存前回调
 $form->saving(function ($form) {
@@ -456,7 +446,7 @@ $form->saving(function ($form) {
 ``` php
 $form->saving(function ($form) {
 
-    dump($form->request['username']);
+    dump($form->data['username']);
 
 });
 ```
@@ -465,7 +455,34 @@ $form->saving(function ($form) {
 ``` php
 $form->saving(function ($form) {
 
-    $form->request['slug'] = $form->request['name'];
+    $form->data['slug'] = $form->data['name'];
     
+});
+```
+
+编辑页面展示前回调：
+``` php
+// 编辑页面展示前回调
+$form->editing(function ($form) {
+    if(isset($form->initialValues['avatar'])) {
+        $form->initialValues['avatar'] = get_picture($form->initialValues['avatar'],0,'all');
+    }
+});
+```
+
+保存数据后回调：
+``` php
+// 保存数据后回调
+$form->saved(function ($form) {
+    if($form->model()) {
+        if($form->isCreating()) {
+            $form->model()->syncRoles(request('role_ids'));
+        } else {
+            Admin::where('id',request('id'))->first()->syncRoles(request('role_ids'));
+        }
+        return success('操作成功！',frontend_url('admin/admin/index'));
+    } else {
+        return error('操作失败，请重试！');
+    }
 });
 ```

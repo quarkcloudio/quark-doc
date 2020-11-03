@@ -285,7 +285,7 @@ $table->column('status','状态')->editable('switch',[
 ```
 
 ## 行为列
-用actions闭包函数，你可以自定义行操作；此方法传入两个参数，`$action`为Action对象的实例,`$row`为当前行的数组
+用actions闭包函数，你可以自定义行操作；此方法传入两个参数，`$action`为Action对象的实例，关于Action的使用方法，你可以在下面 [表格行为](#表格行为) 一节中查看,`$row`为当前行的数组
 
 ### 快速入门
 通过下面的代码你可以快速创建一个操作列：
@@ -328,23 +328,244 @@ $table->column('actions','操作')->width(260)->actions(function($action,$row) {
     });
 });
 ```
-### 行为对象
-下面为行为对象的属性：
+## 表格行为
+`$action` 为 `Action` 对象的实例，下面我们具体介绍一下表格行为的使用：
+
+### 行为样式
+现在表格行为暂时只提供 `A标签`、`按钮`、`下拉菜单` 形式的样式
 
 #### A标签样式的行为
 ``` php
 $action->a('禁用');
 ```
 
-#### 带Popconfirm确认的行为
+#### 按钮样式的行为
 ``` php
-$action->withPopconfirm('确认要禁用数据吗？');
+$action->button('编辑');
 ```
 
 #### 下拉菜单形式的行为
 ``` php
-$action->dropdown('禁用');
+$action->dropdown('更多');
 ```
+
+### A标签行为
+
+#### 跳转链接
+::: danger
+特别注意：当您设置了跳转链接，A标签将自动进行链接跳转，而不是执行行为操作！
+:::
+``` php
+
+// 跳转一个网址
+$action->a('跳转一个连接')
+->href('http://www.ixiaoquan.com')
+->target('_blank');
+
+// 新页面打开一个网址
+$action->a('跳转一个连接')->link('http://www.ixiaoquan.com','_blank');
+
+// 应用内跳转，并传递参数
+$action->a('编辑')->link(frontend_url('admin/article/edit&id={id}'));
+
+// 新页面打开一个接口网址，并带上token
+$action->a('下载文件')->link(backend_url('admin/file/download',true),'_blank');
+```
+
+#### 跳转到新增页面
+``` php
+// 打开新增页面
+$action->a('跳转一个连接')->createLink();
+
+// 新页面打开新增页面
+$action->a('跳转一个连接')->createLink('_blank');
+```
+
+#### 跳转到编辑页面
+``` php
+// 打开编辑页面
+$action->a('跳转一个连接')->editLink();
+
+// 新页面打开编辑页面
+$action->a('跳转一个连接')->editLink('_blank');
+```
+
+#### 跳转到详情页面
+``` php
+// 打开详情页面
+$action->a('跳转一个连接')->showLink();
+
+// 新页面打开详情页面
+$action->a('跳转一个连接')->showLink('_blank');
+```
+
+#### 带Pop确认
+``` php
+$action->a('删除')->withPopconfirm('确认要删除吗？');
+```
+
+#### 带弹框确认
+``` php
+$action->a('删除')->withConfirm('确认要删除吗？','删除后数据将无法恢复，请谨慎操作！');
+```
+
+#### 打开弹框表单
+注意：如果您要打开弹窗表单，需要在相应的接口返回表单渲染数据 [示例代码](https://github.com/quarkcms/quark-cms/blob/master/app/Http/Controllers/Admin/UserController.php#L65)
+``` php
+$action->a('编辑')->modalForm(backend_url('api/admin/config/edit?id=1'));
+```
+
+#### 打开抽屉表单
+注意：如果您要打开抽屉表单，需要在相应的接口返回表单渲染数据 [示例代码](https://github.com/quarkcms/quark-cms/blob/master/app/Http/Controllers/Admin/NavigationController.php#L50)
+``` php
+$action->a('编辑')->drawerForm(backend_url('api/admin/menu/edit?id=1'));
+```
+
+#### 行为执行接口
+在没有设置链接跳转的情况下，点击事件将自动触发对接口的访问，您可以通过`api`方法自定义访问接口，在默认的情况下访问当前控制器的`'api/admin/.../action'`接口
+::: danger
+特别注意：当您设置了跳转链接，将无法触发对接口的访问请求！
+:::
+``` php
+
+// 当链接被点击时，会触发对接口的get访问请求
+$action->a('删除')->api('api/admin/menu/delete?id=1');
+```
+
+#### 行为操作数据
+您可以通过`model`方法，对数据进行管理，当前台触发对`'api/admin/.../action'`接口访问的时候，会对`model`方法进行回调，支持Laravel 提供的Eloquent ORM 来操作各种数据库数据
+::: danger
+特别注意：行操作、批量操作、工具栏操作的行为在参数替换的使用方法上会有些许不同，一定要注意！避免不必要的风险！
+:::
+
+``` php
+
+// 删除全部数据
+$action->a('删除')
+->model()
+->delete();
+
+// 在回调的时候对id进行参数替换，执行带有where条件的操作
+$action->a('禁用')
+->model()
+->where('id','{id}')
+->update(['status'=>0]);
+```
+
+### 按钮行为
+
+#### 按钮行为样式
+按钮行为提供了一些样式配置
+
+``` php
+// 将按钮宽度调整为其父宽度
+$action->button('这是一个按钮')->block();
+
+// 设置危险按钮
+$action->button('这是一个按钮')->danger();
+
+// 按钮失效状态
+$action->button('这是一个按钮')->disabled();
+
+// 幽灵属性，使按钮背景透明
+$action->button('这是一个按钮')->ghost();
+
+// 设置按钮图标
+$action->button('这是一个按钮')->icon('plus-circle');
+
+// 设置按钮形状，可选值为 circle、 round 或者不设
+$action->button('这是一个按钮')->shape('circle');
+
+// 设置按钮类型，primary | ghost | dashed | link | text | default
+$action->button('这是一个按钮')->type('primary');
+
+// 设置按钮类型为primary并且为危险按钮
+$action->button('这是一个按钮')->type('primary',true);
+
+// 设置按钮大小，large | middle | small | default
+$action->button('这是一个按钮')->size('small');
+```
+
+#### 按钮行为其他用法
+按钮行为的 [跳转链接](#跳转链接)、[跳转到新增页面](#跳转到新增页面)、[跳转到编辑页面](#跳转到编辑页面)、[跳转到详情页面](#跳转到详情页面)、[带Pop确认](#带Pop确认)、[带弹框确认](#带弹框确认)、[打开弹框表单](#打开弹框表单)、[打开抽屉表单](#打开抽屉表单)、[行为执行接口](#行为执行接口)、[行为操作数据](#行为操作数据) 等用法与A标签的一样，可以点击相应章节查看，下面是一个简单的示例：
+``` php
+// 跳转一个网址
+$action->button('跳转一个连接')
+->href('http://www.ixiaoquan.com')
+->target('_blank');
+```
+
+### 下拉菜单行为
+#### 快速入门
+``` php
+$action->dropdown('更多')->overlay(function($action) {
+    $action->item('禁用用户')
+    ->withConfirm('确认要禁用吗？','禁用后管理员将无法登陆后台，请谨慎操作！')
+    ->model()
+    ->whereIn('id','{ids}')
+    ->update(['status'=>0]);
+
+    $action->item('启用用户')
+    ->withConfirm('确认要启用吗？','启用后管理员将可以正常登录后台！')
+    ->model()
+    ->whereIn('id','{ids}')
+    ->update(['status'=>1]);
+});
+```
+
+#### 下拉框显示模式
+下拉框显示模式,a|button
+``` php
+// A标签样式的下拉菜单
+$action->dropdown('更多')->mode('a');
+
+// 按钮样式的下拉菜单
+$action->dropdown('更多')->mode('button');
+```
+
+#### 下拉框箭头
+下拉框箭头是否显示
+``` php
+$action->dropdown('更多')->arrow();
+```
+
+#### 菜单是否禁用
+``` php
+$action->dropdown('更多')->disabled();
+```
+
+#### 下拉框的菜单
+``` php
+// 下拉菜单形式的行为
+$action->dropdown('更多')->overlay(function($action) {
+    $action->item('禁用')
+    ->withConfirm('确认要禁用吗？','禁用后将无法使用，请谨慎操作！')
+    ->model()
+    ->whereIn('id','{ids}')
+    ->update(['status'=>0]);
+
+    $action->item('启用')
+    ->withConfirm('确认要启用吗？','启用后可以正常使用！')
+    ->model()
+    ->whereIn('id','{ids}')
+    ->update(['status'=>1]);
+});
+```
+
+#### 菜单弹出位置
+菜单弹出位置：bottomLeft bottomCenter bottomRight topLeft topCenter topRight
+``` php
+$action->dropdown('更多')->placement('bottomLeft');
+```
+
+#### 触发下拉的行为
+触发下拉的行为, 移动端不支持 hover
+``` php
+$action->dropdown('更多')->trigger('hover');
+```
+
+#### 下拉框菜单行为
+下拉框的菜单项触发的行为与A标签的一样，具体用法请查看相应的章节： [跳转链接](#跳转链接)、[跳转到新增页面](#跳转到新增页面)、[跳转到编辑页面](#跳转到编辑页面)、[跳转到详情页面](#跳转到详情页面)、[带Pop确认](#带Pop确认)、[带弹框确认](#带弹框确认)、[打开弹框表单](#打开弹框表单)、[打开抽屉表单](#打开抽屉表单)、[行为执行接口](#行为执行接口)、[行为操作数据](#行为操作数据)
 
 ## 数据查询
 如果在实例化表格对象时绑定了模型，你可以使用 Laravel 提供的Eloquent ORM 来操作各种数据库数据。
@@ -679,54 +900,50 @@ $group->where();
 $group->like();
 ```
 
-使用下面设置批量操作方法
-
-select样式的批量操作
+## 批量操作
+用batchActions闭包函数，你可以自定义批量操作；此方法传入`$action`参数，`$action`为Action对象的实例，关于Action的使用方法，你可以在 [表格行为](#表格行为) 一节中查看
+::: danger
+特别注意：批量操作的行为在参数替换的方法上使用的是`'{ids}'`字符串，一定要注意！避免不必要的风险！
+:::
 ``` php
-// select样式的批量操作
-$table->batchActions(function($batch) {
+$table->batchActions(function($action) {
+    // 跳转默认编辑页面
+    $action->a('批量删除')
+    ->withConfirm('确认要删除吗？','删除后数据将无法恢复，请谨慎操作！')
+    ->model()
+    ->whereIn('id','{ids}')
+    ->delete();
 
-    $batch->option('', '批量操作');
+    // 下拉菜单形式的行为
+    $action->dropdown('更多')->overlay(function($action) {
+        $action->item('禁用菜单')
+        ->withConfirm('确认要禁用吗？','禁用后菜单将无法使用，请谨慎操作！')
+        ->model()
+        ->whereIn('id','{ids}')
+        ->update(['status'=>0]);
 
-    $batch->option('resume', '启用')->model(function($model) {
-        $model->update(['status'=>1]);
+        $action->item('启用菜单')
+        ->withConfirm('确认要启用吗？','启用后菜单可以正常使用！')
+        ->model()
+        ->whereIn('id','{ids}')
+        ->update(['status'=>1]);
     });
-
-    $batch->option('forbid', '禁用')->model(function($model) {
-        $model->update(['status'=>0]);
-    });
-
-    $batch->option('delete', '删除')->model(function($model) {
-        $model->delete();
-    })->withConfirm('确认要删除吗？','删除后数据将无法恢复，请谨慎操作！');
-
-})->style('select',['width'=>120]);
+});
 ```
 
-button样式的批量操作
+## 工具栏
+目前工具栏只支持行为的配置
+### 工具栏行为
+用actions闭包函数，你可以自定义工具栏上的操作；此方法传入`$action`参数，`$action`为Action对象的实例，关于Action的使用方法，你可以在 [表格行为](#表格行为) 一节中查看
+::: danger
+特别注意：工具栏上的行为并不会进行任何形式的参数替换！
+:::
 ``` php
-// button样式的批量操作
-$table->batchActions(function($batch) {
-
-    $batch->button('resume', '启用')
-    ->type('default')
-    ->size('small')
-    ->model(function($model) {
-        $model->update(['status'=>1]);
-    });
-
-    $batch->button('forbid', '禁用')
-    ->type('default')
-    ->size('small')
-    ->model(function($model) {
-        $model->update(['status'=>0]);
-    });
-
-    $batch->button('delete', '删除')
-    ->type('default',true)
-    ->size('small')
-    ->model(function($model) {
-        $model->delete();
-    })->withConfirm('确认要删除吗？','删除后数据将无法恢复，请谨慎操作！');
-})->style('button');
+$table->toolBar()->actions(function($action) {
+    // 跳转默认创建页面
+    $action->button('创建菜单')
+    ->type('primary')
+    ->icon('plus-circle')
+    ->drawerForm(backend_url('api/admin/menu/create'));
+});
 ```
