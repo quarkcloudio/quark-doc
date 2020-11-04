@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = ({
     dest: '../../quarkdoc',
     title: 'Quark',
@@ -80,7 +82,14 @@ module.exports = ({
     },
     plugins: [
         ['@vuepress/back-to-top', true],
-        ['@vuepress/last-updated', true],
+        ['@vuepress/last-updated',{
+                transformer: (timestamp, lang) => {
+                    const moment = require('moment')
+                    moment.locale('zh-cn')
+                    return moment(timestamp).fromNow()
+                }
+            }
+        ],
         ['@vuepress/pwa', {
             serviceWorker: true,
             updatePopup: true
