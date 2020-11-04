@@ -1,96 +1,172 @@
 # 表单组件
 
-## 基于数据模型的表单
-Quark::from()类用于生成基于数据模型的表单，先来个例子，数据库中有movies表
-``` sql
-movies
-    id          - integer
-    title       - string
-    director    - integer
-    describe    - string
-    rate        - tinyint
-    released    - enum(0, 1)
-    release_at  - timestamp
-    created_at  - timestamp
-    updated_at  - timestamp
+## 简介
+通过 QuarkAdmin 的 Form 组件您可以创建一个漂亮、简洁、功能齐全的表单页。每个 Form 组件都可以对应一个「模型」用来与该表交互。你可以通过模型完成表单的提交操作。
+
+#### 效果预览
+![table](./images/form.png)
+
+## 快速入门
+在Table组件章节已经介绍过了，QuarkAdmin 的各组件初始化相对比较统一，我们下面看一下简单的用法：
+``` php
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\Link;
+use Quark;
+use QuarkCMS\QuarkAdmin\Http\Controllers\Controller;
+
+class LinkController extends Controller
+{
+    protected function form()
+    {
+        $form = Quark::form(new Link)->title($this->title);
+        ...
+        return $form;
+    }
+}
 ```
-对应的数据模型为App\Models\Movie，下面的代码可以生成movies的数据表单：
+在所有Form组件使用的文档里，示例控制器都应继承`QuarkCMS\QuarkAdmin\Http\Controllers\Controller`类，`$form` 是指 `Quark::form()` 得到的实例，这里就不在每个页面单独写了。
+
+#### 下面我们正式开启Form组件的使用旅程：
+我们还是以 [Table](./table.html) 组件章节的[友情链接模型](./table.html#下面我们正式开启Table组件的使用旅程)为例，用下面的代码生成友情链接表links的表单页 [示例代码](https://github.com/quarkcms/quark-cms/blob/master/app/Http/Controllers/Admin/LinkController.php#L112)：
 
 ``` php
-use App\Models\Movie;
+use App\Models\Link;
 use Quark;
 
-$form = new Form(new Movie);
-
-// 显示记录id
-$form->id('id', 'ID');
-
-// 添加text类型的input框
-$form->text('title', '电影标题');
-
-$directors = [
-    1 => 'John',
-    2 => 'Smith',
-    3 => 'Kate' ,
-];
-
-$form->select('director', '导演')->options($directors);
-
-// 添加describe的textarea输入框
-$form->textarea('describe', '简介');
-
-// 数字输入框
-$form->number('rate', '打分');
-
-// 添加开关操作
-$form->switch('released','发布？')->options([
+$form = Quark::form(new Link);
+$title = $form->isCreating() ? '创建'.$this->title : '编辑'.$this->title;
+$form->title($title);
+$form->hidden('id');
+$form->text('title','标题')
+->rules(['required','max:200'],['required'=>'标题必须填写','max'=>'标题不能超过200个字符']);
+$form->text('url','链接');
+$form->image('cover_id','封面图')->button('上传图片');
+$form->number('sort','排序')->value(0);
+$form->switch('status','状态')->options([
     'on'  => '正常',
     'off' => '禁用'
 ])->default(true);
 
-// 添加日期时间选择框
-$form->datetime('release_at', '发布时间');
-
-// 两个时间显示
-$form->display('created_at', '创建时间');
-$form->display('updated_at', '修改时间');
 ```
+配置好相应的[路由]()、[菜单]()后，点开我们新添加的菜单就可以看到如下页面：
 
-设置布局
+![form](./images/form-page.png)
+
+## 基本使用
+
+### 初始化表单
+你可以通过Quark门面快速实例化一个Form对象，如有必要你可以传入一个Model实例，来给表格组件绑定一个模型（注意：绑定模型并不是必须的，这取决于你是否使用了Form组件提供的增、改等操作）
 ``` php
-$layout['labelCol']['span'] = 4;
-$layout['wrapperCol']['span'] = 20;
-
-$form->layout($layout);
+Quark::form(new Link);
 ```
 
-设置表单提交的action
+### 表单标题
+可以通过`title()`方法来设置表单的标题
 ``` php
-$form->api('admin/users');
+$form->title('友情链接');
 ```
 
-判断当前表单页是创建页面还是更新页面
+### 表单宽度
+可以通过`width()`方法来设置表单宽度
+``` php
+$form->width(600);
+```
+
+### 是否显示 Label 后面的冒号
+表示是否显示 `label` 后面的冒号 (只有在属性 `layout` 为 `horizontal` 时有效)
+``` php
+$form->colon();
+```
+
+### 表单默认值
+你可以自行给表单赋值
+``` php
+$form->initialValues($data);
+```
+
+### Label标签的文本对齐方式
+label 标签的文本对齐方式,`'left'` | `'right'`
+``` php
+$form->labelAlign('left');
+```
+
+### 当字段被删除时保留字段值
+当字段被删除时保留字段值，默认`true`
+``` php
+$form->preserve();
+```
+
+### 自动滚动到第一个错误字段
+提交失败自动滚动到第一个错误字段，默认`'false'`
+``` php
+$form->scrollToFirstError();
+```
+
+### 设置组件的尺寸
+设置字段组件的尺寸,`'small'` | `'middle'` | `'large'`，默认`'default'`
+``` php
+$form->size('small');
+```
+
+### 表单布局
+表单布局，`'horizontal'` | `'vertical'`，默认为`'horizontal'`竖排
+``` php
+$form->layout('vertical');
+```
+
+### Label 标签布局
+Label 标签布局，同 `<Col>` 组件，设置 `span offset` 值，如 `{span: 3, offset: 12}` 或 `sm: {span: 3, offset: 12}`
+``` php
+$form->labelCol(['span' => 2]);
+```
+
+### wrapperCol
+需要为输入控件设置布局样式时，使用该属性，用法同 `labelCol`
+``` php
+$form->wrapperCol(['span' => 14]);
+```
+
+### 自定义表单提交接口
+你可以自定义表单提交的api接口，，在默认的情况下系统会根据当前控制器自动生成指定的接口
+``` php
+$form->api(backend_url('api/admin/menu/save'));
+```
+
+### 判断是否为创建页面
+判断是否为创建页面，会返回`bool`类型的数据
 ``` php
 $form->isCreating();
-$form->isUpdating();
 ```
 
-# 表单组件
-在model-form中内置了大量的form组件来帮助你快速的构建form表单
-
-## 基础方法
-
-设置保存值
+### 判断是否为编辑页面
+判断是否为编辑页面，会返回`bool`类型的数据
 ``` php
-$form->text('title','标题')->value('text...');
+$form->isEditing();
 ```
 
-设置默认值
+## 表单控件
+在Form组件中内置了大量表单控件来帮助你快速的构建页面
+
+### 基础方法
+
+#### 设置默认值
 ``` php
 $form->text('title','标题')->default('text...');
 ```
 
-设置help信息
+#### 设置保存值
+::: tip
+注意：如果你同时使用`default()`方法和`value()`方法给字段赋值，`value()`方法设置的值会冲掉`default()`设置的值
+:::
+
+``` php
+$form->text('title','标题')->value('text...');
+```
+
+#### 设置提示信息
 ``` php
 $form->text('title','标题')->help('help...');
 
@@ -98,36 +174,27 @@ $form->text('title','标题')->help('help...');
 $form->text('title','标题')->extra('help...');
 ```
 
-设置placeholder
+#### 设置占位符
 ``` php
 $form->text('title')->placeholder('请输入。。。');
 ```
 
-设置必填
+#### 设置必填
 ``` php
 $form->text('title')->required();
 ```
 
-## 标签页表单
-如果表单元素太多,会导致form页面太长, 这种情况下可以使用tab来分隔form:
-
+#### 设置禁用
 ``` php
-$form = new TabForm(new Movie);
-
-$form->tab('Basic info', function ($form) {
-
-    $form->text('username');
-
-})->tab('Profile', function ($form) {
-
-   $form->image('avatar');
-   $form->text('address');
-   $form->text('phone');
-
-});
+$form->text('title')->disabled();
 ```
 
-文本输入
+### 隐藏域（hidden）控件
+``` php
+$form->hidden($column);
+```
+
+### 文本输入（text）控件
 ``` php
 $form->text($column, [$label]);
 
@@ -147,13 +214,13 @@ $form->text($column, [$label])->maxLength(20);
 $form->text($column, [$label])->size('default');
 
 // 可以点击清除图标删除内容
-$form->text($column, [$label])->allowClear('default');
+$form->text($column, [$label])->allowClear();
 
 // 输入框宽度
 $form->text($column, [$label])->width(100);
 ```
 
-Textarea 输入
+### 文本域（textarea）控件
 ``` php
 // 添加占位符
 $form->textarea($column, [$label])->placeholder('text');
@@ -165,29 +232,32 @@ $form->textarea($column[, $label])->rows(10);
 $form->textarea($column, [$label])->width(100);
 ```
 
-Radio选择
+### 单选（radio）控件
 ``` php
 $form->radio($column[, $label])->options(['m' => 'Female', 'f'=> 'Male'])->default('m');
 
 $form->radio($column[, $label])->options(['m' => 'Female', 'f'=> 'Male'])->value('m');
 ```
 
-Checkbox选择
+### 多选（checkbox）控件
 ``` php
 $form->checkbox($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
-Select单选
+### 下拉框（select）控件
 ``` php
+
+// 单选模式
 $form->select($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
-```
 
-Select多选
-``` php
+// 多选模式
 $form->select($column[, $label])->mode('multiple')->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+
+// tags模式
+$form->select($column[, $label])->mode('tags')->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
-日期时间输入
+### 日期时间（datetime）控件
 ``` php
 
 // 设置时间格式，更多格式参考http://momentjs.com/docs/#/displaying/format/
@@ -197,19 +267,19 @@ $form->datetime($column[, $label])->format('YYYY-MM-DD HH:mm:ss');
 $form->datetime($column[, $label])->showTime('HH:mm:ss')->format('YYYY-MM-DD HH:mm:ss');
 ```
 
-时间日期范围选择
+### 时间日期范围（datetimeRange）控件
 $startDateTime、$endDateTime为开始和结束时间日期:
 ``` php
 $form->datetimeRange($column[, $label])->value([$startDateTime,$endDateTime]);
 ```
 
-时间范围选择
+### 时间范围（timeRange）控件
 $startTime、$endTime为开始和结束时间:
 ``` php
 $form->timeRange($column[, $label])->format('HH:mm')->value([$startTime,$endTime]);
 ```
 
-数字输入
+### 数字输入（number）控件
 ``` php
 $form->number($column[, $label]);
 
@@ -223,13 +293,13 @@ $form->number($column[, $label])->min(10);
 $form->number($column[, $label])->step(1);
 ```
 
-富文本编辑
+### 富文本编辑器（editor）
 ``` php
-$form->editor($column[, $label])->height(500);
+$form->editor($column[, $label])->height(500)->width(600);
 ```
 
-开关
-on和off对用开关的两个值1和0:
+### 开关（switch）控件
+on和off对用开关的两个值 `true` 和 `false`:
 ``` php
 $form->switch('comment_status','允许评论')->options([
     'on'  => '是',
@@ -237,58 +307,36 @@ $form->switch('comment_status','允许评论')->options([
 ])->default(true);
 ```
 
-纯显示
+### 纯展示
 只显示文字，不做任何操作：
 ``` php
 $form->display($label);
 ```
 
-图标选择
+### 图标选择（icon）控件
 ``` php
 $form->icon($column[, $label]);
 ```
 
-级联选择
+### 级联选择（cascader）控件
 ``` php
 $options = [
   [
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [
+    'value' => 'zhejiang',
+    'label' => 'Zhejiang',
+    'children' => [
       [
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [
-          [
-            value: 'xihu',
-            label: 'West Lake',
-          ],
-        ],
-      ],
-    ],
-  ],
-  [
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [
-      [
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [
-          [
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-          ],
-        ],
-      ],
-    ],
-  ],
+        'value' => 'hangzhou',
+        'label' => 'Hangzhou'
+      ]
+    ]
+  ]
 ];
 
 $form->cascader($column[, $label])->options($options);
 ```
 
-搜索选择
+### 搜索（search）控件
 ``` php
 $form->search($column[, $label])->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 
@@ -299,14 +347,8 @@ $form->search($column[, $label])->mode('multiple')->options([1 => 'foo', 2 => 'b
 $form->search($column[, $label])->api('/api/user/suggest');
 ```
 
-搜索选择的接口代码示例
+#### 搜索选择的接口代码示例
 ``` php
-/**
-* 用户建议搜索列表
-*
-* @param  Request  $request
-* @return Response
-*/
 public function suggest(Request $request)
 {
     // 获取参数
@@ -331,43 +373,42 @@ public function suggest(Request $request)
 }
 ```
 
-树选择
+### 树型选择（tree）控件
 ``` php
 $treeData = [
   [
-    title: 'Node1',
-    value: '0-0',
-    children: [
+    'title' => 'Node1',
+    'value' => '0-0',
+    'children' => [
       [
-        title: 'Child Node1',
-        value: '0-0-1',
+        'title' => 'Child Node1',
+        'value' => '0-0-1',
       ],
       [
-        title: 'Child Node2',
-        value: '0-0-2',
+        'title' => 'Child Node2',
+        'value' => '0-0-2',
       ],
     ],
   ],
   [
-    title: 'Node2',
-    value: '0-1',
-  ],
+    'title' => 'Node2',
+    'value' => '0-1',
+  ]
 ];
 
 $form->tree($column[, $label])->data($treeData);
 ```
 
-地图控件
+### 地图坐标选择（map）控件
 ``` php
 $form->map($column[, $label])->style(['width'=>'100%','height'=>400])->position($longitude,$latitude);
 ```
-## 文件/图片上传
 
-图片上传
+### 图片上传（image）控件
 ``` php
 $form->image($column[, $label]);
 
-// 多图上传，默认数据库保存json格式数据
+// 多图上传，默认数据库保存json格式数据，model可选 'multiple' | 'single' 或者缩写 'm' | 's'
 $form->image($column[, $label])->mode('multiple');
 
 // 上传button文字
@@ -379,11 +420,11 @@ $form->image($column[, $label])->limitNum(4);
 // 上传文件大小限制，默认2M
 $form->image($column[, $label])->limitSize(20);
 
-// 上传文件类型限制
+// 上传文件类型限制，类型支持后缀方式，例如['jpeg','png']这样的数组也是可以的
 $form->image($column[, $label])->limitType(['image/jpeg','image/png']);
 ```
 
-文件上传
+### 文件上传（file）控件
 ``` php
 $form->file($column[, $label]);
 
@@ -396,12 +437,58 @@ $form->file($column[, $label])->limitNum(4);
 // 上传文件大小限制，默认2M
 $form->file($column[, $label])->limitSize(20);
 
-// 上传文件类型限制
+// 上传文件类型限制，类型支持后缀方式，例如['jpeg','png']这样的数组也是可以的
 $form->file($column[, $label])->limitType(['image/jpeg','image/png']);
 ```
 
+### 嵌套表单字段（list）控件
+``` php
+$form->list($column[, $label])->button('添加数据')->item(function ($form) {
+	$form->text($column, [$label]);
+	...
+});
+```
+
+## 表单联动
+表单联动是指，在选择表单项的指定的选项时，联动显示其他的表单项。
+
+### 文本框控件
+``` php
+$form->text('column')->when('hello', function ($form) {
+    $form->select('options')->options();
+});
+```
+
+### 单选控件
+``` php
+$form->radio('nationality', '国籍')->options([
+    1 => '本国',
+    2 => '外国',
+])->when(1, function ($form) { 
+    $form->text('name', '姓名');
+    $form->text('idcard', '身份证');
+})->when(2, function ($form) { 
+    $form->text('name', '姓名');
+    $form->text('passport', '护照');
+});
+```
+上例中，方法`when(1, $callback)`等效于`when('=', 1, $callback)`, 如果用操作符`=`，则可以省略这个参数，同时也支持这些操作符 `=`、`>`、`>=`、`<`、`<=`、`!=`、`in`、`notIn` 使用方法如下：
+``` php
+$form->radio('check')->when('>', 1, function () {
+
+})->when('>=', 2, function () {
+
+})->when('in', [5, 6], function () {
+
+})->when('notIn', [7, 8], function () {
+
+});
+```
+
 ## 表单验证
-model-form使用Laravel的验证规则来验证表单提交的数据：
+
+### 通用规则
+Form组件使用Laravel的验证规则来验证表单提交的数据：
 ``` php
 $form->text('title','标题')->rules(
     ['required','min:6','max:20'],
@@ -409,6 +496,7 @@ $form->text('title','标题')->rules(
 );
 ```
 
+### 创建页规则
 创建页面规则，只在创建表单提交时生效
 ``` php
 $form->text('username','用户名')->creationRules(
@@ -417,6 +505,7 @@ $form->text('username','用户名')->creationRules(
 );
 ```
 
+### 编辑页规则
 更新页面规则，只在更新表单提交时生效
 ``` php
 $form->text('username','用户名')->updateRules(
@@ -425,7 +514,7 @@ $form->text('username','用户名')->updateRules(
 );
 ```
 
-数据库unique检查
+### 数据库unique检查
 一个比较常见的场景是提交表单是检查数据是否已经存在，可以使用下面的方式：
 ``` php
 $form->text('username','用户名')
@@ -433,34 +522,22 @@ $form->text('username','用户名')
 ->updateRules(["unique:admins,username,{id}"],['unique'=>'用户名已经存在']);
 ```
 
-## 模型表单回调
-Form组件目前提供了下面几个方法来接收回调函数：
+## 表单回调
+Form组件目前提供了下面几个方法来接收回调函数
+
+### 创建页面显示前回调
+可以通过对`$form->initialValues`的值更改，来给编辑页面、创建页面表单的值重置
 ``` php
-//保存前回调
-$form->saving(function ($form) {
-    //...
+// 创建页面显示前回调
+$form->creating(function ($form) {
+    if(isset($form->initialValues['avatar'])) {
+        $form->initialValues['avatar'] = get_picture($form->initialValues['avatar'],0,'all');
+    }
 });
 ```
 
-可以从回调参数$form中获取当前提交的表单数据：
-``` php
-$form->saving(function ($form) {
-
-    dump($form->data['username']);
-
-});
-```
-
-或者给某一个表单项赋值：
-``` php
-$form->saving(function ($form) {
-
-    $form->data['slug'] = $form->data['name'];
-    
-});
-```
-
-编辑页面展示前回调：
+### 编辑页面展示前回调
+可以通过对`$form->initialValues`的值更改，来给编辑页面、创建页面表单的值重置
 ``` php
 // 编辑页面展示前回调
 $form->editing(function ($form) {
@@ -470,13 +547,37 @@ $form->editing(function ($form) {
 });
 ```
 
-保存数据后回调：
+### 保存数据前回调
+``` php
+// 保存数据前回调
+$form->saving(function ($form) {
+    //...
+});
+```
+
+可以从回调参数`$form->data`中获取当前提交的表单数据：
+``` php
+$form->saving(function ($form) {
+    dump($form->data['username']);
+});
+```
+
+或者给某一个表单项赋值：
+``` php
+$form->saving(function ($form) {
+    $form->data['slug'] = $form->data['name'];
+});
+```
+
+### 保存数据后回调
+保存数据后的返回结果可以通过`$form->model()`获取，你可以根据不同的结果进行不同的响应
 ``` php
 // 保存数据后回调
 $form->saved(function ($form) {
+    // 保存数据后的返回结果可以通过$form->model()获取
     if($form->model()) {
         if($form->isCreating()) {
-            $form->model()->syncRoles(request('role_ids'));
+            $form->model()->id;
         } else {
             Admin::where('id',request('id'))->first()->syncRoles(request('role_ids'));
         }
@@ -484,5 +585,19 @@ $form->saved(function ($form) {
     } else {
         return error('操作失败，请重试！');
     }
+});
+```
+
+## Tab表单
+如果表单元素太多,会导致form页面太长, 这种情况下可以使用tab来分隔form:
+``` php
+$form = new TabForm(new Movie);
+
+$form->tab('Basic info', function ($form) {
+    $form->text('username');
+})->tab('Profile', function ($form) {
+    $form->image('avatar');
+    $form->text('address');
+    $form->text('phone');
 });
 ```
