@@ -191,6 +191,11 @@ $table->column('sex','性别')->display(function ($sex) {
         return '女';
     }
 });
+
+// 当你自定义一个表中不存在的字段时，闭包函数会传入本行的数组
+$table->column('full_name','全名')->display(function ($row) {
+    return $row['first_name'].$row['last_name'];
+});
 ```
 
 ### 内容映射

@@ -257,14 +257,22 @@ $form->select($column[, $label])->mode('multiple')->options([1 => 'foo', 2 => 'b
 $form->select($column[, $label])->mode('tags')->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
+### 日期时间（date）控件
+``` php
+
+$form->date($column[, $label]);
+```
+
+### 日期范围（dateRange）控件
+$startDate、$endDate为开始和结束日期:
+``` php
+$form->dateRange($column[, $label])->value([$startDate,$endDate]);
+```
+
 ### 日期时间（datetime）控件
 ``` php
 
-// 设置时间格式，更多格式参考http://momentjs.com/docs/#/displaying/format/
-$form->datetime($column[, $label])->format('YYYY-MM-DD HH:mm:ss');
-
-// 显示时间的格式
-$form->datetime($column[, $label])->showTime('HH:mm:ss')->format('YYYY-MM-DD HH:mm:ss');
+$form->datetime($column[, $label]);
 ```
 
 ### 时间日期范围（datetimeRange）控件
