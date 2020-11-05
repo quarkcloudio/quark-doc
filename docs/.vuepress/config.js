@@ -62,6 +62,8 @@ module.exports = ({
                     children: [
                         '',
                         'installation',
+                        'container',
+                        'card',
                         'table',
                         'form',
                         'show'
