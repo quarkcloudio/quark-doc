@@ -281,6 +281,11 @@ $startDateTime、$endDateTime为开始和结束时间日期:
 $form->datetimeRange($column[, $label])->value([$startDateTime,$endDateTime]);
 ```
 
+### 时间（time）控件
+``` php
+$form->time($column[, $label]);
+```
+
 ### 时间范围（timeRange）控件
 $startTime、$endTime为开始和结束时间:
 ``` php
