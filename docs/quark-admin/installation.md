@@ -37,6 +37,15 @@ php artisan serve
 
 默认用户名：administrator 密码：123456
 
+## 更新
+``` bash
+# 第一步，更新依赖
+composer update quarkcms/quark-admin
+
+# 第二步，执行更新命令：
+php artisan quarkadmin:update
+```
+
 ## 目录结构
 安装完成之后，后台的控制器目录为app/Http/Controllers/Admin，之后大部分的后台开发编码工作都是在这个目录下进行.
 

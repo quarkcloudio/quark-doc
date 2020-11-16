@@ -373,6 +373,9 @@ $action->a('跳转一个连接')->link('http://www.ixiaoquan.com','_blank');
 // 应用内跳转，并传递参数
 $action->a('编辑')->link(frontend_url('admin/article/edit&id={id}'));
 
+// 跳转到Table组件页面，并传递搜索参数，特别注意：需要对应的Table组件页面定义了搜索栏表单
+$action->a('跳转')->link(frontend_url('admin/article/index&search[id]=1'));
+
 // 新页面打开一个接口网址，并带上token
 $action->a('下载文件')->link(backend_url('admin/file/download',true),'_blank');
 ```
