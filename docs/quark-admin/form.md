@@ -189,6 +189,11 @@ $form->text('title')->required();
 $form->text('title')->disabled();
 ```
 
+#### 保存到数据库时忽略字段值
+``` php
+$form->text('title')->ignore();
+```
+
 ### 隐藏域（hidden）控件
 ``` php
 $form->hidden($column);
