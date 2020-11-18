@@ -543,6 +543,13 @@ Form组件目前提供了下面几个方法来接收回调函数
 ``` php
 // 创建页面显示前回调
 $form->creating(function ($form) {
+
+    // $form->values 原始值
+    if(isset($form->values['avatar'])) {
+        $form->values['avatar'] = get_picture($form->values['avatar'],0,'all');
+    }
+    
+    // $form->initialValues 解析后的值
     if(isset($form->initialValues['avatar'])) {
         $form->initialValues['avatar'] = get_picture($form->initialValues['avatar'],0,'all');
     }
@@ -554,6 +561,10 @@ $form->creating(function ($form) {
 ``` php
 // 编辑页面展示前回调
 $form->editing(function ($form) {
+    if(isset($form->values['avatar'])) {
+        $form->values['avatar'] = get_picture($form->values['avatar'],0,'all');
+    }
+
     if(isset($form->initialValues['avatar'])) {
         $form->initialValues['avatar'] = get_picture($form->initialValues['avatar'],0,'all');
     }
