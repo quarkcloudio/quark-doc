@@ -352,7 +352,42 @@ $options = [
 ];
 
 $form->cascader($column[, $label])->options($options);
+
+// 通过ajax获取数据
+$options = Area::where('level',1)->select('id as value','area_name as label')->get()->toArray();
+
+// 通过isLeaf属性设定是否有下一级
+foreach ($options as $key => $value) {
+    $options[$key]['isLeaf'] = false;
+}
+
+$form->cascader($column[, $label])->options($options)->api('admin/area/suggest');
 ```
+
+#### 级联选择的接口代码示例
+``` php
+public function suggest(Request $request)
+{
+    // 获取参数
+    $pid = $request->input('search');
+
+    // 当前层级
+    $level = $request->input('level');
+
+    // 获取数据
+    $options = Area::where('pid',$pid)->select('id as value','area_name as label')->get()->toArray();
+    
+    // 设定层级超过2后，不在获取数据
+    if($level < 2) {
+        foreach ($options as $key => $value) {
+            $options[$key]['isLeaf'] = false;
+        }
+    }
+
+    return success('获取成功','',$options);
+}
+```
+
 
 ### 搜索（search）控件
 ``` php
