@@ -74,27 +74,94 @@ project  									应用部署目录
 ## 配置信息
 安装完成之后，您可以找到`config`目录下的`admin.php`文件进行相关配置
 ``` php
-return [
-    
-	// 当前程序版本
-    'version' => 'v1.0.18',
+<?php
 
-	// 系统名称
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | QuarkAdmin App Name
+    |--------------------------------------------------------------------------
+    |
+    | This value is the name of your application. This value is used when the
+    | framework needs to display the name of the application within the UI
+    | or in other locations. Of course, you're free to change the value.
+    |
+    */
     'name' => 'QuarkAdmin',
 
-	// 展示的logo
+    /*
+    |--------------------------------------------------------------------------
+    | QuarkAdmin logo
+    |--------------------------------------------------------------------------
+    |
+    | The logo of all admin pages. You can also set it as an image by using a
+    | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
+    |
+    */
     'logo' => false,
 
-	// 登录界面的描述信息
+    /*
+    |--------------------------------------------------------------------------
+    | QuarkAdmin description
+    |--------------------------------------------------------------------------
+    |
+    | The description of login page.
+    |
+    */
     'description' => '信息丰富的世界里，唯一稀缺的就是人类的注意力',
-    
-	// 登录方式['username']，暂时只支持username
-	'login_type' => ['username'],
-	
-	// 使用 IconFont 的图标配置
+
+    /*
+    |--------------------------------------------------------------------------
+    | QuarkAdmin captcha:todo
+    |--------------------------------------------------------------------------
+    |
+    | 登录验证码类型，tencent_captcha：腾讯云验证码，local：本地图形验证码
+    |
+    */
+    'captcha_driver' => 'local',
+
+    /*
+    |--------------------------------------------------------------------------
+    | tencent captcha config:todo
+    |--------------------------------------------------------------------------
+    |
+    | 腾讯云验证码配置
+    |
+    */
+    'tencent_captcha' => [
+        'appid' => env('appid'),
+        'app_secret_key' => env('app_secret_key')
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | login type
+    |--------------------------------------------------------------------------
+    |
+    | 登录方式['username']，暂时只支持username
+    |
+    */
+    'login_type' => ['username'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | QuarkAdmin iconfontUrl
+    |--------------------------------------------------------------------------
+    |
+    | 使用 IconFont 的图标配置
+    |
+    */
     'iconfont_url' => '//at.alicdn.com/t/font_1615691_3pgkh5uyob.js',
 
-	// 后台的布局配置
+    /*
+    |--------------------------------------------------------------------------
+    | QuarkAdmin layout
+    |--------------------------------------------------------------------------
+    |
+    | The layout of QuarkAdmin
+    |
+    */
     'layout' => [
 
         // layout 的左上角 的 title
@@ -103,11 +170,31 @@ return [
         // layout 的左上角 的 logo
         'logo' => config('admin.logo'),
 
+        // layout 的头部行为
+        'header_actions' => [
+            [
+                'component' => 'icon',
+                'icon' => 'icon-question-circle',
+                'tooltip' => '使用文档',
+                'href' => 'http://www.quarkcms.com/',
+                'target' => '_blank'
+            ],
+            // [
+            //     'component' => 'a',
+            //     'title' => '使用文档',
+            //     'href' => 'http://www.ixiaoquan.com',
+            //     'target' => '_blank'
+            // ]
+        ],
+
         // layout 的菜单模式,side：右侧导航，top：顶部导航，mix：混合模式
         'layout' => 'side',
 
         // layout 的菜单模式为mix时，是否自动分割菜单
         'split_menus' => false,
+
+        // layout 的菜单模式为mix时，顶部主题 'dark' | 'light'
+        'header_theme' => 'dark',
 
         // layout 的内容模式,Fluid：定宽 1200px，Fixed：自适应
         'content_width' => 'Fluid',
@@ -134,10 +221,24 @@ return [
         'sider_width' => 208
     ],
 
-	// 页脚的网站版权
+    /*
+    |--------------------------------------------------------------------------
+    | QuarkAdmin copyright
+    |--------------------------------------------------------------------------
+    |
+    | 网站版权
+    |
+    */
     'copyright' => '2020 QuarkCMS',
 
-	// 页脚的友情链接
+    /*
+    |--------------------------------------------------------------------------
+    | QuarkAdmin friend links
+    |--------------------------------------------------------------------------
+    |
+    | 友情链接
+    |
+    */
     'links' => [
         [
             'title' => 'Quark',
@@ -152,6 +253,35 @@ return [
             'href' => 'https://github.com/quarkcms'
         ]
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | QuarkAdmin auth setting
+    |--------------------------------------------------------------------------
+    |
+    | Authentication settings for all admin pages. Include an authentication
+    | guard and a user provider setting of authentication driver.
+    |
+    | You can specify a controller for `login` `logout` and other auth routes.
+    |
+    */
+    'auth' => [
+
+        'guards' => [
+            'admin' => [
+                'driver'   => 'session',
+                'provider' => 'admins',
+            ],
+        ],
+
+        'providers' => [
+            'admins' => [
+                'driver' => 'eloquent',
+                'model'  => QuarkCMS\QuarkAdmin\Models\Admin::class,
+            ],
+        ],
+    ],
+
 ];
 ```
 
