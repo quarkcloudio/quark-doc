@@ -857,6 +857,30 @@ $search->equal('column')->placeholder('请输入。。。');
 $search->equal('column')->select(['key' => 'value'...]);
 ```
 
+#### 下拉框（select）控件联动
+``` php
+
+// 下拉框联动
+$search->equal('province', '省')->select([1 => '北京', 2 => '天津', 3 => '河北省'])->load('city','admin/area/cities');
+
+// 市
+$search->equal('city', '市')->select();
+```
+
+#### 下拉框联动的接口代码示例
+``` php
+public function cities(Request $request)
+{
+    // 获取参数
+    $pid = $request->input('search');
+
+    // 获取数据
+    $options = Area::where('pid',$pid)->select('id as value','area_name as label')->get()->toArray();
+
+    return success('获取成功','',$options);
+}
+```
+
 #### 多选下拉框控件（multipleSelect）
 一般用来配合in和notIn两个需要查询数组的查询类型使用，也可以在where类型的查询中使用：
 ``` php

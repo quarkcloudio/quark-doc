@@ -262,6 +262,30 @@ $form->select($column[, $label])->mode('multiple')->options([1 => 'foo', 2 => 'b
 $form->select($column[, $label])->mode('tags')->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
 ```
 
+#### 下拉框（select）控件联动
+``` php
+
+// 下拉框联动
+$form->select('province', '省')->options([1 => '北京', 2 => '天津', 3 => '河北省'])->load('city','admin/area/cities');
+
+// 市
+$form->select('city', '市');
+```
+
+#### 下拉框联动的接口代码示例
+``` php
+public function cities(Request $request)
+{
+    // 获取参数
+    $pid = $request->input('search');
+
+    // 获取数据
+    $options = Area::where('pid',$pid)->select('id as value','area_name as label')->get()->toArray();
+
+    return success('获取成功','',$options);
+}
+```
+
 ### 日期时间（date）控件
 ``` php
 
@@ -387,7 +411,6 @@ public function suggest(Request $request)
     return success('获取成功','',$options);
 }
 ```
-
 
 ### 搜索（search）控件
 ``` php
