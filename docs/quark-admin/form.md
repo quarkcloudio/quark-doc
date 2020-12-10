@@ -147,6 +147,26 @@ $form->isCreating();
 $form->isEditing();
 ```
 
+### 禁用重置按钮
+``` php
+$form->disabledResetButton();
+```
+
+### 重置按钮文字展示
+``` php
+$form->resetButtonText('重置');
+```
+
+### 禁用提交按钮
+``` php
+$form->disabledSubmitButton();
+```
+
+### 提交按钮文字展示
+``` php
+$form->submitButtonText('提交');
+```
+
 ## 表单控件
 在Form组件中内置了大量表单控件来帮助你快速的构建页面
 
