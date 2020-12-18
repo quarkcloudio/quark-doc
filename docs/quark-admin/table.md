@@ -148,6 +148,12 @@ $table->datasource($data);
 $table->column('sex','性别')->width(100);
 ```
 
+### 列内容样式
+通过`style()`方法来设置列的宽度
+``` php
+$table->column('sex','性别')->style(['color'=>'green']);
+```
+
 ### 对齐方式
 可以用`align()`方法来设置列的对齐方式，可选 `'left'` | `'right'` | `'center'`，默认为：`'left'`
 ``` php
