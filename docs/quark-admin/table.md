@@ -148,7 +148,13 @@ $table->datasource($data);
 $table->column('sex','性别')->width(100);
 ```
 
-### 列内容样式
+### 内容渲染html标签，特别注意：如果以html标签方式渲染内容，将存在XSS攻击的风险！
+通过`isHtml()`方法来设置列的宽度
+``` php
+$table->column('sex','性别')->isHtml();
+```
+
+### 内容样式
 通过`style()`方法来设置列的宽度
 ``` php
 $table->column('sex','性别')->style(['color'=>'green']);
@@ -195,6 +201,15 @@ $table->column('sex','性别')->display(function ($sex) {
         return '男';
     } else {
         return '女';
+    }
+});
+
+// 支持渲染html标签
+$table->column('sex','性别')->isHtml()->display(function ($sex) {
+    if($sex == 1) {
+        return '<span style="color:red">男</span>';
+    } else {
+        return '<span style="color:green">女</span>';
     }
 });
 
