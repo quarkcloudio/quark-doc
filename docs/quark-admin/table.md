@@ -148,14 +148,14 @@ $table->datasource($data);
 $table->column('sex','性别')->width(100);
 ```
 
-### 内容渲染html标签，特别注意：如果以html标签方式渲染内容，将存在XSS攻击的风险！
-通过`isHtml()`方法来设置列的宽度
+### 内容渲染html标签
+通过`isHtml()`方法来渲染html标签内容，特别注意：如果以html标签方式渲染内容，将有可能存在XSS攻击的风险！
 ``` php
 $table->column('sex','性别')->isHtml();
 ```
 
 ### 内容样式
-通过`style()`方法来设置列的宽度
+通过`style()`方法来设置内容的样式
 ``` php
 $table->column('sex','性别')->style(['color'=>'green']);
 ```
