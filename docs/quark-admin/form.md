@@ -448,20 +448,31 @@ $form->search($column[, $label])->api('/api/user/suggest');
 public function suggest(Request $request)
 {
     // 获取参数
-    $search    = $request->input('search');
+    $search = $request->input('search');
+
+    // 获取类型：当type为'value'时，search传入的为下拉框的值;当type为'label'时，search传入的为下拉框的文本
+    $type = $request->input('type','label');
     
     // 定义对象
     $query = User::query();
 
-    // 查询用户名
-    if(!empty($search)) {
-        $query->where('username','like','%'.$search.'%');
+    if($type === 'label') {
+        // 查询用户名
+        if(!empty($search)) {
+            $query->where('nickname','like','%'.$search.'%');
+        }
+    } elseif($type === 'value') {
+        if(!empty($search)) {
+            $query->where('id', $search);
+        }
     }
 
     // 查询列表
     $users = $query
     ->limit(20)
-    ->select('username as label','id as value')
+    ->where('status', '>', 0)
+    ->orderBy('id', 'desc')
+    ->select('nickname as label','id as value')
     ->get()
     ->toArray();
 
