@@ -757,19 +757,25 @@ $table->search(function($search) {
 ### 范围查询
 可以把你最常用的查询定义为一个查询范围，它将会出现在筛选按钮的下拉菜单中，下面是几个例子：
 ``` php
-$search->scope('male', '男性')->where('gender', 'm');
+$search->scope('anywords', '测试',function ($scope) {
+    $scope->option('option1', '正常')->where('status', 1);
+    $scope->option('option2', '禁用')->where('status', 0);
+    $scope->option('male', '男性')->where('gender', 'm');
 
-// 多条件查询
-$search->scope('new', '最近修改')
-    ->whereDate('created_at', date('Y-m-d'))
-    ->orWhere('updated_at', date('Y-m-d'));
+    // 多条件查询
+    $scope->option('new', '最近修改')
+        ->whereDate('created_at', date('Y-m-d'))
+        ->orWhere('updated_at', date('Y-m-d'));
 
-// 关联关系查询
-$search->scope('address')->whereHas('profile', function ($query) {
-    $query->whereNotNull('address');
-});
+    // 关联关系查询
+    $scope->option('address')->whereHas('profile', function ($query) {
+        $query->whereNotNull('address');
+    });
 
-$search->scope('trashed', '被软删除的数据')->onlyTrashed();
+    $scope->option('trashed', '被软删除的数据')->onlyTrashed();
+
+})->placeholder('请选择查询内容');
+
 ```
 ::: tip
 scope方法可以链式调用任何eloquent查询条件
@@ -915,7 +921,7 @@ $search->equal('column')->datetime();
 #### 高级控件
 有时候对同一个字段要设置多中筛选方式，可以通过下面的方式实现
 ``` php
-$search->group('rate', function ($group) {
+$search->group('rate','评分', function ($group) {
     $group->gt('大于');
     $group->lt('小于');
     $group->nlt('不小于');
