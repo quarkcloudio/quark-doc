@@ -757,7 +757,7 @@ $table->search(function($search) {
 ### 范围查询
 可以把你最常用的查询定义为一个查询范围，它将会出现在筛选按钮的下拉菜单中，下面是几个例子：
 ``` php
-$search->scope('anywords', '测试',function ($scope) {
+$search->scope('anywords', '范围查询',function ($scope) {
     $scope->option('option1', '正常')->where('status', 1);
     $scope->option('option2', '禁用')->where('status', 0);
     $scope->option('male', '男性')->where('gender', 'm');
