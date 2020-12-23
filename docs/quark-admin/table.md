@@ -110,6 +110,19 @@ $table->tableLayout('fixed');
 $table->columnEmptyText('空');
 ```
 
+### 设置表格滚动
+通过`scroll()`方法来设置表格滚动固定
+``` php
+// 可水平滚动
+$table->scroll(['x'=>240]);
+
+// 可垂直滚动
+$table->scroll(['y'=>1200]);
+
+// 垂直水平均可滚动
+$table->scroll(['x'=>240,'y'=>1200]);
+```
+
 ### 添加列
 通过`column($attribute, $title)`方法来设置表格列的展示、字段绑定，参数`$attribute`为绑定的字段，`$title`为列的标题，更多关于列的操作可以查看下一节 [列的显示](#列的显示)：
 ``` php
