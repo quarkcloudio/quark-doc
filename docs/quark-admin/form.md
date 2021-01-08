@@ -529,6 +529,9 @@ $form->image($column[, $label])->limitSize(20);
 
 // 上传文件类型限制，类型支持后缀方式，例如['jpeg','png']这样的数组也是可以的
 $form->image($column[, $label])->limitType(['image/jpeg','image/png']);
+
+// 上传尺寸限制
+$form->image($column[, $label])->limitWH(200，200);
 ```
 
 ### 文件上传（file）控件
