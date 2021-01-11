@@ -167,6 +167,16 @@ $form->disabledSubmitButton();
 $form->submitButtonText('提交');
 ```
 
+### 禁用返回按钮
+``` php
+$form->disabledBackButton();
+```
+
+### 返回按钮文字展示
+``` php
+$form->backButtonText('返回上一页');
+```
+
 ## 表单控件
 在Form组件中内置了大量表单控件来帮助你快速的构建页面
 
@@ -530,7 +540,7 @@ $form->image($column[, $label])->limitSize(20);
 // 上传文件类型限制，类型支持后缀方式，例如['jpeg','png']这样的数组也是可以的
 $form->image($column[, $label])->limitType(['image/jpeg','image/png']);
 
-// 上传尺寸限制
+// 上传尺寸限制，第一个参数是显的宽度，第二个参数是限定的高度
 $form->image($column[, $label])->limitWH(200，200);
 ```
 
