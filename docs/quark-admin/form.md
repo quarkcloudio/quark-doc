@@ -521,6 +521,26 @@ $form->tree($column[, $label])->data($treeData);
 $form->map($column[, $label])->style(['width'=>'100%','height'=>400])->position($longitude,$latitude);
 ```
 
+### 地理围栏（geofence）控件
+``` php
+
+$longitude = 116.397724;
+$latitude = 39.903755;
+
+$points = [
+    ['longitude'=> bcadd($longitude,0.005,6), 'latitude'=> bcadd($latitude,0.005,6) ],
+    ['longitude'=> bcadd($longitude,0.005,6), 'latitude'=> bcsub($latitude,0.005,6) ],
+    ['longitude'=> bcsub($longitude,0.005,6), 'latitude'=> bcsub($latitude,0.005,6) ],
+    ['longitude'=> bcsub($longitude,0.005,6), 'latitude'=> bcadd($latitude,0.005,6) ]
+];
+
+$form->geofence($column[, $label])
+->style(['width'=>'100%','height'=>400])
+->center($longitude,$latitude) // 中心点
+->points($points); // 多边形围栏坐标点
+
+```
+
 ### 图片上传（image）控件
 ``` php
 $form->image($column[, $label]);

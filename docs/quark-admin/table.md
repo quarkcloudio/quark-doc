@@ -418,6 +418,9 @@ $action->a('跳转')->link(frontend_url('admin/article/index&search[id]=1'));
 
 // 新页面打开一个接口网址，并带上token
 $action->a('下载文件')->link(backend_url('admin/file/download',true),'_blank');
+
+// 新页面打开一个接口网址，带上token和搜索条件(注意：替换搜索条件只能在工具栏行为中使用)
+$action->a('下载文件')->link(backend_url('admin/file/download&search={search}',true),'_blank');
 ```
 
 #### 跳转到新增页面
