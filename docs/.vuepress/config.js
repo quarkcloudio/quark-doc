@@ -69,12 +69,12 @@ module.exports = ({
                     children: [
                         '',
                         'installation',
-                        'base',
                         'resources',
                         'search',
                         'actions',
                         'metrics',
                         'dashboards',
+                        'builtin',
                         'helper'
                     ]
                 },
