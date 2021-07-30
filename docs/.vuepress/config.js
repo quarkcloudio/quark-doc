@@ -37,6 +37,13 @@ module.exports = ({
                 text: 'UI文档',
                 link: '/quark-ui/'
             },
+            {
+                text: 'v2',
+                items: [
+                    { text: 'v2', link: 'https://www.quarkcms.com/' },
+                    { text: 'v1', link: 'https://v1.quarkcms.com/' }
+                ]
+              }
         ],
         sidebar: {
             '/quark-cms/' : [
@@ -63,11 +70,11 @@ module.exports = ({
                         '',
                         'installation',
                         'base',
-                        'container',
-                        'card',
-                        'table',
-                        'form',
-                        'show',
+                        'resources',
+                        'search',
+                        'actions',
+                        'metrics',
+                        'dashboards',
                         'helper'
                     ]
                 },

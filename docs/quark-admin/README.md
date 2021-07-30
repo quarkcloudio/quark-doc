@@ -21,7 +21,6 @@ QuarkAdmin 是一个可以帮你快速搭建管理后台的工具；它提供的
 * Table组件
 * Form组件
 * Show组件
-* TabForm组件
 * ...
 
 ## 所需依赖

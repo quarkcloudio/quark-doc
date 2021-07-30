@@ -2,7 +2,7 @@
 
 ## 安装
 
-需要安装PHP7.2+ 和 Laravel6.0，首先确保安装好了laravel，并且数据库连接设置正确。
+需要安装PHP7.2+ 和 Laravel8.0+，首先确保安装好了laravel，并且数据库连接设置正确。
 
 ``` bash
 # 第一步，安装依赖
@@ -29,11 +29,9 @@ SQLSTATE[42000]: Syntax error or access violation: 1071 Specified key was too lo
 'engine' => 'InnoDB',
 ```
 
-完成安装后，执行如下命令，快速启动服务：
-``` bash
-php artisan serve
-```
-后台地址： http://127.0.0.1:8000/admin/index
+完成安装后，将网站执行public目录：
+
+后台地址： http://127.0.0.1:8000/admin/
 
 默认用户名：administrator 密码：123456
 
@@ -47,16 +45,17 @@ php artisan quarkadmin:update
 ```
 
 ## 目录结构
-安装完成之后，后台的控制器目录为app/Http/Controllers/Admin，之后大部分的后台开发编码工作都是在这个目录下进行.
+安装完成之后，后台的控制器目录为app/Admin，之后大部分的后台开发编码工作都是在这个目录下进行.
 
 ``` code
 project  									应用部署目录
 ├─app           							应用目录
-│  ├─Http               					Http目录
-│  │  ├─Controllers     					Controllers目录
-│  │  │  ├─Admin          					应用入口文件
-│  │  │  │	├─DashboardController.php       仪表盘控制器
-│  │  │  │	├─UpgradeController.php         程序自定义升级控制器
+│  ├─Admin               					Admin目录
+│  │  ├─Actions     					    行为目录
+│  │  ├─Dashboards     					    仪表盘目录
+│  │  ├─Metrics     					    监控指标目录
+│  │  ├─Resources     					    资源目录
+│  │  ├─Searches     					    搜索表单目录
 │  │  │  └─...            					更多类库目录
 │  │  └─...            						更多类库目录
 │  └─...        							更多类库目录
@@ -286,15 +285,4 @@ return [
 ```
 
 ## 路由
-安装完成之后，您可以找到 `routes` 目录下的 `admin.php` 文件进行路由配置，如果你的控制器继承了 `QuarkCMS\QuarkAdmin\Http\Controllers\Controller` 控制器，那此控制器对应的路由需包含`index`、`show`、`create`、`store`、`edit`、`update`、`action`、`destroy`这几个方法
-
-``` php
-$router->get('admin/article/index', 'ArticleController@index')->name('api/admin/article/index');
-$router->get('admin/article/show', 'ArticleController@show')->name('api/admin/article/show');
-$router->get('admin/article/create', 'ArticleController@create')->name('api/admin/article/create');
-$router->post('admin/article/store', 'ArticleController@store')->name('api/admin/article/store');
-$router->get('admin/article/edit', 'ArticleController@edit')->name('api/admin/article/edit');
-$router->post('admin/article/update', 'ArticleController@update')->name('api/admin/article/update');
-$router->any('admin/article/action', 'ArticleController@action')->name('api/admin/article/action');
-$router->post('admin/article/destroy', 'ArticleController@destroy')->name('api/admin/article/destroy');
-```
+安装完成之后，您可以找到 `routes` 目录下的 `admin.php` 文件进行路由配置
