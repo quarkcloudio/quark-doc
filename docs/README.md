@@ -10,5 +10,5 @@ features:
   details: Ant Design Pro & Laravel 加持，享受便捷的模块化开发。
 - title: 文档丰富
   details: 无论新手还是老司机，清晰规范的文档都能让您快速上手。
-footer: MIT Licensed | Copyright © 2020 QuarkCMS
+footer: MIT Licensed | Copyright © 2021 QuarkCMS
 ---

@@ -65,7 +65,7 @@ module.exports = ({
                 {
                     title: 'Admin文档',
                     collapsable: false,
-                    sidebarDepth:1,
+                    sidebarDepth:2,
                     children: [
                         '',
                         'installation',
