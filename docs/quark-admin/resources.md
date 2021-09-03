@@ -27,7 +27,7 @@ public static $model = 'App\Post';
 新创建的 QuarkAdmin 资源只包含一个`ID`字段定义。别担心，我们很快会为我们的资源添加更多字段。
 
 
-一旦你的资源用 QuarkAdmin 创建完毕，你可以在页面中访问；如需在侧边栏显示，在菜单中添加即可：
+一旦你的资源用 QuarkAdmin 创建完毕，你可以打开`http://www.yoursite.com/admin/#/index?api=admin/post/index`中访问；如需在侧边栏显示，在菜单中添加相关信息即可：
 
 ![QuarkAdmin Dashboard](./images/post-demo.png)
 

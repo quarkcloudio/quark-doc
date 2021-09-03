@@ -72,13 +72,13 @@ class Delete extends Action
 }
 ```
 
-动作最重要的方法是`handle`方法。该`handle`方法接收该操作所附的任何字段的值，以及选定模型的集合。即使仅针对单个模型执行操作，该`handle`方法也**始终**接收`Collection`模型。
+行为最重要的方法是`handle`方法。该`handle`方法接收该操作所附的任何字段的值，以及选定模型的集合。即使仅针对单个模型执行操作，该`handle`方法也**始终**接收`Collection`模型。
 
 在该`handle`方法内，您可以执行完成操作所需的任何任务。您可以自由更新数据库记录，发送电子邮件，致电其他服务等。
 
-## 动作可见度
+### 行为可见度
 
-默认情况下，操作在资源索引和详细信息屏幕上都是可见的。此外，默认情况下，内联操作从表行的操作下拉列表中隐藏。定义动作时，可以通过在动作上设置以下方法之一来指定其可见性：
+默认情况下，操作在资源索引和详细信息屏幕上都是可见的。此外，默认情况下，内联操作从表行的操作下拉列表中隐藏。定义行为时，可以通过在行为上设置以下方法之一来指定其可见性：
 
 -   `onlyOnIndex`
 -   `exceptOnIndex`
@@ -90,290 +90,243 @@ class Delete extends Action
 -   `exceptOnTableRow`
 -   `showOnTableRow`
 
-## [＃](https://nova.laravel.com/docs/2.0/actions/defining-actions.html#action-fields)行动领域
+### 行为类型
+QuarkAdmin 暂时封装了`Drawer`、`Link`、`Modal`几种类型的动作，下面我们看一下如何使用：
 
-有时，您可能希望在分派操作之前从用户那里收集其他信息。因此，Nova允许您将Nova支持的大多数[字段](https://nova.laravel.com/docs/2.0/resources/fields.html)直接附加到动作上。启动操作时，Nova将提示用户提供以下字段的输入：
+#### 抽屉行为
 
-![行动领域](https://nova.laravel.com/docs/assets/img/action-field.b545d287.png)
+Drawer行为可以弹出抽屉，用来完成具体操作；例如下面的代码，可以在列表页生成抽屉类型的操作：
+```php
+<?php
 
-要将字段添加到动作，请将字段添加到该动作的`fields`方法返回的字段数组中：
+namespace App\Admin\Actions;
 
-```
-use Laravel\Nova\Fields\Text;
+use QuarkCMS\Quark\Facades\Form;
+use QuarkCMS\QuarkAdmin\Actions\Drawer;
+use QuarkCMS\QuarkAdmin\Http\Requests\ResourceCreateRequest;
+use QuarkCMS\Quark\Facades\Action;
 
-/**
- * Get the fields available on the action.
- *
- * @return array
- */
-public function fields()
+class CreateDrawer extends Drawer
 {
-    return [
-        Text::make('Subject'),
-    ];
-}
+    /**
+     * 设置按钮类型,primary | ghost | dashed | link | text | default
+     *
+     * @var string
+     */
+    public $type = 'primary';
 
-```
+    /**
+     * 设置图标
+     *
+     * @var string
+     */
+    public $icon = 'plus-circle';
 
-最后，在您的操作`handle`方法内，您可以使用提供的`ActionFields`实例上的动态访问器来访问字段：
+    /**
+     * 初始化
+     *
+     * @param  string  $name
+     * 
+     * @return void
+     */
+    public function __construct($name)
+    {
+        $this->name = '创建' . $name;
+    }
 
-```
-/**
- * Perform the action on the given models.
- *
- * @param  \Laravel\Nova\Fields\ActionFields  $fields
- * @param  \Illuminate\Support\Collection  $models
- * @return mixed
- */
-public function handle(ActionFields $fields, Collection $models)
-{
-    foreach ($models as $model) {
-        (new AccountData($model))->send($fields->subject);
+    /**
+     * 弹窗内容
+     * 
+     * @return $string
+     */
+    public function body()
+    {
+        $request = new ResourceCreateRequest;
+
+        // 表单
+        return Form::key('createDrawerForm')
+        ->api($request->newResource()->creationApi($request))
+        ->items($request->newResource()->creationFields($request))
+        ->initialValues($request->newResource()->beforeCreating($request))
+        ->labelCol([
+            'span' => 6
+        ])
+        ->wrapperCol([
+            'span' => 18
+        ]);
+    }
+
+    /**
+     * 弹窗行为
+     *
+     * @return $this
+     */
+    public function actions()
+    {
+        return [
+            Action::make('取消')->actionType('cancel'),
+            
+            Action::make("提交")
+            ->reload('table')
+            ->type('primary')
+            ->actionType('submit')
+            ->submitForm('createDrawerForm')
+        ];
     }
 }
-
 ```
 
-## [＃](https://nova.laravel.com/docs/2.0/actions/defining-actions.html#action-modal-customization)动作模式自定义
+#### 弹窗行为
 
-默认情况下，操作将在运行前要求用户确认。您可以自定义确认消息，确认按钮和取消按钮，以在执行操作之前为用户提供更多上下文。这是通过指定的完成`confirmText`，`confirmButtonText`以及`cancelButtonText`定义操作时的方法：
+Modal行为可以生成弹窗，用来完成具体操作；例如下面的代码，可以在列表页生成弹窗类型的操作：
+```php
+<?php
 
+namespace App\Admin\Actions;
+
+use QuarkCMS\Quark\Facades\Form;
+use QuarkCMS\QuarkAdmin\Actions\Modal;
+use QuarkCMS\QuarkAdmin\Http\Requests\ResourceCreateRequest;
+use QuarkCMS\Quark\Facades\Action;
+
+class CreateModal extends Modal
+{
+    /**
+     * 设置按钮类型,primary | ghost | dashed | link | text | default
+     *
+     * @var string
+     */
+    public $type = 'primary';
+
+    /**
+     * 设置图标
+     *
+     * @var string
+     */
+    public $icon = 'plus-circle';
+
+    /**
+     * 初始化
+     *
+     * @param  string  $name
+     * 
+     * @return void
+     */
+    public function __construct($name)
+    {
+        $this->name = '创建' . $name;
+    }
+
+    /**
+     * 弹窗内容
+     * 
+     * @return $string
+     */
+    public function body()
+    {
+        $request = new ResourceCreateRequest;
+
+        // 表单
+        return Form::key('createModalForm')
+        ->api($request->newResource()->creationApi($request))
+        ->items($request->newResource()->creationFields($request))
+        ->initialValues($request->newResource()->beforeCreating($request))
+        ->labelCol([
+            'span' => 6
+        ])
+        ->wrapperCol([
+            'span' => 18
+        ]);
+    }
+
+    /**
+     * 弹窗行为
+     *
+     * @return $this
+     */
+    public function actions()
+    {
+        return [
+            Action::make('取消')->actionType('cancel'),
+            
+            Action::make("提交")
+            ->reload('table')
+            ->type('primary')
+            ->actionType('submit')
+            ->submitForm('createModalForm')
+        ];
+    }
+}
 ```
+
+#### 链接行为
+
+Link行为可以生成一个带连接的按钮，用来完成页面跳转操作：
+```php
+<?php
+
+namespace App\Admin\Actions;
+
+use Illuminate\Support\Str;
+use QuarkCMS\QuarkAdmin\Actions\Link;
+
+class CreateLink extends Link
+{
+    /**
+     * 设置按钮类型,primary | ghost | dashed | link | text | default
+     *
+     * @var string
+     */
+    public $type = 'primary';
+
+    /**
+     * 设置图标
+     *
+     * @var string
+     */
+    public $icon = 'plus-circle';
+
+    /**
+     * 初始化
+     *
+     * @param  string  $name
+     * 
+     * @return void
+     */
+    public function __construct($name)
+    {
+        $this->name = '创建' . $name;
+    }
+
+    /**
+     * 跳转链接
+     *
+     * @return string
+     */
+    public function href()
+    {
+        return '#/index?api=' . Str::replaceLast('/index', '/create', 
+            Str::replaceFirst('api/','',\request()->path())
+        );
+    }
+}
+```
+
+## 注册行为
+
+一旦你定义了行为, 你便可以将它注册到一个资源中. 每一个资源都通过容器中 `actions` 方法注册行为, 你只需要将行为项实例放入 `actions` 方法的返回数组中即可:
+
+```php
 /**
- * Get the actions available for the resource.
+ * 行为
  *
- * @param  \Illuminate\Http\Request  $request
- * @return array
+ * @param  Request  $request
+ * @return object
  */
 public function actions(Request $request)
 {
     return [
-        (new Actions\ActivateUser)
-            ->confirmText('Are you sure you want to activate this user?')
-            ->confirmButtonText('Activate')
-            ->cancelButtonText("Don't activate"),
+        (new \App\Admin\Actions\Delete('删除'))->onlyOnTableRow(),
     ];
-}
-
-```
-
-这将自定义模式，如下所示：
-
-![动作定制](https://nova.laravel.com/docs/assets/img/action-customization.52d158fd.png)
-
-## [＃](https://nova.laravel.com/docs/2.0/actions/defining-actions.html#action-responses)动作回应
-
-通常，执行操作时，Nova UI中会显示通用的“成功”消息。但是，您可以使用`Action`类上的各种方法来自定义此响应。
-
-要显示自定义的“成功”消息，可以`Action::message`从您的`handle`方法中返回该方法的结果：
-
-```
-/**
- * Perform the action on the given models.
- *
- * @param  \Laravel\Nova\Fields\ActionFields  $fields
- * @param  \Illuminate\Support\Collection  $models
- * @return mixed
- */
-public function handle(ActionFields $fields, Collection $models)
-{
-    // ...
-
-    return Action::message('It worked!');
-}
-
-```
-
-要返回红色的“危险”消息，可以使用以下`Action::danger`方法：
-
-```
-return Action::danger('Something went wrong!');
-
-```
-
-#### [＃](https://nova.laravel.com/docs/2.0/actions/defining-actions.html#redirect-responses)重定向响应
-
-要在执行操作后将用户重定向到一个全新的位置，可以使用以下`Action::redirect`方法：
-
-```
-return Action::redirect('https://example.com');
-
-```
-
-要将用户重定向到内部路由，请使用以下`Action::push`方法：
-
-```
-return Action::push('/resources/posts/new', [
-  'viaResource' => 'users',
-  'viaResourceId' => 1,
-  'viaRelationship' => 'posts'
-]);
-
-```
-
-#### [＃](https://nova.laravel.com/docs/2.0/actions/defining-actions.html#download-responses)下载回应
-
-要在执行操作后启动文件下载，可以使用该`Action::download`方法。该`download`方法将要下载的文件的URL作为其第一个参数，并将文件的所需名称作为其第二个参数：
-
-```
-return Action::download('https://example.com/invoice.pdf', 'Invoice.pdf');
-
-```
-
-## [＃](https://nova.laravel.com/docs/2.0/actions/defining-actions.html#queued-actions)排队的动作
-
-有时，您可能需要花费一些时间才能完成运行。出于这个原因，Nova让您[排队](https://laravel.com/docs/queues)行动很容易。要指示Nova将操作排入队列而不是同步运行，请在`ShouldQueue`界面上标记该操作：
-
-```
-<?php
-
-namespace App\Nova\Actions;
-
-use App\AccountData;
-use Illuminate\Bus\Queueable;
-use Laravel\Nova\Actions\Action;
-use Illuminate\Support\Collection;
-use Laravel\Nova\Fields\ActionFields;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-
-class EmailAccountProfile extends Action implements ShouldQueue
-{
-  use InteractsWithQueue, Queueable;
-
-  // ...
-}
-
-```
-
-使用排队操作时，请不要忘记为应用程序配置和启动队列工作器。否则，您的操作将不会被处理。
-
-排队的操作文件
-
-目前，Nova不支持将`File`字段附加到排队的操作。如果需要将`File`字段附加到操作，则该操作必须同步运行。
-
-#### [＃](https://nova.laravel.com/docs/2.0/actions/defining-actions.html#customizing-the-connection-and-queue)自定义连接和队列
-
-您可以通过在操作上定义`$connection`和`$queue`属性来自定义操作排队的队列连接和队列名称：
-
-```
-/**
- * The name of the connection the job should be sent to.
- *
- * @var string|null
- */
-public $connection = 'redis';
-
-/**
- * The name of the queue the job should be sent to.
- *
- * @var string|null
- */
-public $queue = 'emails';
-
-```
-
-## [＃](https://nova.laravel.com/docs/2.0/actions/defining-actions.html#action-log)动作日志
-
-查看针对资源运行的操作的日志通常很有用。此外，在对操作进行排队时，知道它们何时真正完成通常很重要。值得庆幸的是，Nova通过将`Laravel\Nova\Actions\Actionable`特征附加到资源的相应Eloquent模型来轻松地向该资源添加操作日志。
-
-例如，我们可以将`Laravel\Nova\Actions\Actionable`特征附加到`User`Eloquent模型：
-
-```
-<?php
-
-namespace App;
-
-use Laravel\Nova\Actions\Actionable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-class User extends Authenticatable
-{
-  use Actionable, Notifiable;
-
-  // ...
-}
-
-```
-
-将特征附加到模型后，Nova将自动开始在资源的详细信息屏幕底部显示操作日志：
-
-![动作日志](https://nova.laravel.com/docs/assets/img/action-log.1b96fe60.png)
-
-### [＃](https://nova.laravel.com/docs/2.0/actions/defining-actions.html#disabling-the-action-log)禁用操作日志
-
-如果您不想在操作日志中记录操作，则可以通过`withoutActionEvents`在操作类上添加属性来禁用此行为：
-
-```
-/**
- * Disables action log events for this action.
- *
- * @var bool
- */
-public $withoutActionEvents = true;
-
-```
-
-或者，使用该`withoutActionEvents`方法，可以在将操作附加到资源时为该操作禁用操作日志：
-
-```
-/**
- * Get the actions available for the resource.
- *
- * @param  \Illuminate\Http\Request  $request
- * @return array
- */
-public function actions(Request $request)
-{
-    return [
-        (new SomeAction)->withoutActionEvents()
-    ];
-}
-
-```
-
-### [＃](https://nova.laravel.com/docs/2.0/actions/defining-actions.html#queued-action-statuses)排队的动作状态
-
-当排队的操作正在运行时，您可以为通过其模型集合传递给该操作的任何模型更新该操作的“状态”。例如，您可以使用操作的`markAsFinished`方法来指示该操作已完成对特定模型的处理：
-
-```
-/**
- * Perform the action on the given models.
- *
- * @param  \Laravel\Nova\Fields\ActionFields  $fields
- * @param  \Illuminate\Support\Collection  $models
- * @return mixed
- */
-public function handle(ActionFields $fields, Collection $models)
-{
-    foreach ($models as $model) {
-        (new AccountData($model))->send($fields->subject);
-
-        $this->markAsFinished($model);
-    }
-}
-
-```
-
-或者，如果您想指示某个动作对于给定的模型“失败”，则可以使用以下`markAsFailed`方法：
-
-```
-/**
- * Perform the action on the given models.
- *
- * @param  \Laravel\Nova\Fields\ActionFields  $fields
- * @param  \Illuminate\Support\Collection  $models
- * @return mixed
- */
-public function handle(ActionFields $fields, Collection $models)
-{
-    foreach ($models as $model) {
-        try {
-            (new AccountData($model))->send($fields->subject);
-        } catch (Exception $e) {
-            $this->markAsFailed($model, $e);
-        }
-    }
 }
 ```
