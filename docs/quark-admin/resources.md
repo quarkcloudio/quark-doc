@@ -381,15 +381,24 @@ public function cities(Request $request)
 ```
 
 #### 日期时间（date）字段
+
+`date` 字段提供一个 `picker` 方法，来设置选择器类型：
+
 ``` php
 
 Field::date($column[, $label]);
+
+// 周选择器，picker方法的参数为 date | week | month | quarter | year
+Field::date($column[, $label])->picker('week');
 ```
 
 #### 日期范围（dateRange）字段
-$startDate、$endDate为开始和结束日期:
+$startDate、$endDate为开始和结束日期，`dateRange` 字段提供一个 `picker` 方法，来设置选择器类型：
 ``` php
 Field::dateRange($column[, $label])->value([$startDate,$endDate]);
+
+// 周选择器，picker方法的参数为 date | week | month | quarter | year
+Field::dateRange($column[, $label])->picker('week')->value([$startDate,$endDate]);
 ```
 
 #### 日期时间（datetime）字段
