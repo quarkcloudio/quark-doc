@@ -424,6 +424,34 @@ $startTime、$endTime为开始和结束时间:
 Field::timeRange($column[, $label])->format('HH:mm')->value([$startTime,$endTime]);
 ```
 
+#### 周（week）字段
+注意数据库字段需为字符串类型
+``` php
+
+Field::week($column[, $label]);
+```
+
+#### 月（month）字段
+注意数据库字段需为字符串类型
+``` php
+
+Field::month($column[, $label]);
+```
+
+#### 季度（quarter）字段
+注意数据库字段需为字符串类型
+``` php
+
+Field::quarter($column[, $label]);
+```
+
+#### 年（year）字段
+注意数据库字段需为字符串类型
+``` php
+
+Field::year($column[, $label]);
+```
+
 #### 数字输入（number）字段
 ``` php
 Field::number($column[, $label]);
