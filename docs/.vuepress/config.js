@@ -22,16 +22,21 @@ module.exports = ({
         docsDir: 'docs',
         smoothScroll: true,
         editLinkText: '在 GitHub 上编辑此页',
-        lastUpdated: '上次更新',
+        lastUpdatedText: '上次更新',
+        contributorsText: '贡献者',
         logo: '/logo.png',
-        nav: [
+        navbar: [
             {
-                text: 'CMS文档',
-                link: '/quark-cms/'
+                text: 'Quark文档',
+                link: '/quark/'
             },
             {
                 text: 'Admin文档',
                 link: '/quark-admin/'
+            },
+            {
+                text: 'CMS文档',
+                link: '/quark-cms/'
             },
             {
                 text: 'UI文档',
@@ -39,25 +44,20 @@ module.exports = ({
             },
             {
                 text: 'v2',
-                items: [
+                children: [
                     { text: 'v2', link: 'https://www.quarkcms.com/' },
                     { text: 'v1', link: 'https://v1.quarkcms.com/' }
                 ]
               }
         ],
         sidebar: {
-            '/quark-cms/' : [
+            '/quark/' : [
                 {
-                    title: 'CMS文档',
+                    title: 'Quark文档',
                     collapsable: false,
+                    sidebarDepth:2,
                     children: [
                         '',
-                        'installation',
-                        'tags',
-                        'views',
-                        'tools',
-                        'qa',
-                        'helper',
                     ]
                 },
             ],
@@ -79,6 +79,21 @@ module.exports = ({
                     ]
                 },
             ],
+            '/quark-cms/' : [
+                {
+                    title: 'CMS文档',
+                    collapsable: false,
+                    children: [
+                        '',
+                        'installation',
+                        'tags',
+                        'views',
+                        'tools',
+                        'qa',
+                        'helper',
+                    ]
+                },
+            ],
             '/quark-ui/' : [
                 {
                     title: 'UI文档',
@@ -91,30 +106,38 @@ module.exports = ({
             ]
         }
     },
+    themePlugins: {
+        // only enable git plugin in production mode
+        git: true,
+    },
     plugins: [
         ['@vuepress/back-to-top', true],
-        ['@vuepress/last-updated',{
-                transformer: (timestamp, lang) => {
-                    const moment = require('moment')
-                    moment.locale('zh-cn')
-                    return moment(timestamp).fromNow()
-                }
-            }
-        ],
         ['@vuepress/pwa', {
             serviceWorker: true,
             updatePopup: true
         }],
         ['@vuepress/medium-zoom', true],
-        ['container', {
+        ['@vuepress/container', {
             type: 'vue',
             before: '<pre class="vue-container"><code>',
             after: '</code></pre>'
         }],
-        ['container', {
+        ['@vuepress/container', {
             type: 'upgrade',
             before: info => `<UpgradePath title="${info}">`,
             after: '</UpgradePath>'
-        }]
+        }],
+        ['@vuepress/plugin-docsearch',{
+            apiKey: '3a539aab83105f01761a137c61004d85',
+            indexName: 'vuepress',
+            searchParameters: {
+                facetFilters: ['tags:v2'],
+            },
+            // locales: {
+            //     '/zh/': {
+            //         placeholder: '搜索文档',
+            //     },
+            // },
+        }],
     ]
 })

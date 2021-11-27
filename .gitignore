@@ -13,3 +13,5 @@
 # misc
 .DS_Store
 .vscode
+.temp
+.cache
