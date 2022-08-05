@@ -1,4 +1,5 @@
 const moment = require('moment');
+const { defaultTheme } = require('@vuepress/theme-default')
 
 module.exports = ({
     dest: '../../quarkdoc',
@@ -15,7 +16,9 @@ module.exports = ({
         ['meta', { name: 'msapplication-TileImage', content: '/icons/msapplication-icon-144x144.png' }],
         ['meta', { name: 'msapplication-TileColor', content: '#000000' }]
     ],
-    themeConfig: {
+
+    theme: defaultTheme({
+
         repo: 'quarkcms/quark-doc',
         repoLabel: 'GitHub',
         editLinks: true,
@@ -105,7 +108,8 @@ module.exports = ({
                 },
             ]
         }
-    },
+    }),
+
     themePlugins: {
         // only enable git plugin in production mode
         git: true,
