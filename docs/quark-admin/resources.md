@@ -353,16 +353,19 @@ Field::select($column[, $label])
 ``` php
 
 // 下拉框联动
-Field::select('province', '省')
-->options([
-    1 => '北京',
-    2 => '天津',
-    3 => '河北省'
-])
-->load('city','admin/area/cities');
+Field::selects([
+    // 下拉框联动
+    Field::select('province', '省')
+    ->options([
+        1 => '北京',
+        2 => '天津',
+        3 => '河北省'
+    ])
+    ->load('city','admin/area/cities'),
 
-// 市
-Field::select('city', '市');
+    // 市
+    Field::select('city', '市')
+]);
 ```
 
 ##### 下拉框联动的接口代码示例
