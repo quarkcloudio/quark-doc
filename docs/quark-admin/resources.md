@@ -688,9 +688,22 @@ Field::file($column[, $label])->limitType(['image/jpeg','image/png']);
 
 #### 嵌套表单字段（list）字段
 ``` php
-Field::list($column[, $label])->button('添加数据')->item(function ($form) {
+Field::list($column[, $label])->button('添加数据')->item(function () {
 	Field::text($column, [$label]);
 	...
+});
+
+// 实例
+Field::list($column[, $label])
+->button('添加数据','bottom')
+->item(function () {
+    return Field::group([
+        Field::text('title','奖品名称'),
+
+        Field::number('num','奖品数量'),
+
+        Field::number('probability','中奖概率')
+    ]);
 });
 ```
 
