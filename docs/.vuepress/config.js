@@ -3,8 +3,8 @@ const { defaultTheme } = require('@vuepress/theme-default')
 
 module.exports = ({
     dest: '../../quarkdoc',
-    title: 'Quark',
-    description: '一款由 Ant Design Pro & Laravel 驱动的开发框架',
+    title: 'QuarkCMS',
+    description: '基于低代码架构 可快速开发多端应用的解决方案',
     head: [
         ['link', { rel: 'icon', href: `/logo.png` }],
         ['link', { rel: 'manifest', href: '/manifest.json' }],
@@ -18,7 +18,6 @@ module.exports = ({
     ],
 
     theme: defaultTheme({
-
         repo: 'quarkcms/quark-doc',
         repoLabel: 'GitHub',
         editLinks: true,
@@ -30,19 +29,15 @@ module.exports = ({
         logo: '/logo.png',
         navbar: [
             {
-                text: 'Quark文档',
-                link: '/quark/'
+                text: 'QuarkGo文档',
+                link: '/quark-go/'
             },
             {
-                text: 'Admin文档',
+                text: 'QuarkAdmin文档',
                 link: '/quark-admin/'
             },
             {
-                text: 'CMS文档',
-                link: '/quark-cms/'
-            },
-            {
-                text: 'UI文档',
+                text: 'QuarkUI文档',
                 link: '/quark-ui/'
             },
             {
@@ -54,13 +49,19 @@ module.exports = ({
               }
         ],
         sidebar: {
-            '/quark/' : [
+            '/quark-go/' : [
                 {
-                    title: 'Quark文档',
+                    title: 'QuarkGo文档',
                     collapsable: false,
                     sidebarDepth:2,
                     children: [
-                        '',
+                        'installation',
+                        'resources',
+                        'search',
+                        'actions',
+                        'metrics',
+                        'dashboards',
+                        'builtin'
                     ]
                 },
             ],
@@ -70,7 +71,6 @@ module.exports = ({
                     collapsable: false,
                     sidebarDepth:2,
                     children: [
-                        '',
                         'installation',
                         'resources',
                         'search',
@@ -79,21 +79,6 @@ module.exports = ({
                         'dashboards',
                         'builtin',
                         'helper'
-                    ]
-                },
-            ],
-            '/quark-cms/' : [
-                {
-                    title: 'CMS文档',
-                    collapsable: false,
-                    children: [
-                        '',
-                        'installation',
-                        'tags',
-                        'views',
-                        'tools',
-                        'qa',
-                        'helper',
                     ]
                 },
             ],
