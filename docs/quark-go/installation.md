@@ -307,7 +307,7 @@ func isDir(path string) bool {
 }
 ```
 
-## 整理 & 拉取依赖
+## 拉取依赖
 ``` bash
 # 第一步，创建vendor目录
 go mod vendor

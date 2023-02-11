@@ -50,44 +50,46 @@ module.exports = ({
         sidebar: {
             '/quark-go/' : [
                 {
-                    title: 'QuarkGo文档',
-                    collapsable: false,
+                    text: 'QuarkGo文档',
+                    collapsable: true,
                     sidebarDepth:2,
                     children: [
-                        'installation',
-                        'resources',
-                        'search',
-                        'actions',
-                        'metrics',
-                        'dashboards',
-                        'builtin'
+                        '/quark-go/README.md',
+                        '/quark-go/installation',
+                        '/quark-go/resources',
+                        '/quark-go/search',
+                        '/quark-go/actions',
+                        '/quark-go/metrics',
+                        '/quark-go/dashboards',
+                        '/quark-go/builtin'
                     ]
                 },
             ],
             '/quark-admin/' : [
                 {
-                    title: 'Admin文档',
-                    collapsable: false,
+                    text: 'Admin文档',
+                    collapsable: true,
                     sidebarDepth:2,
                     children: [
-                        'installation',
-                        'resources',
-                        'search',
-                        'actions',
-                        'metrics',
-                        'dashboards',
-                        'builtin',
-                        'helper'
+                        '/quark-admin/README.md',
+                        '/quark-admin/installation',
+                        '/quark-admin/resources',
+                        '/quark-admin/search',
+                        '/quark-admin/actions',
+                        '/quark-admin/metrics',
+                        '/quark-admin/dashboards',
+                        '/quark-admin/builtin',
+                        '/quark-admin/helper'
                     ]
                 },
             ],
             '/quark-ui/' : [
                 {
-                    title: 'UI文档',
-                    collapsable: false,
+                    text: 'UI文档',
+                    collapsable: true,
                     children: [
-                        '',
-                        'getting-started'
+                        '/quark-ui/README.md',
+                        '/quark-ui/getting-started'
                     ]
                 },
             ]
