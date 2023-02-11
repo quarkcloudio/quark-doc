@@ -1,15 +1,72 @@
 # 入门
 
-## 安装
-
-### 准备 Golang 开发环境
+## 开发环境
 1. 如果您之前未搭建 Golang 开发环境，请先安装 Golang 环境。
 2. 推荐使用最新版本的 Golang，或保证现有 Golang 版本 >= 1.18。小于 1.18 版本，可以自行尝试使用但不保障兼容性和稳定性。
 3. 确保打开 go mod 支持 (Golang >= 1.18时，默认开启)。
 
-### 在 Hertz 框架中使用
+## 快速开始
+1. 在当前目录下创建 demo 文件夹，进入该目录中
+2. 创建 main.go 文件
+3. 在 main.go 文件中添加如下代码：
+
+``` go
+package main
+
+import (
+	"github.com/quarkcms/quark-go/pkg/app/handler/admin"
+	"github.com/quarkcms/quark-go/pkg/app/install"
+	"github.com/quarkcms/quark-go/pkg/app/middleware"
+	"github.com/quarkcms/quark-go/pkg/builder"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+)
+
+func main() {
+	// 数据库配置信息
+	dsn := "root:Bc5HQFJc4bLjZCcC@tcp(127.0.0.1:3306)/quarkgo?charset=utf8&parseTime=True&loc=Local"
+
+	// 配置资源
+	config := &builder.Config{
+		AppKey:    "123456",
+		Providers: admin.Providers,
+		DBConfig: &builder.DBConfig{
+			Dialector: mysql.Open(dsn),
+			Opts:      &gorm.Config{},
+		},
+	}
+
+	// 实例化对象
+	b := builder.New(config)
+
+	// 静态文件
+	b.Static("/", "./website")
+
+	// 自动构建数据库、拉取静态文件
+	b.Use(install.Handle)
+
+	// 后台中间件
+	b.Use(middleware.Handle)
+
+	// 响应Get请求
+	b.GET("/", func(ctx *builder.Context) error {
+		ctx.Write([]byte("hello world!"))
+
+		return nil
+	})
+
+	// 启动服务
+	b.Run(":3000")
+}
+```
+
+## 框架中使用
+
+### Hertz框架
 1. 首先确保 Hertz 框架安装成功
 2. 在 main.go 文件中正确引入quark-go相关包
+3. 在 main.go 文件中添加如下代码：
+
 ``` go
 package main
 
@@ -22,10 +79,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
-```
 
-在 main.go 文件中添加如下代码：
-``` go
 func main() {
 	h := server.Default()
 	register(h)
@@ -59,9 +113,11 @@ func main() {
 }
 ```
 
-### 在 Gin 框架中使用
+### Gin框架
 1. 首先确保 Gin 框架安装成功
 2. 在 main.go 文件中正确引入quark-go相关包
+3. 在 main.go 文件中添加如下代码：
+
 ``` go
 package main
 
@@ -74,10 +130,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
-```
 
-在 main.go 文件中添加如下代码：
-``` go
 func main() {
 	r := gin.Default()
     
@@ -107,9 +160,11 @@ func main() {
 }
 ```
 
-### 在 Fiber 框架中使用
+### Fiber框架
 1. 首先确保 Fiber 框架安装成功
 2. 在 main.go 文件中正确引入quark-go相关包
+3. 在 main.go 文件中添加如下代码：
+
 ``` go
 package main
 
@@ -122,10 +177,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
-```
 
-在 main.go 文件中添加如下代码：
-``` go
 func main() {
 	app := fiber.New()
 
@@ -170,9 +222,11 @@ func main() {
 }
 ```
 
-### 在 Zero 框架中使用
+### Zero框架
 1. 首先确保 Zero 框架安装成功
 2. 在 main.go 文件中正确引入quark-go相关包
+3. 在 main.go 文件中添加如下代码：
+
 ``` go
 package main
 
@@ -185,10 +239,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
-```
 
-在 main.go 文件中添加如下代码：
-``` go
 func main() {
 	flag.Parse()
 

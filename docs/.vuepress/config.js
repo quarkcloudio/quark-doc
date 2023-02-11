@@ -1,8 +1,7 @@
-const moment = require('moment');
-const { defaultTheme } = require('@vuepress/theme-default')
+import { defaultTheme } from '@vuepress/theme-default'
 
 module.exports = ({
-    dest: '../../quarkdoc',
+    dest: './dist',
     title: 'QuarkCMS',
     description: '基于低代码架构 可快速开发多端应用的解决方案',
     head: [
