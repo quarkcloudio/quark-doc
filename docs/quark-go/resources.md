@@ -1,6 +1,6 @@
 # 资源
 
-## 基础
+## 快速开始
 
 资源（Resource）是 QuarkGO 中重要的组成部分，几乎所有的功能都是围绕着资源实现的；QuarkGo 的思想是约定大于配置，我们在资源里已经内置好各种功能的实现，开发者只需关注关键点的功能实现即可开发出完整的功能模块。
 
@@ -23,7 +23,7 @@ www                         WEB部署目录
 ├─website                   静态文件目录（对外访问）
 └─main.go                   主文件
 ~~~
-3. 打开 models 目录，创建 [post.go](https://github.com/quarkcms/quark-simple/blob/main/internal/models/post.go) 模型文件
+3. 打开 models 目录，创建 [post.go](https://github.com/quarkcms/quark-simple/blob/main/internal/models/post.go) 模型文件；
 4. 在 post.go 模型文件中添加如下代码：
 
 ``` go
@@ -46,7 +46,7 @@ type Post struct {
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 }
 ```
-5. 打开 resources 目录，创建 [post.go](https://github.com/quarkcms/quark-simple/blob/main/internal/admin/resources/post.go) 资源文件
+5. 打开 resources 目录，创建 [post.go](https://github.com/quarkcms/quark-simple/blob/main/internal/admin/resources/post.go) 资源文件；
 6. 在 post.go 资源文件中添加如下代码：
 
 ``` go
@@ -211,3 +211,78 @@ func main() {
 ```
 
 9. 重启服务后，我们打开 ```http://127.0.0.1:3000/admin/#/index?api=/api/admin/post/index``` 路径，你就可以看到文章的页面了；至此一个简单的 CURD 就完成了，完整的项目代码请打开 [Demo](https://github.com/quarkcms/quark-simple) 链接查看
+
+
+## 模型
+
+通过资源的`Model`属性，来绑定CURD操作的数据表：
+
+``` go
+// 初始化
+func (p *Post) Init() interface{} {
+	// 初始化模板
+	p.TemplateInit()
+
+	// 模型
+	p.Model = &models.Post{}
+
+	return p
+}
+```
+
+## 页面标题
+
+可以通过资源的`Title`属性设置页面标题：
+
+``` go
+// 初始化
+func (p *Post) Init() interface{} {
+	// 初始化模板
+	p.TemplateInit()
+
+	// 标题
+	p.Title = "文章"
+
+	return p
+}
+```
+
+## 列表分页
+
+通过资源的`PerPage`属性设置每页数量或者关闭分页，当值未设置时，即关闭了列表分页功能：
+
+```go
+// 初始化
+func (p *Post) Init() interface{} {
+
+	// 初始化模板
+	p.TemplateInit()
+
+	// 分页
+	p.PerPage = 10
+
+	return p
+}
+```
+
+## 字段
+
+### 概述
+
+每个 QuarkGo 资源均包含一个`Fields`方法，用来组合页面的展示内容；Fields 提供了各种开箱即用的字段，包括文本输入、布尔、日期、文件上传等多种形式的控件。
+
+要向资源添加字段，我们只需将它加入到资源的`Fields`方法内。此方法会接受几个参数，通常我们需传递一个数据库表对应的列名，以及列名展示的文字：
+``` go
+
+// 字段
+func (p *Post) Fields(ctx *builder.Context) []interface{} {
+	field := &builder.AdminField{}
+
+	return []interface{}{
+		field.ID("id", "ID"),
+		field.Text("title", "标题"),
+		field.Editor("content", "内容"),
+	}
+}
+
+```
