@@ -455,3 +455,83 @@ SetOptions(map[interface{}]interface{}{
     2: "女",
 }).SetDefault(1)
 ```
+
+### Checkbox
+
+`Checkbox` 字段：
+
+``` go
+field.Checkbox("role_ids", "角色").
+SetOptions(map[interface{}]interface{}{
+    1: "编辑",
+    2: "运营",
+	3: "业务",
+}).SetDefault([1,2])
+```
+
+### Select
+
+`Select` 字段：
+
+``` go
+
+// 单选模式
+field.Select("category_id", "分类").
+SetOptions(map[interface{}]interface{}{
+    1: "新闻",
+    2: "音乐",
+	3: "体育",
+}).SetDefault(1)
+
+// 多选模式
+field.Select("category_id", "分类").
+SetMode("multiple").
+SetOptions(map[interface{}]interface{}{
+    1: "新闻",
+    2: "音乐",
+	3: "体育",
+}).SetDefault([1,2])
+
+// tags模式
+field.Select("category_id", "分类").
+SetMode("tags").
+SetOptions(map[interface{}]interface{}{
+    1: "新闻",
+    2: "音乐",
+	3: "体育",
+}).SetDefault([1,2])
+```
+
+#### Select 组件联动
+
+``` go
+
+// 下拉框联动
+Field::selects([
+    // 下拉框联动
+	field.Select("province", "省").
+	SetOptions(map[interface{}]interface{}{
+		1: "北京",
+		2: "天津",
+		3: "河北省",
+	}).SetLoad("city","/api/admin/area/cities"),
+
+    // 市
+    Field::select("city", "市"),
+]);
+```
+
+#### ```/api/admin/area/cities```接口返回数据格式
+
+``` go
+return []map[string]interface{}{
+		{
+			"label":"石家庄",
+			"value":10,
+		},
+		{
+			"label":"唐山",
+			"value":11,
+		},
+	}
+```
