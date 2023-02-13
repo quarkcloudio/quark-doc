@@ -363,3 +363,68 @@ field.Text("title", "标题").SetExtra("help tip")
 ```go
 field.Text("title", "标题").SetPlaceholder("请输入标题")
 ```
+
+### 设置必填
+
+通过`SetRequired`方法，设置表单字段为必填项：
+
+```go
+field.Text("title", "标题").SetRequired()
+```
+
+### 禁用字段
+
+可以通过`SetDisabled`方法，禁用表单里的字段：
+
+```go
+field.Text("title", "标题").SetDisabled(true)
+```
+
+## 字段控件
+
+QuarkGo 提供了丰富的字段控件，下面我们将详细介绍各种控件的使用方法。
+
+### Hidden
+
+`Hidden` 字段可以用于不需要展示，但是却需要提交的表单项，例如 `id`等：
+
+```go
+field.Hidden("id", "ID")
+```
+
+### ID
+
+`ID` 专门用于id字段的展示：
+
+```go
+field.ID("id", "ID")
+```
+
+### Text
+
+`Text` 字段提供了一个 `type` 属性为 `text` 的 `input` 字段：
+
+```go
+field.Text("title", "标题")
+
+// 添加占位符
+field.Text("title", "标题").SetPlaceholder("请输入标题")
+
+// 带标签的 input，设置后置标签。例如：'http://'
+field.Text("title", "标题").SetAddonAfter("http://")
+
+// 带标签的 input，设置前置标签。例如：'.com'
+field.Text("title", "标题").SetAddonBefore(".com")
+
+// 最大长度
+field.Text("title", "标题").SetMaxLength(20)
+
+// 字段大小。注：标准表单内的输入框大小限制为 large。可选 large default small
+field.Text("title", "标题").SetSize("default")
+
+// 可以点击清除图标删除内容
+field.Text("title", "标题").SetAllowClear(true)
+
+// Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
+field.Text("title", "标题").SetWidth("xs")
+```
