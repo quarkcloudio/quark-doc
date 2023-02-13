@@ -281,7 +281,7 @@ Field::text($column, [$label])->width(100);
 
 #### 文本域（textarea）字段
 
-`textarea` 字段提供一个 `textarea` 字段：
+`textarea` 字段：
 
 ```php
 // 添加占位符
@@ -296,7 +296,7 @@ Field::textarea($column, [$label])->width(100);
 
 #### 单选（radio）字段
 
-`radio` 字段提供一个 `radio` 字段：
+`radio` 字段：
 
 ``` php
 Field::radio($column[, $label])->options(['m' => 'Female', 'f'=> 'Male'])->default('m');
@@ -306,7 +306,7 @@ Field::radio($column[, $label])->options(['m' => 'Female', 'f'=> 'Male'])->value
 
 #### 多选（checkbox）字段
 
-`checkbox` 字段提供一个 `checkbox` 字段：
+`checkbox` 字段：
 
 ``` php
 Field::checkbox($column[, $label])->options([

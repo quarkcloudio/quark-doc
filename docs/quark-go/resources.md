@@ -380,9 +380,9 @@ field.Text("title", "标题").SetRequired()
 field.Text("title", "标题").SetDisabled(true)
 ```
 
-## 字段控件
+## 字段组件
 
-QuarkGo 提供了丰富的字段控件，下面我们将详细介绍各种控件的使用方法。
+QuarkGo 提供了丰富的字段组件，下面我们将详细介绍各种控件的使用方法。
 
 ### Hidden
 
@@ -427,4 +427,31 @@ field.Text("title", "标题").SetAllowClear(true)
 
 // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
 field.Text("title", "标题").SetWidth("xs")
+```
+
+### Textarea
+
+`Textarea` 文本域字段：
+
+```go
+// 添加占位符
+field.TextArea("content", "内容").SetPlaceholder("请输入内容")
+
+// 行数
+field.TextArea("content", "内容").SetMaxRows(10)
+
+// 宽度
+field.TextArea("content", "内容").SetWidth("xs")
+```
+
+### Radio
+
+`Radio` 字段：
+
+``` go
+field.Radio("sex", "性别").
+SetOptions(map[interface{}]interface{}{
+    1: "男",
+    2: "女",
+}).SetDefault(1)
 ```
