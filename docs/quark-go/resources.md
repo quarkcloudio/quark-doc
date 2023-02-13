@@ -286,3 +286,80 @@ func (p *Post) Fields(ctx *builder.Context) []interface{} {
 }
 
 ```
+
+### 字段展示
+
+你经常会在某些场景下只想显示某个字段。例如，你通常有一个在查询列表中无需显示的`Password`字段。同样地，你也想在「创建 / 更新表单」里只显示`created_at`字段。QuarkGo 可以轻松的控制字段的显示或隐藏。
+
+下面的方法可以很好的控制字段在上下文里展示或隐藏：
+
+- `HideFromIndex`     在列表页隐藏
+- `HideFromDetail`    在详情页隐藏
+- `HideWhenCreating`  在创建表单页隐藏
+- `HideWhenUpdating`  在更新表单页隐藏
+- `HideWhenExporting` 导出数据时隐藏
+- `HideWhenImporting` 导入数据时隐藏
+- `OnIndexShowing`    在列表页展示
+- `OnDetailShowing`   在详情页展示
+- `ShowOnCreating`    在创建表单页展示
+- `ShowOnUpdating`    在更新表单页展示
+- `ShowOnExporting`   导出数据时展示
+- `ShowOnImporting`   导入数据时展示
+- `OnlyOnIndex`       只在列表页展示
+- `OnlyOnDetail`      只在详情页展示
+- `OnlyOnForms`       只在表单页展示
+- `OnlyOnExport`      只在导出数据时展示
+- `OnlyOnImport`      只在导入数据时展示
+- `ExceptOnForms`     除了表单页均展示
+
+你可以在字段定义时链式调用这些方法，以指示 QuarkGo 在哪里可以显示 / 隐藏字段：
+
+```go
+field := &builder.AdminField{}
+field.Editor("content", "内容").OnlyOnForms()
+```
+
+### 可编辑字段
+
+当向资源添加一个字段时，你可以使用`SetEditable`方法指定列表上的字段为可编辑状态：
+
+```go
+field.Text("title", "标题").SetEditable(true)
+```
+
+### 设置默认值
+
+可以通过`SetDefault`方法，给表单里的字段设置默认值：
+
+```go
+field.Text("title", "标题").SetDefault("hello world")
+```
+
+### 设置保存值
+
+`SetValue`方法与`SetDefault`方法效果相似，不同的是当你点击重置表单的时候，会重置成`SetDefault`方法设置的值：
+::: tip
+注意：如果你同时使用`SetDefault()`方法和`SetValue()`方法给字段赋值，`SetValue()`方法设置的值会冲掉`SetDefault()`设置的值
+:::
+```go
+field.Text("title", "标题").SetValue("hello world")
+```
+
+### 提示信息
+
+可以通过`SetHelp`，`SetExtra`方法，给表单里的字段设置提示信息：
+
+```go
+field.Text("title", "标题").SetHelp("help tip")
+
+// 或者
+field.Text("title", "标题").SetExtra("help tip")
+```
+
+### 设置占位符
+
+可以通过`SetPlaceholder`方法，设置表单里字段的占位符：
+
+```go
+field.Text("title", "标题").SetPlaceholder("请输入标题")
+```
