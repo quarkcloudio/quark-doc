@@ -617,7 +617,7 @@ field.Editor("content", "内容").SetHeight(500).SetWidth(600)
 
 ### Switch
 SetTrueValue 和 SetFalseValue 对应开关的两个值 `true` 和 `false`:
-``` php
+``` go
 field.Switch("status", "状态").
 	SetTrueValue("正常").
 	SetFalseValue("禁用").
