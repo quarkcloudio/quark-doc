@@ -5,7 +5,7 @@
 资源（Resource）是 QuarkGO 中重要的组成部分，几乎所有的功能都是围绕着资源实现的；QuarkGo 的思想是约定大于配置，我们在资源里已经内置好各种功能的实现，开发者只需关注关键点的功能实现即可开发出完整的功能模块。
 
 下面我们以内容管理为例，实现一个关于文章的 CURD 功能：
-1. 首先我们以```github.com/quarkcms/quark-simple```命名模块，执行```go mod init github.com/quarkcms/quark-simple```命令，然后参照 [快速开始](./installation.html#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B) 章节，创建好 [main.go](https://github.com/quarkcms/quark-simple/blob/main/main.go) 文件；
+1. 首先我们以```github.com/quarkcms/quark-star```命名模块，执行```go mod init github.com/quarkcms/quark-star```命令，然后参照 [快速开始](./installation.html#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B) 章节，创建好 [main.go](https://github.com/quarkcms/quark-star/blob/main/main.go) 文件；
 2. 根据约定创建如下目录（也可自由命名）：
 ~~~
 www                         WEB部署目录
@@ -23,7 +23,7 @@ www                         WEB部署目录
 ├─website                   静态文件目录（对外访问）
 └─main.go                   主文件
 ~~~
-3. 打开 models 目录，创建 [post.go](https://github.com/quarkcms/quark-simple/blob/main/internal/models/post.go) 模型文件；
+3. 打开 models 目录，创建 [post.go](https://github.com/quarkcms/quark-star/blob/main/internal/models/post.go) 模型文件；
 4. 在 post.go 模型文件中添加如下代码：
 
 ``` go
@@ -46,7 +46,7 @@ type Post struct {
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 }
 ```
-5. 打开 resources 目录，创建 [post.go](https://github.com/quarkcms/quark-simple/blob/main/internal/admin/resources/post.go) 资源文件；
+5. 打开 resources 目录，创建 [post.go](https://github.com/quarkcms/quark-star/blob/main/internal/admin/resources/post.go) 资源文件；
 6. 在 post.go 资源文件中添加如下代码：
 
 ``` go
@@ -57,7 +57,7 @@ import (
 	"github.com/quarkcms/quark-go/pkg/app/handler/admin/searches"
 	"github.com/quarkcms/quark-go/pkg/builder"
 	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource"
-	"github.com/quarkcms/quark-simple/internal/models"
+	"github.com/quarkcms/quark-star/internal/models"
 )
 
 type Post struct {
@@ -140,13 +140,13 @@ func (p *Post) Actions(ctx *builder.Context) []interface{} {
 	}
 }
 ```
-7. 将资源注册到 [providers.go](https://github.com/quarkcms/quark-simple/blob/main/internal/admin/providers.go) 文件里，代码如下：
+7. 将资源注册到 [providers.go](https://github.com/quarkcms/quark-star/blob/main/internal/admin/providers.go) 文件里，代码如下：
 
 ```go
 package admin
 
 import (
-	"github.com/quarkcms/quark-simple/internal/admin/resources"
+	"github.com/quarkcms/quark-star/internal/admin/resources"
 )
 
 // 注册服务
@@ -164,7 +164,7 @@ import (
 	"github.com/quarkcms/quark-go/pkg/app/install"
 	"github.com/quarkcms/quark-go/pkg/app/middleware"
 	"github.com/quarkcms/quark-go/pkg/builder"
-	adminproviders "github.com/quarkcms/quark-simple/internal/admin"
+	adminproviders "github.com/quarkcms/quark-star/internal/admin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -210,7 +210,7 @@ func main() {
 
 ```
 
-9. 重启服务后，我们打开 ```http://127.0.0.1:3000/admin/#/index?api=/api/admin/post/index``` 路径，你就可以看到文章的页面了；至此一个简单的 CURD 就完成了，完整的项目代码请打开 [Demo](https://github.com/quarkcms/quark-simple) 链接查看
+9. 重启服务后，我们打开 ```http://127.0.0.1:3000/admin/#/index?api=/api/admin/post/index``` 路径，你就可以看到文章的页面了；至此一个简单的 CURD 就完成了，完整的项目代码请打开 [Demo](https://github.com/quarkcms/quark-star) 链接查看
 
 
 ## 模型
