@@ -535,3 +535,38 @@ return []map[string]interface{}{
 		},
 	}
 ```
+
+### Date
+
+`Date` 字段提供一个 `SetPicker` 方法，来设置选择器类型：
+
+``` go
+field.Date("date", "日期")
+
+// 周选择器，picker方法的参数为 date | week | month | quarter | year
+field.Date("week", "周").SetPicker("week")
+```
+
+### DateRange
+`DateRange` 字段提供一个 `SetPicker` 方法，来设置选择器类型：
+``` go
+field.DateRange("date", "日期")->value([]string{"2023-02-10","2023-02-12"})
+
+// 周选择器，picker方法的参数为 date | week | month | quarter | year
+field.DateRange("week", "周")->SetPicker("week")
+```
+
+### Datetime
+``` go
+field.Datetime("datetime", "日期时间")
+```
+
+### DatetimeRange
+``` go
+field.DatetimeRange("datetimeRange", "日期时间范围")
+```
+
+### Time
+``` go
+field.Time("time", "时间")
+```
