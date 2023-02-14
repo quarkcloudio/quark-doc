@@ -631,7 +631,7 @@ field.Switch("status", "状态").
 field.Display("这是一条展示信息")
 ```
 
-### icon
+### Icon
 ``` go
 field.Icon("icon", "图标")
 ```
