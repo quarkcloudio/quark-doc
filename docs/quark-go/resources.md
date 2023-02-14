@@ -570,3 +570,57 @@ field.DatetimeRange("datetimeRange", "日期时间范围")
 ``` go
 field.Time("time", "时间")
 ```
+
+### TimeRange
+``` go
+field.Time("time", "时间")->SetFormat("HH:mm")
+```
+
+### Week
+``` go
+field.Week("week", "周")
+```
+
+### Month
+``` go
+field.Month("month", "月")
+```
+
+### Quarter
+``` go
+field.Quarter("quarter", "季度")
+```
+
+### Year
+``` go
+field.Year("year", "年")
+```
+
+### Number
+``` go
+field.Number("num", "数量")
+
+// 设置最大值
+field.Number("num", "数量").SetMax(100)
+
+// 设置最小值
+field.Number("num", "数量").SetMin(10)
+
+// 步进值
+field.Number("num", "数量").SetStep(1)
+```
+
+### Editor
+``` go
+field.Editor("content", "内容").SetHeight(500).SetWidth(600)
+```
+
+### Switch
+SetTrueValue 和 SetFalseValue 对应开关的两个值 `true` 和 `false`:
+``` php
+field.Switch("status", "状态").
+	SetTrueValue("正常").
+	SetFalseValue("禁用").
+	SetEditable(true).
+	SetDefault(true)
+```
