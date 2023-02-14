@@ -635,3 +635,54 @@ field.Display("这是一条展示信息")
 ``` go
 field.Icon("icon", "图标")
 ```
+
+### Cascader
+``` go
+options := []map[string]interface{}{
+	{
+		"value" :"zhejiang",
+		"label":"Zhejiang",
+		"children" : []map[string]interface{}{
+			{
+				"value":"hangzhou",
+				"label":"Hangzhou",
+			},
+		},
+	},
+}
+
+field.Cascader("address", "地址").SetOptions(options)
+
+// 通过isLeaf属性设定是否有下一级
+options1 := []map[string]interface{}{
+	{
+		"value" :"zhejiang",
+		"label":"Zhejiang",
+		"isLeaf":false,
+	},
+	{
+		"value":"hebei",
+		"label":"Hebei",
+		"isLeaf":false,
+	},
+}
+
+// 通过ajax获取数据
+field.Cascader("address", "地址").SetOptions(options1).SetApi("/api/admin/area/suggest")
+```
+
+#### 接口代码返回数据
+``` go
+return []map[string]interface{}{
+	{
+		"value" :"shijiazhuang",
+		"label":"Shijiazhuang",
+		"isLeaf":false,
+	},
+	{
+		"value":"tangshan",
+		"label":"Tangshan",
+		"isLeaf":false,
+	},
+}
+```
