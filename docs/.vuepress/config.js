@@ -3,7 +3,7 @@ import { defaultTheme } from '@vuepress/theme-default'
 module.exports = ({
     dest: './dist',
     title: 'QuarkCMS',
-    description: 'The Best Center Management System',
+    description: 'The Lowcode Center Management System',
     head: [
         ['link', { rel: 'icon', href: `/logo.png` }],
         ['link', { rel: 'manifest', href: '/manifest.json' }],
