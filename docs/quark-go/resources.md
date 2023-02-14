@@ -624,3 +624,14 @@ field.Switch("status", "状态").
 	SetEditable(true).
 	SetDefault(true)
 ```
+
+### Display
+只显示文字，不做任何操作：
+``` go
+field.Display("这是一条展示信息")
+```
+
+### icon
+``` go
+field.Icon("icon", "图标")
+```
