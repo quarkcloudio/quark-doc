@@ -814,19 +814,68 @@ field.File("file", "文件上传组件").SetLimitType([]string{"image/jpeg","ima
 嵌套表单字段
 
 ``` go
-field.List("list", "嵌套表单组件").SetButton("添加数据","bottom")->SetItem(func () interface{} {
+field.List("list", "嵌套表单组件").SetButton("添加数据","bottom").SetItem(func () interface{} {
 	return field.Text("title", "标题")
 })
 
 // 实例
 field.List("list", "嵌套表单组件")
 .SetButton("添加数据","bottom")
-->SetItem(func () interface{} {
+.SetItem(func () interface{} {
 
 	return field.Group([]interface{}{
         field.Text("title", "标题"),
         field.Number("num","奖品数量"),
         Field::number("probability","中奖概率"),
     })
+})
+```
+
+## 表单联动
+表单联动是指，在选择表单项的指定的选项时，联动显示其他的表单项。
+
+### 文本组件联动
+``` go
+field.Text("name", "姓名").SetWhen("yangguo", func () interface{} {
+	return field.Text("title", "职位")
+})
+```
+
+### 单选组件联动
+``` go
+field.Radio("nationality", "国籍").
+SetOptions(map[interface{}]interface{}{
+    1: "本国",
+    2: "外国",
+}).
+SetWhen(1, func () interface{} {
+	return []interface{}{
+        field.Text("name", "姓名"),
+        field.Text("idcard", "身份证"),
+    }
+}).
+SetWhen(2, func () interface{} {
+	return []interface{}{
+        field.Text("name", "姓名"),
+        field.Text("passport", "护照"),
+    }
+})
+```
+
+上例中，方法`SetWhen(1, callback)`等效于`SetWhen("=", 1, callback)`, 如果用操作符`=`，则可以省略这个参数，同时也支持这些操作符 `=`、`>`、`>=`、`<`、`<=`、`!=`、`in`、`notIn` 使用方法如下：
+
+``` go
+field.Radio("check", "选择").
+SetWhen(">", 1, func () interface{} {
+
+}).
+SetWhen(">=", 2, func () interface{} {
+
+}).
+SetWhen("in", []int[5, 6], func () interface{} {
+
+}).
+SetWhen("notIn", []int[7, 8], func () interface{} {
+
 })
 ```
