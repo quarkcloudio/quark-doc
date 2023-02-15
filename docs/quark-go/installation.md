@@ -60,6 +60,35 @@ func main() {
 }
 ```
 
+## 拉取依赖
+``` bash
+# 第一步，创建vendor目录
+go mod vendor
+# 第二步，安装依赖:
+go mod tidy
+```
+
+## 配置信息
+在 main.go 代码中配置数据库相关信息：
+``` go
+dsn := "root:Bc5HQFJc4bLjZCcC@tcp(127.0.0.1:3306)/quarkgo?charset=utf8&parseTime=True&loc=Local"
+```
+
+替换 AppKey（请务必更改，且不可泄露）：
+``` go
+config := &builder.Config{
+    AppKey:"Your App Key",
+}
+```
+::: warning
+注意：因为AppKey用于JWT加密，请务必更改！
+:::
+
+## 启动服务
+``` bash
+go run main.go
+```
+
 ## 框架中使用
 
 ### Hertz框架
@@ -306,36 +335,6 @@ func isDir(path string) bool {
 	return s.IsDir()
 }
 ```
-
-## 拉取依赖
-``` bash
-# 第一步，创建vendor目录
-go mod vendor
-# 第二步，安装依赖:
-go mod tidy
-```
-
-## 配置信息
-在 main.go 代码中配置数据库相关信息：
-``` go
-dsn := "root:Bc5HQFJc4bLjZCcC@tcp(127.0.0.1:3306)/quarkgo?charset=utf8&parseTime=True&loc=Local"
-```
-
-替换 AppKey（请务必更改，且不可泄露）：
-``` go
-config := &builder.Config{
-    AppKey:"Your App Key",
-}
-```
-::: warning
-注意：因为AppKey用于JWT加密，请务必更改！
-:::
-
-## 启动服务
-``` bash
-go run main.go
-```
-
 
 后台地址： http://127.0.0.1:3000/admin/
 
