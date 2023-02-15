@@ -879,3 +879,78 @@ SetWhen("notIn", []int[7, 8], func () interface{} {
 
 })
 ```
+
+## 表单验证
+
+### 通用规则
+Form 组件提供了类似PHP中Laravel框架的验证规则来验证表单提交的数据：
+``` go
+field.Text("title", "标题").
+SetRules(
+	[]string{
+		"required",
+		"min:6",
+		"max:20",
+	},
+	map[string]string{
+		"required": "标题必须填写",
+		"min": "标题不能少于6个字符",
+		"max": "标题不能超过20个字符",
+	},
+)
+```
+
+### 创建页规则
+创建页面规则，只在创建表单提交时生效
+``` go
+field.Text("username", "用户名").
+creationRules(
+	[]string{
+		"unique:admins",
+	},
+	map[string]string{
+		"unique": "用户名已经存在",
+	},
+)
+```
+
+### 编辑页规则
+更新页面规则，只在更新表单提交时生效
+``` go
+
+field.Text("username", "用户名").
+updateRules(
+	[]string{
+		"unique:admins,username,{id}",
+	},
+	map[string]string{
+		"unique": "用户名已经存在",
+	},
+)
+```
+
+### 数据库unique检查
+一个比较常见的场景是提交表单是检查数据是否已经存在，可以使用下面的方式：
+``` go
+field.Text("username", "用户名").
+creationRules(
+	[]string{
+		"unique:admins",
+	},
+	map[string]string{
+		"unique": "用户名已经存在",
+	},
+).
+updateRules(
+	[]string{
+		"unique:admins,username,{id}",
+	},
+	map[string]string{
+		"unique": "用户名已经存在",
+	},
+)
+```
+
+## 回调函数
+
+quarkgo 提供了丰富的回调函数，用来重写数据已经自定义反馈等操作
