@@ -289,7 +289,7 @@ func (p *Post) Fields(ctx *builder.Context) []interface{} {
 
 ```
 
-### 字段展示位置
+### 展示位置
 
 你经常会在某些场景下只想显示某个字段。例如，你通常有一个在查询列表中无需显示的`Password`字段。同样地，你也想在「创建 / 更新表单」里只显示`created_at`字段。QuarkGo 可以轻松的控制字段的显示或隐藏。
 
