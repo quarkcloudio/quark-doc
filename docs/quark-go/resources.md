@@ -954,3 +954,111 @@ updateRules(
 ## 回调函数
 
 quarkgo 提供了丰富的回调函数，用来重写数据已经自定义反馈等操作
+
+- `BeforeIndexShowing`    	列表页展示前回调
+- `BeforeExporting`     	数据导出前回调
+- `BeforeImporting`    		数据导入前回调
+- `BeforeDetailShowing`    	详情页展示前回调
+- `BeforeCreating`  		创建页面显示前回调
+- `BeforeEditing`  			编辑页面显示前回调
+- `BeforeSaving` 			表单数据保存前回调
+- `AfterSaved` 				表单数据保存后回调
+
+### 列表展示前回调
+
+可以通过此方法重写列表数据；下面的示例是将列表转换成tree型数据返回给前端组件
+
+``` go
+import (
+	"github.com/quarkcms/quark-go/pkg/lister"
+)
+
+func (p *Menu) BeforeIndexShowing(ctx *builder.Context, list []map[string]interface{}) []interface{} {
+	// 转换成树形表格
+	tree, _ := lister.ListToTree(list, "id", "pid", "children", 0)
+
+	return tree
+}
+```
+
+### 数据导出前回调
+
+可以通过此方法重写导出数据
+
+``` go
+func (p *Menu) BeforeExporting(ctx *builder.Context, list []map[string]interface{}) []interface{} {
+	result := []interface{}{}
+	for _, v := range list {
+		result = append(result, v)
+	}
+
+	return result
+}
+```
+
+### 数据导入前回调
+
+可以通过此方法重写导入数据
+
+``` go
+func (p *Menu) BeforeImporting(ctx *builder.Context, list [][]interface{}) [][]interface{} {
+	return list
+}
+```
+
+### 详情页展示前回调
+
+可以通过此方法重写详情页数据
+
+``` go
+func (p *Menu) BeforeDetailShowing(ctx *builder.Context, data map[string]interface{}) map[string]interface{} {
+	return data
+}
+```
+
+### 创建页面显示前回调
+
+可以通过此方法初始化表单数据
+
+``` go
+func (p *Menu) BeforeCreating(ctx *builder.Context) map[string]interface{} {
+	return map[string]interface{}{}
+}
+```
+
+### 编辑页面显示前回调
+
+可以通过此方法可以重写编辑页数据
+
+``` go
+func (p *Menu) BeforeEditing(request *builder.Context, data map[string]interface{}) map[string]interface{} {
+	return data
+}
+```
+
+### 表单数据保存前回调
+
+可以通过此方法可以自定义表单数据
+
+``` go
+func (p *Menu) BeforeSaving(ctx *builder.Context, submitData map[string]interface{}) (map[string]interface{}, error) {
+	return submitData, nil
+}
+```
+
+### 表单数据保存后回调
+
+可以通过此方法可以自定义表单提交成功后的其他操作
+
+``` go
+func (p *Menu) AfterSaved(ctx *builder.Context, model *gorm.DB) interface{} {
+	if model.Error != nil {
+		return ctx.JSON(200, msg.Error(model.Error.Error(), ""))
+	}
+
+	return ctx.JSON(
+		200,
+		msg.Success("操作成功！", strings.Replace("/index?api="+IndexRoute, ":resource", ctx.Param("resource"), -1), ""),
+	)
+}
+```
