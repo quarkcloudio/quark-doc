@@ -1,8 +1,10 @@
 # 资源
 
-## 快速开始
+## 概述
 
 资源（Resource）是 QuarkGO 中重要的组成部分，几乎所有的功能都是围绕着资源实现的；QuarkGo 的思想是约定大于配置，我们在资源里已经内置好各种功能的实现，开发者只需关注关键点的功能实现即可开发出完整的功能模块。
+
+## 快速开始
 
 下面我们以内容管理为例，实现一个关于文章的 CURD 功能：
 1. 首先我们以```github.com/quarkcms/quark-smart```命名模块，执行```go mod init github.com/quarkcms/quark-smart```命令，然后参照 [快速开始](./installation.html#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B) 章节，创建好 [main.go](https://github.com/quarkcms/quark-smart/blob/main/main.go) 文件；
@@ -287,7 +289,7 @@ func (p *Post) Fields(ctx *builder.Context) []interface{} {
 
 ```
 
-### 字段展示
+### 字段展示位置
 
 你经常会在某些场景下只想显示某个字段。例如，你通常有一个在查询列表中无需显示的`Password`字段。同样地，你也想在「创建 / 更新表单」里只显示`created_at`字段。QuarkGo 可以轻松的控制字段的显示或隐藏。
 
@@ -959,8 +961,8 @@ quarkgo 提供了丰富的回调函数，用来重写数据已经自定义反馈
 - `BeforeExporting`     	数据导出前回调
 - `BeforeImporting`    		数据导入前回调
 - `BeforeDetailShowing`    	详情页展示前回调
-- `BeforeCreating`  		创建页面显示前回调
-- `BeforeEditing`  			编辑页面显示前回调
+- `BeforeCreating`  		创建页显示前回调
+- `BeforeEditing`  			编辑页显示前回调
 - `BeforeSaving` 			表单数据保存前回调
 - `AfterSaved` 				表单数据保存后回调
 
@@ -1006,7 +1008,7 @@ func (p *Menu) BeforeImporting(ctx *builder.Context, list [][]interface{}) [][]i
 }
 ```
 
-### 详情页展示前回调
+### 详情页显示前回调
 
 可以通过此方法重写详情页数据
 
@@ -1016,7 +1018,7 @@ func (p *Menu) BeforeDetailShowing(ctx *builder.Context, data map[string]interfa
 }
 ```
 
-### 创建页面显示前回调
+### 创建页显示前回调
 
 可以通过此方法初始化表单数据
 
@@ -1026,7 +1028,7 @@ func (p *Menu) BeforeCreating(ctx *builder.Context) map[string]interface{} {
 }
 ```
 
-### 编辑页面显示前回调
+### 编辑页显示前回调
 
 可以通过此方法可以重写编辑页数据
 
