@@ -686,3 +686,147 @@ return []map[string]interface{}{
 	},
 }
 ```
+
+### Search
+``` go
+
+// 单选模式
+field.Search("category_id", "分类").
+SetOptions(map[interface{}]interface{}{
+    1: "新闻",
+    2: "音乐",
+	3: "体育",
+}).SetDefault(1)
+
+// 多选模式
+field.Search("category_id", "分类").
+SetMode("multiple").
+SetOptions(map[interface{}]interface{}{
+    1: "新闻",
+    2: "音乐",
+	3: "体育",
+}).SetDefault([1,2])
+
+
+// 通过ajax获取数据
+field.Search("category_id", "分类").SetApi("/api/category/suggest")
+```
+
+#### 接口返回数据
+``` go
+return []map[string]interface{}{
+		{
+			"label":"古典音乐",
+			"value":10,
+		},
+		{
+			"label":"现代音乐",
+			"value":11,
+		},
+	}
+```
+
+### Tree
+``` go
+data := []map[string]interface{}{
+  {
+    "title": "Node1",
+    "value": "0-0",
+    "children": []map[string]interface{}{
+      {
+        "title": "Child Node1",
+        "value": "0-0-1",
+      },
+      {
+        "title": "Child Node2",
+        "value": "0-0-2",
+      },
+    },
+  },
+  {
+    "title": "Node2",
+    "value": "0-1",
+  },
+}
+
+field.Tree("tree", "树形组件").SetData(data)
+```
+
+### Map
+``` go
+longitude := "116.397724"
+latitude := "39.903755"
+
+field.Map("map", "地图组件").SetPosition(longitude, latitude).SetStyle(map[string]interface{}{"width": "100%", "height": 400})
+```
+
+### Geofence
+
+``` go
+
+field.Geofence("geofence", "地理围栏组件")
+```
+
+### Image
+
+``` go
+
+field.Image("image", "图片上传组件")
+
+// 多图上传，默认数据库保存json格式数据，model可选 'multiple' | 'single' 或者缩写 'm' | 's'
+field.Image("image", "图片上传组件").SetMode("multiple")
+
+// 上传button文字
+field.Image("image", "图片上传组件").SetButton("上传图片")
+
+// 上传数量限制，默认3个文件
+field.Image("image", "图片上传组件").SetLimitNum(4)
+
+// 上传文件大小限制，默认2M
+field.Image("image", "图片上传组件").SetLimitSize(20)
+
+// 上传文件类型限制，类型支持后缀方式，例如[]string{"jpeg","png"}这样的数组也是可以的
+field.Image("image", "图片上传组件").SetLimitType([]string{"image/jpeg","image/png"})
+
+// 上传尺寸限制，第一个参数是显的宽度，第二个参数是限定的高度
+field.Image("image", "图片上传组件").SetLimitWH(200，200)
+```
+
+### File
+``` go
+field.File("file", "文件上传组件")
+
+// 上传button文字
+field.File("file", "文件上传组件").SetButton("上传附件")
+
+// 上传数量限制，默认3个文件
+field.File("file", "文件上传组件").SetLimitNum(4)
+
+// 上传文件大小限制，默认2M
+field.File("file", "文件上传组件").SetLimitSize(20)
+
+// 上传文件类型限制，类型支持后缀方式，例如[]string{"jpeg","png"}这样的数组也是可以的
+field.File("file", "文件上传组件").SetLimitType([]string{"image/jpeg","image/png"})
+```
+
+### List
+
+嵌套表单字段
+
+``` go
+field.List("list", "嵌套表单组件").SetButton("添加数据","bottom")->SetItem(func () interface{} {
+	return field.Text("title", "标题")
+})
+
+// 实例
+field.List("list", "嵌套表单组件")
+.SetButton("添加数据","bottom")
+->SetItem(func () interface{} {
+
+	return field.Group([]interface{}{
+        field.Text("title", "标题"),
+        field.Number("num","奖品数量"),
+        Field::number("probability","中奖概率"),
+    })
+})
+```
