@@ -89,6 +89,10 @@ config := &builder.Config{
 go run main.go
 ```
 
+后台地址： http://127.0.0.1:3000/admin/
+
+默认用户名：administrator 密码：123456
+
 ## 框架中使用
 
 ### Hertz框架
@@ -335,7 +339,3 @@ func isDir(path string) bool {
 	return s.IsDir()
 }
 ```
-
-后台地址： http://127.0.0.1:3000/admin/
-
-默认用户名：administrator 密码：123456
