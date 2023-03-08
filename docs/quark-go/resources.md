@@ -1053,9 +1053,9 @@ func (p *Menu) BeforeSaving(ctx *builder.Context, submitData map[string]interfac
 可以通过此方法可以自定义表单提交成功后的其他操作
 
 ``` go
-func (p *Menu) AfterSaved(ctx *builder.Context, model *gorm.DB) interface{} {
-	if model.Error != nil {
-		return ctx.JSON(200, msg.Error(model.Error.Error(), ""))
+func (p *Menu) AfterSaved(ctx *builder.Context, id int, data map[string]interface{}, result *gorm.DB) interface{} {
+	if result.Error != nil {
+		return ctx.JSON(200, msg.Error(result.Error.Error(), ""))
 	}
 
 	return ctx.JSON(
