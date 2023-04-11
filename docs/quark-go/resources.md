@@ -945,7 +945,7 @@ updateRules([]*rule.Rule{
 
 ## 回调函数
 
-quarkgo 提供了丰富的回调函数，用来重写数据已经自定义反馈等操作
+quarkgo 提供了丰富的回调函数，用来重写数据、自定义反馈等操作
 
 - `BeforeIndexShowing`    	列表页展示前回调
 - `BeforeExporting`     	数据导出前回调
