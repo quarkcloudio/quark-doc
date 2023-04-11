@@ -13,19 +13,18 @@
 www                         WEB部署目录
 ├─internal                  业务目录
 │  ├─admin				    后台业务目录
-│  │  ├─actions				行为目录
-│  │  ├─dashboards			仪表盘资源目录
-│  │  ├─metrics       		仪表盘指标目录
-│  │  ├─resources         	资源目录
-│  │  ├─searches            搜索目录
-│  │  └─providers.go        服务注册文件
-│  │
-│  └─models                 Gorm模型文件目录
+│  │  ├─action				行为目录
+│  │  ├─dashboard			仪表盘资源目录
+│  │  ├─metric      		仪表盘指标目录
+│  │  ├─resource         	资源目录
+│  │  ├─searche             搜索目录
+│  │  └─provider.go         服务注册文件
+│  └─model                  Gorm模型文件目录
 │
 ├─website                   静态文件目录（对外访问）
 └─main.go                   主文件
 ~~~
-3. 打开 models 目录，创建 [post.go](https://github.com/quarkcms/quark-smart/blob/main/internal/models/post.go) 模型文件；
+3. 打开 model 目录，创建 [post.go](https://github.com/quarkcms/quark-smart/blob/main/internal/model/post.go) 模型文件；
 4. 在 post.go 模型文件中添加如下代码：
 
 ``` go
@@ -48,7 +47,7 @@ type Post struct {
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 }
 ```
-5. 打开 resources 目录，创建 [article.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/resources/article.go) 资源文件；
+5. 打开 resource 目录，创建 [article.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/resource/article.go) 资源文件；
 6. 在 article.go 资源文件中添加如下代码：
 
 ``` go
@@ -150,22 +149,22 @@ func (p *Article) BeforeCreating(ctx *builder.Context) map[string]interface{} {
 	return data
 }
 ```
-7. 将资源注册到 [providers.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/providers.go) 文件里，代码如下：
+7. 将资源注册到 [provider.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/provider.go) 文件里，代码如下：
 
 ```go
 package admin
 
 import (
-	"github.com/quarkcms/quark-smart/internal/admin/resources"
+	"github.com/quarkcms/quark-smart/internal/admin/resource"
 )
 
 // 注册服务
 var Providers = []interface{}{
-	&resources.Article{},
+	&resource.Article{},
 }
 
 ```
-8. 修改 main.go 主文件，引入 providers.go包，代码如下：
+8. 修改 main.go 主文件，引入 provider.go包，代码如下：
 ```go
 package main
 
@@ -174,7 +173,7 @@ import (
 	"github.com/quarkcms/quark-go/pkg/app/install"
 	"github.com/quarkcms/quark-go/pkg/app/middleware"
 	"github.com/quarkcms/quark-go/pkg/builder"
-	adminproviders "github.com/quarkcms/quark-smart/internal/admin"
+	adminprovider "github.com/quarkcms/quark-smart/internal/admin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -192,7 +191,7 @@ func main() {
 		},
 
         // ******* 将引入的服务注册到系统里 code start *******
-		Providers: append(admin.Providers, adminproviders.Providers...),
+		Providers: append(admin.Providers, adminprovider.Providers...),
         // ******* 将引入的服务注册到系统里 code end *******
 		AdminLayout: &builder.AdminLayout{
 			Title: "QuarkSimple",
@@ -206,10 +205,7 @@ func main() {
 	b.Static("/", "./website")
 
 	// 构建quarkgo基础数据库、拉取静态文件
-	b.Use(install.Handle)
-
-	// 构建本项目数据库
-	b.Use(database.Handle)
+	install.Handle()
 
 	// 后台中间件
 	b.Use(middleware.Handle)
