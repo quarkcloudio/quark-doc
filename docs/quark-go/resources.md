@@ -321,7 +321,7 @@ func (p *Article) Fields(ctx *builder.Context) []interface{} {
 你可以在字段定义时链式调用这些方法，以指示 QuarkGo 在哪里可以显示 / 隐藏字段：
 
 ```go
-field := &builder.AdminField{}
+field := &adminresource.Field{}
 field.Editor("content", "内容").OnlyOnForms()
 ```
 
