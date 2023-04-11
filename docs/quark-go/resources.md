@@ -213,7 +213,6 @@ func main() {
 	// 启动服务
 	b.Run(":3000")
 }
-
 ```
 
 9. 重启服务后，我们打开 ```http://127.0.0.1:3000/admin/#/index?api=/api/admin/article/index``` 路径，你就可以看到文章的页面了；至此一个简单的 CURD 就完成了，完整的项目代码请打开 [Demo](https://github.com/quarkcms/quark-smart) 链接查看
