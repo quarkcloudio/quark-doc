@@ -107,6 +107,8 @@ go run main.go
 package main
 
 import (
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/quarkcms/quark-go/pkg/adapter/hertzadapter"
 	"github.com/quarkcms/quark-go/pkg/app/handler/admin"
 	"github.com/quarkcms/quark-go/pkg/app/install"
@@ -117,16 +119,17 @@ import (
 )
 
 func main() {
-	h := server.Default()
-	register(h)
+	h := server.Default(server.WithHostPorts(":3000"))
 
+	// 注册路由
+	register(h)
 	// 静态文件
 	h.StaticFile("/admin/", "./website/admin/index.html")
 	// 静态文件目录
 	fs := &app.FS{Root: "./website", IndexNames: []string{"index.html"}}
 	h.StaticFS("/", fs)
 	// 数据库配置信息
-	dsn := "root:yourpassword@tcp(127.0.0.1:3306)/yourdbname?charset=utf8&parseTime=True&loc=Local"
+	dsn := "root:Bc5HQFJc4bLjZCcC@tcp(127.0.0.1:3306)/quarkgo?charset=utf8&parseTime=True&loc=Local"
 	// 配置资源
 	config := &builder.Config{
 		AppKey:    "123456",
@@ -139,14 +142,16 @@ func main() {
 	// 创建对象
 	b := builder.New(config)
 	// 初始化安装
-	b.Use(install.Handle)
+	install.Handle()
 	// 中间件
 	b.Use(middleware.Handle)
 	// 适配hertz
 	hertzadapter.Adapter(b, h)
 
+	// 启动服务
 	h.Spin()
 }
+
 ```
 
 ### Gin框架
@@ -158,6 +163,8 @@ func main() {
 package main
 
 import (
+	"github.com/gin-contrib/static"
+	"github.com/gin-gonic/gin"
 	"github.com/quarkcms/quark-go/pkg/adapter/ginadapter"
 	"github.com/quarkcms/quark-go/pkg/app/handler/admin"
 	"github.com/quarkcms/quark-go/pkg/app/install"
@@ -169,7 +176,7 @@ import (
 
 func main() {
 	r := gin.Default()
-    
+
 	// 静态文件
 	r.Use(static.Serve("/", static.LocalFile("./website", false)))
 	// 数据库配置信息
@@ -186,7 +193,7 @@ func main() {
 	// 创建对象
 	b := builder.New(config)
 	// 初始化安装
-	b.Use(install.Handle)
+	install.Handle()
 	// 中间件
 	b.Use(middleware.Handle)
 	// 适配gin
@@ -205,6 +212,10 @@ func main() {
 package main
 
 import (
+	"strings"
+	"time"
+
+	"github.com/gofiber/fiber/v2"
 	"github.com/quarkcms/quark-go/pkg/adapter/fiberadapter"
 	"github.com/quarkcms/quark-go/pkg/app/handler/admin"
 	"github.com/quarkcms/quark-go/pkg/app/install"
@@ -248,7 +259,7 @@ func main() {
 	// 创建对象
 	b := builder.New(config)
 	// 初始化安装
-	b.Use(install.Handle)
+	install.Handle()
 	// 中间件
 	b.Use(middleware.Handle)
 	// 适配fiber
@@ -267,6 +278,15 @@ func main() {
 package main
 
 import (
+	"flag"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"os"
+
+	"github.com/quarkcms/quark-go/examples/zeroadmin/internal/config"
+	"github.com/quarkcms/quark-go/examples/zeroadmin/internal/handler"
+	"github.com/quarkcms/quark-go/examples/zeroadmin/internal/svc"
 	"github.com/quarkcms/quark-go/pkg/adapter/zeroadapter"
 	"github.com/quarkcms/quark-go/pkg/app/handler/admin"
 	"github.com/quarkcms/quark-go/pkg/app/install"
@@ -274,7 +294,12 @@ import (
 	"github.com/quarkcms/quark-go/pkg/builder"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/zeromicro/go-zero/rest"
 )
+
+var configFile = flag.String("f", "etc/zeroadmin-api.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -303,7 +328,7 @@ func main() {
 	// 创建对象
 	b := builder.New(config)
 	// 初始化安装
-	b.Use(install.Handle)
+	install.Handle()
 	// 中间件
 	b.Use(middleware.Handle)
 	// 适配gozero
