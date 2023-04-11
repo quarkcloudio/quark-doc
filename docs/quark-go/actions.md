@@ -16,7 +16,7 @@ import (
 	"strings"
 
 	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/actions"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
 )
 
 type CreateLink struct {
@@ -142,7 +142,7 @@ package actions
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/actions"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
 	"github.com/quarkcms/quark-go/pkg/msg"
 	"gorm.io/gorm"
 )
@@ -215,7 +215,7 @@ import (
 	"strings"
 
 	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/actions"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
 )
 
 type EditLink struct {
@@ -255,7 +255,7 @@ package actions
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/actions"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
 	"github.com/quarkcms/quark-go/pkg/component/admin/action"
 	"github.com/quarkcms/quark-go/pkg/component/admin/form"
 )
@@ -348,7 +348,7 @@ package actions
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/actions"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
 	"github.com/quarkcms/quark-go/pkg/component/admin/action"
 	"github.com/quarkcms/quark-go/pkg/component/admin/form"
 )
@@ -439,7 +439,7 @@ func (p *EditDrawer) GetActions(ctx *builder.Context) []interface{} {
 package actions
 
 import (
-	"github.com/quarkcms/quark-go/pkg/builder/actions"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
 )
 
 type FormSubmit struct {
@@ -476,7 +476,7 @@ func (p *FormSubmit) Init() *FormSubmit {
 package actions
 
 import (
-	"github.com/quarkcms/quark-go/pkg/builder/actions"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
 )
 
 type FormReset struct {
@@ -510,7 +510,7 @@ func (p *FormReset) Init() *FormReset {
 package actions
 
 import (
-	"github.com/quarkcms/quark-go/pkg/builder/actions"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
 )
 
 type FormBack struct {
@@ -544,7 +544,7 @@ func (p *FormBack) Init() *FormBack {
 package actions
 
 import (
-	"github.com/quarkcms/quark-go/pkg/builder/actions"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
 )
 
 type MoreActions struct {

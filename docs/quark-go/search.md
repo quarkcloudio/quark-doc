@@ -101,7 +101,8 @@ package searches
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/searches"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/searches"
+	"github.com/quarkcms/quark-go/pkg/component/admin/form/fields/selectfield"
 	"gorm.io/gorm"
 )
 
@@ -132,10 +133,10 @@ func (p *Status) Apply(ctx *builder.Context, query *gorm.DB, value interface{}) 
 }
 
 // 属性
-func (p *Status) Options(ctx *builder.Context) map[interface{}]interface{} {
-	return map[interface{}]interface{}{
-		"on":  "正常",
-		"off": "禁用",
+func (p *Status) Options(ctx *builder.Context) interface{} {
+	return []*selectfield.Option{
+		p.Option(0, "禁用"),
+		p.Option(1, "正常"),
 	}
 }
 ```
@@ -147,7 +148,7 @@ package searches
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/searches"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/searches"
 	"gorm.io/gorm"
 )
 
@@ -177,7 +178,7 @@ package searches
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/searches"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/searches"
 	"gorm.io/gorm"
 )
 
@@ -213,7 +214,7 @@ package searches
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/searches"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/searches"
 	"gorm.io/gorm"
 )
 
@@ -243,7 +244,7 @@ package searches
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/searches"
+	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/searches"
 	"gorm.io/gorm"
 )
 
