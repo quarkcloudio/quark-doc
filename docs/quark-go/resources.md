@@ -229,7 +229,7 @@ func main() {
 
 ``` go
 // 初始化
-func (p *Post) Init() interface{} {
+func (p *Article) Init() interface{} {
 	// 初始化模板
 	p.TemplateInit()
 
@@ -246,7 +246,7 @@ func (p *Post) Init() interface{} {
 
 ``` go
 // 初始化
-func (p *Post) Init() interface{} {
+func (p *Article) Init() interface{} {
 	// 初始化模板
 	p.TemplateInit()
 
@@ -263,7 +263,7 @@ func (p *Post) Init() interface{} {
 
 ```go
 // 初始化
-func (p *Post) Init() interface{} {
+func (p *Article) Init() interface{} {
 
 	// 初始化模板
 	p.TemplateInit()
@@ -285,7 +285,7 @@ func (p *Post) Init() interface{} {
 ``` go
 
 // 字段
-func (p *Post) Fields(ctx *builder.Context) []interface{} {
+func (p *Article) Fields(ctx *builder.Context) []interface{} {
 	field := &adminresource.Field{}
 
 	return []interface{}{
