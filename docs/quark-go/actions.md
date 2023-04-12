@@ -5,12 +5,12 @@
 在页面展示中我们会有各种对数据的操作，例如：提交表单、删除、修改数据、跳转链接等，我们统称这些操作为行为；quarkgo 内置了较为全面的行为组件，来方便开发者进行各种类型的数据操作。
 
 ## 快速开始
-1. 首先找到`/www/internal/admin/actions`目录，进入该目录中
+1. 首先找到`/www/internal/admin/action`目录，进入该目录中
 2. 创建 create_link.go 文件
 3. 在 create_link.go 文件中添加如下代码：
 
 ``` go
-package actions
+package action
 
 import (
 	"strings"
@@ -138,7 +138,7 @@ func (p *CreateLink) Init(name string) *CreateLink {
 ### 发送Ajax请求
 
 ``` go
-package actions
+package action
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
@@ -209,7 +209,7 @@ func (p *Delete) Handle(ctx *builder.Context, model *gorm.DB) interface{} {
 ### 页面跳转
 
 ``` go
-package actions
+package action
 
 import (
 	"strings"
@@ -251,7 +251,7 @@ func (p *EditLink) GetHref(ctx *builder.Context) string {
 ### 弹窗
 
 ``` go
-package actions
+package action
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
@@ -344,7 +344,7 @@ func (p *CreateModal) GetActions(ctx *builder.Context) []interface{} {
 ### 抽屉
 
 ``` go
-package actions
+package action
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
@@ -436,7 +436,7 @@ func (p *EditDrawer) GetActions(ctx *builder.Context) []interface{} {
 ### 提交表单
 
 ``` go
-package actions
+package action
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
@@ -473,7 +473,7 @@ func (p *FormSubmit) Init() *FormSubmit {
 ### 重置表单
 
 ``` go
-package actions
+package action
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
@@ -507,7 +507,7 @@ func (p *FormReset) Init() *FormReset {
 ### 返回上一页
 
 ``` go
-package actions
+package action
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
@@ -541,7 +541,7 @@ func (p *FormBack) Init() *FormBack {
 ### 下拉菜单
 
 ``` go
-package actions
+package action
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"

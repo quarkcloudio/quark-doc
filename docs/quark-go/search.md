@@ -9,7 +9,7 @@
 2. 创建 input.go 文件
 3. 在 input.go 文件中添加如下代码：
 ``` go
-package searches
+package search
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
@@ -67,7 +67,7 @@ quarkgo 内置了如下搜索组件：
 ### Input
 
 ``` go
-package searches
+package search
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
@@ -97,7 +97,7 @@ func (p *Input) Apply(ctx *builder.Context, query *gorm.DB, value interface{}) *
 ### Select
 
 ``` go
-package searches
+package search
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
@@ -144,7 +144,7 @@ func (p *Status) Options(ctx *builder.Context) interface{} {
 ### Date
 
 ``` go
-package searches
+package search
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
@@ -174,7 +174,7 @@ func (p *Date) Apply(ctx *builder.Context, query *gorm.DB, value interface{}) *g
 ### DateRange
 
 ``` go
-package searches
+package search
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
@@ -210,7 +210,7 @@ func (p *DateRange) Apply(ctx *builder.Context, query *gorm.DB, value interface{
 ### Datetime
 
 ``` go
-package searches
+package search
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"
@@ -240,7 +240,7 @@ func (p *Datetime) Apply(ctx *builder.Context, query *gorm.DB, value interface{}
 ### DateTimeRange
 
 ``` go
-package searches
+package search
 
 import (
 	"github.com/quarkcms/quark-go/pkg/builder"

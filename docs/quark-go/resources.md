@@ -28,7 +28,7 @@ www                         WEB部署目录
 4. 在 post.go 模型文件中添加如下代码：
 
 ``` go
-package models
+package model
 
 import (
 	"time"
