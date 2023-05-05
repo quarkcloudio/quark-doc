@@ -21,7 +21,11 @@ www                         WEB部署目录
 │  │  └─provider.go         服务注册文件
 │  └─model                  Gorm模型文件目录
 │
-├─website                   静态文件目录（对外访问）
+├─web                   	WEB资源目录
+│  ├─app				    WEB根目录（对外访问）
+│  ├─static				    静态文件目录（对外访问）
+│  └─template               模板文件目录
+│
 └─main.go                   主文件
 ~~~
 3. 打开 model 目录，创建 [post.go](https://github.com/quarkcms/quark-smart/blob/main/internal/model/post.go) 模型文件；
@@ -201,8 +205,8 @@ func main() {
 	// 实例化对象
 	b := builder.New(config)
 
-	// 静态文件目录
-	b.Static("/", "./website")
+	// WEB根目录
+	b.Static("/", "./web/app")
 
 	// 构建quarkgo基础数据库、拉取静态文件
 	install.Handle()

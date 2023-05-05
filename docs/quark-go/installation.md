@@ -49,8 +49,8 @@ func main() {
 	// 实例化对象
 	b := builder.New(config)
 
-	// 静态文件
-	b.Static("/", "./website")
+	// WEB根目录
+	b.Static("/", "./web/app")
 
 	// 自动构建数据库、拉取静态文件
 	install.Handle()
@@ -129,9 +129,9 @@ func main() {
 	// 注册路由
 	register(h)
 	// 静态文件
-	h.StaticFile("/admin/", "./website/admin/index.html")
-	// 静态文件目录
-	fs := &app.FS{Root: "./website", IndexNames: []string{"index.html"}}
+	h.StaticFile("/admin/", "./web/app/admin/index.html")
+	// WEB根目录
+	fs := &app.FS{Root: "./web/app", IndexNames: []string{"index.html"}}
 	h.StaticFS("/", fs)
 	// 数据库配置信息
 	dsn := "root:Bc5HQFJc4bLjZCcC@tcp(127.0.0.1:3306)/quarkgo?charset=utf8&parseTime=True&loc=Local"
@@ -182,8 +182,8 @@ import (
 func main() {
 	r := gin.Default()
 
-	// 静态文件
-	r.Use(static.Serve("/", static.LocalFile("./website", false)))
+	// WEB根目录
+	r.Use(static.Serve("/", static.LocalFile("./web/app", false)))
 	// 数据库配置信息
 	dsn := "root:Bc5HQFJc4bLjZCcC@tcp(127.0.0.1:3306)/quarkgo?charset=utf8&parseTime=True&loc=Local"
 	// 配置资源
@@ -241,8 +241,8 @@ func main() {
 		}
 		return c.Next()
 	})
-	// 静态资源
-	app.Static("/", "./website", fiber.Static{
+	// WEB根目录
+	app.Static("/", "./web/app", fiber.Static{
 		Compress:      true,
 		ByteRange:     true,
 		Browse:        false,
@@ -315,8 +315,8 @@ func main() {
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 
-	// 加载静态文件
-	staticFile("/", "./website", server)
+	// WEB根目录
+	staticFile("/", "./web/app", server)
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
 	// 数据库配置信息
