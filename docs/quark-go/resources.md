@@ -521,34 +521,30 @@ SetOptions([]*selectfield.Option{
 ``` go
 import ("github.com/quarkcms/quark-go/pkg/component/admin/form/fields/selectfield")
 
-// 下拉框联动
-Field::selects([
-    // 下拉框联动
+field.Selects([]interface{}{
 	field.Select("province", "省").
-	SetOptions([]*selectfield.Option{
-		{Value: 1, Label: "北京"},
-		{Value: 2, Label: "天津"},
-		{Value: 3, Label: "河北省"},
-	}).SetLoad("city","/api/admin/area/cities"),
-
-    // 市
-    Field::select("city", "市"),
-]);
+		SetOptions([]*selectfield.Option{
+			{Value: 1, Label: "北京"},
+			{Value: 2, Label: "天津"},
+			{Value: 3, Label: "河北省"},
+		}).SetLoad("city", "/api/admin/test/cities"),
+	field.Select("city", "市"),
+}),
 ```
 
 #### ```/api/admin/area/cities```接口返回数据格式
 
 ``` go
-return []map[string]interface{}{
-		{
-			"label":"石家庄",
-			"value":10,
-		},
-		{
-			"label":"唐山",
-			"value":11,
-		},
-	}
+return ctx.JSONOk("获取成功", "", []map[string]interface{}{
+	{
+		"label": "石家庄",
+		"value": 10,
+	},
+	{
+		"label": "唐山",
+		"value": 11,
+	},
+})
 ```
 
 ### Date
@@ -692,7 +688,7 @@ field.Cascader("address", "地址").SetOptions(options1).SetApi("/api/admin/area
 ``` go
 import ("github.com/quarkcms/quark-go/pkg/component/admin/form/fields/cascader")
 
-return []*cascader.Option{
+return ctx.JSONOk("获取成功", "", []*cascader.Option{
 	{
 		Value :"zhejiang",
 		Label:"Zhejiang",
@@ -703,7 +699,7 @@ return []*cascader.Option{
 		Label:"hebei",
 		IsLeaf:false,
 	},
-}
+})
 ```
 
 ### Search
@@ -734,11 +730,11 @@ field.Search("category_id", "分类").SetApi("/api/category/suggest")
 
 #### 接口返回数据
 ``` go
-return []*search.Option{
+return ctx.JSONOk("获取成功", "", []*search.Option{
 	{Value: 1, Label: "新闻"},
 	{Value: 2, Label: "音乐"},
 	{Value: 3, Label: "体育"},
-}
+})
 ```
 
 ### Tree
