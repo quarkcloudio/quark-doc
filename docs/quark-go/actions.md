@@ -5,7 +5,7 @@
 在页面展示中我们会有各种对数据的操作，例如：提交表单、删除、修改数据、跳转链接等，我们统称这些操作为行为；quarkgo 内置了较为全面的行为组件，来方便开发者进行各种类型的数据操作。
 
 ## 快速开始
-1. 首先找到`/www/internal/admin/action`目录，进入该目录中
+1. 首先找到`/www/internal/admin/service/action`目录，进入该目录中
 2. 创建 create_link.go 文件
 3. 在 create_link.go 文件中添加如下代码：
 
@@ -15,27 +15,32 @@ package action
 import (
 	"strings"
 
-	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/types"
+	"github.com/quarkcms/quark-go/v2/pkg/builder"
 )
 
-type CreateLink struct {
+type CreateLinkAction struct {
 	actions.Link
 }
 
+// 创建-跳转类型
+func CreateLink() *CreateLinkAction {
+	return &CreateLinkAction{}
+}
+
 // 初始化
-func (p *CreateLink) Init(name string) *CreateLink {
-	// 初始化父结构
-	p.ParentInit()
+func (p *CreateLinkAction) Init(ctx *builder.Context) interface{} {
+	template := ctx.Template.(types.Resourcer)
+
+	// 文字
+	p.Name = "创建" + template.GetTitle()
 
 	// 类型
 	p.Type = "primary"
 
 	// 图标
 	p.Icon = "plus-circle"
-
-	// 文字
-	p.Name = "创建" + name
 
 	// 设置展示位置
 	p.SetOnlyOnIndex(true)
@@ -44,22 +49,23 @@ func (p *CreateLink) Init(name string) *CreateLink {
 }
 
 // 跳转链接
-func (p *CreateLink) GetHref(ctx *builder.Context) string {
-	return "#/index?api=" + strings.Replace(ctx.Path(), "/index", "/create", -1)
+func (p *CreateLinkAction) GetHref(ctx *builder.Context) string {
+	return "#/layout/index?api=" + strings.Replace(ctx.Path(), "/index", "/create", -1)
 }
+
 ```
 
-4. 将 create_link.go 注册到对应的资源中，我们以 [post.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/resources/post.go) 为例，代码如下：
+4. 将 create_link.go 注册到对应的资源中，我们以 [post.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/service/resources/post.go) 为例，代码如下：
 ``` go
 // 引入包，这里省略其他代码 ...
 import (
-	"github.com/quarkcms/quark-smart/internal/admin/actions"
+	"github.com/quarkcms/quark-smart/internal/admin/service/action"
 )
 
 // 行为
 func (p *Post) Actions(ctx *builder.Context) []interface{} {
 	return []interface{}{
-		(&actions.CreateLink{}).Init(p.Title),
+		action.CreateLink(),
 	}
 }
 
@@ -73,25 +79,21 @@ func (p *Post) Actions(ctx *builder.Context) []interface{} {
 ``` go
 
 // 初始化
-func (p *CreateLink) Init(name string) *CreateLink {
+func (p *CreateLinkAction) Init(ctx *builder.Context) interface{} {
+	template := ctx.Template.(types.Resourcer)
 
-	// 初始化父结构
-	p.ParentInit()
+	// 文字
+	p.Name = "创建" + template.GetTitle()
 
-	// 设置按钮类型，primary | ghost | dashed | link | text | default
+	// 类型
 	p.Type = "primary"
-
-    // 设置按钮大小,large | middle | small | default
-    p.Size= "default"
 
 	// 图标
 	p.Icon = "plus-circle"
 
-	// 文字
-	p.Name = "创建" + name
-
 	return p
 }
+
 ```
 
 ## 展示位置
@@ -119,16 +121,16 @@ func (p *CreateLink) Init(name string) *CreateLink {
 - `SetShowOnIndexTableAlert`        在多选弹出层展示
 
 ``` go
+
 // 初始化
-func (p *CreateLink) Init(name string) *CreateLink {
-	// 初始化父结构
-	p.ParentInit()
+func (p *CreateLinkAction) Init(ctx *builder.Context) interface{} {
 
 	// 设置展示位置
 	p.SetOnlyOnIndex(true)
 
 	return p
 }
+
 ```
 
 ## 行为组件
@@ -141,24 +143,26 @@ func (p *CreateLink) Init(name string) *CreateLink {
 package action
 
 import (
-	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
-	"github.com/quarkcms/quark-go/pkg/msg"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/message"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/builder"
 	"gorm.io/gorm"
 )
 
-type Delete struct {
+type DeleteAction struct {
 	actions.Action
 }
 
+// 删除
+func Delete() *DeleteAction {
+	return &DeleteAction{}
+}
+
 // 初始化
-func (p *Delete) Init(name string) *Delete {
+func (p *DeleteAction) Init(ctx *builder.Context) interface{} {
 
-	// 初始化父结构
-	p.ParentInit()
-
-	// 行为名称，当行为在表格行展示时，支持js表达式
-	p.Name = name
+	// 文字
+	p.Name = "删除"
 
 	// 设置按钮类型,primary | ghost | dashed | link | text | default
 	p.Type = "link"
@@ -172,36 +176,25 @@ func (p *Delete) Init(name string) *Delete {
 	// 当行为在表格行展示时，支持js表达式
 	p.WithConfirm("确定要删除吗？", "删除后数据将无法恢复，请谨慎操作！", "modal")
 
-	if name == "删除" {
-		p.SetOnlyOnIndexTableRow(true)
-	}
+	// 在表格行内展示
+	p.SetOnlyOnIndexTableRow(true)
 
-	if name == "批量删除" {
-		p.SetOnlyOnIndexTableAlert(true)
-	}
+	// 行为接口接收的参数，当行为在表格行展示的时候，可以配置当前行的任意字段
+	p.SetApiParams([]string{
+		"id",
+	})
 
 	return p
 }
 
-/**
- * 行为接口接收的参数，当行为在表格行展示的时候，可以配置当前行的任意字段
- *
- * @return array
- */
-func (p *Delete) GetApiParams() []string {
-	return []string{
-		"id",
-	}
-}
-
 // 执行行为句柄
-func (p *Delete) Handle(ctx *builder.Context, model *gorm.DB) interface{} {
-	err := model.Delete("").Error
+func (p *DeleteAction) Handle(ctx *builder.Context, query *gorm.DB) error {
+	err := query.Delete("").Error
 	if err != nil {
-		return ctx.JSON(200, msg.Error(err.Error(), ""))
+		return ctx.JSON(200, message.Error(err.Error()))
 	}
 
-	return ctx.JSON(200, msg.Success("操作成功", "", ""))
+	return ctx.JSON(200, message.Success("操作成功"))
 }
 
 ```
@@ -214,27 +207,30 @@ package action
 import (
 	"strings"
 
-	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/builder"
 )
 
-type EditLink struct {
+type EditLinkAction struct {
 	actions.Link
 }
 
+// 编辑-跳转类型
+func EditLink() *EditLinkAction {
+	return &EditLinkAction{}
+}
+
 // 初始化
-func (p *EditLink) Init(name string) *EditLink {
-	// 初始化父结构
-	p.ParentInit()
+func (p *EditLinkAction) Init(ctx *builder.Context) interface{} {
+
+	// 文字
+	p.Name = "编辑"
 
 	// 设置按钮类型,primary | ghost | dashed | link | text | default
 	p.Type = "link"
 
 	// 设置按钮大小,large | middle | small | default
 	p.Size = "small"
-
-	// 文字
-	p.Name = name
 
 	// 设置展示位置
 	p.SetOnlyOnIndexTableRow(true)
@@ -243,9 +239,10 @@ func (p *EditLink) Init(name string) *EditLink {
 }
 
 // 跳转链接
-func (p *EditLink) GetHref(ctx *builder.Context) string {
-	return "#/index?api=" + strings.Replace(ctx.Path(), "/index", "/edit&id=${id}", -1)
+func (p *EditLinkAction) GetHref(ctx *builder.Context) string {
+	return "#/layout/index?api=" + strings.Replace(ctx.Path(), "/index", "/edit&id=${id}", -1)
 }
+
 ```
 
 ### 弹窗
@@ -254,29 +251,34 @@ func (p *EditLink) GetHref(ctx *builder.Context) string {
 package action
 
 import (
-	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
-	"github.com/quarkcms/quark-go/pkg/component/admin/action"
-	"github.com/quarkcms/quark-go/pkg/component/admin/form"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/action"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/types"
+	"github.com/quarkcms/quark-go/v2/pkg/builder"
 )
 
-type CreateModal struct {
+type CreateModalAction struct {
 	actions.Modal
 }
 
+// 创建-弹窗类型
+func CreateModal() *CreateModalAction {
+	return &CreateModalAction{}
+}
+
 // 初始化
-func (p *CreateModal) Init(name string) *CreateModal {
-	// 初始化父结构
-	p.ParentInit()
+func (p *CreateModalAction) Init(ctx *builder.Context) interface{} {
+	template := ctx.Template.(types.Resourcer)
+
+	// 文字
+	p.Name = "创建" + template.GetTitle()
 
 	// 类型
 	p.Type = "primary"
 
 	// 图标
 	p.Icon = "plus-circle"
-
-	// 文字
-	p.Name = "创建" + name
 
 	// 关闭时销毁 Modal 里的子元素
 	p.DestroyOnClose = true
@@ -291,23 +293,24 @@ func (p *CreateModal) Init(name string) *CreateModal {
 }
 
 // 内容
-func (p *CreateModal) GetBody(ctx *builder.Context) interface{} {
+func (p *CreateModalAction) GetBody(ctx *builder.Context) interface{} {
+	template := ctx.Template.(types.Resourcer)
 
-	api := ctx.Template.(interface {
-		CreationApi(*builder.Context) string
-	}).CreationApi(ctx)
+	// 创建表单的接口
+	api := template.CreationApi(ctx)
 
-	fields := ctx.Template.(interface {
-		CreationFieldsWithinComponents(*builder.Context) interface{}
-	}).CreationFieldsWithinComponents(ctx)
+	// 包裹在组件内的创建页字段
+	fields := template.CreationFieldsWithinComponents(ctx)
 
-	// 断言BeforeCreating方法，获取初始数据
-	data := ctx.Template.(interface {
-		BeforeCreating(*builder.Context) map[string]interface{}
-	}).BeforeCreating(ctx)
+	// 创建页面显示前回调
+	data := template.BeforeCreating(ctx)
 
+	// 返回数据
 	return (&form.Component{}).
 		Init().
+		SetStyle(map[string]interface{}{
+			"paddingTop": "24px",
+		}).
 		SetKey("createModalForm", false).
 		SetApi(api).
 		SetBody(fields).
@@ -321,7 +324,7 @@ func (p *CreateModal) GetBody(ctx *builder.Context) interface{} {
 }
 
 // 弹窗行为
-func (p *CreateModal) GetActions(ctx *builder.Context) []interface{} {
+func (p *CreateModalAction) GetActions(ctx *builder.Context) []interface{} {
 
 	return []interface{}{
 		(&action.Component{}).
@@ -339,6 +342,7 @@ func (p *CreateModal) GetActions(ctx *builder.Context) []interface{} {
 			SetSubmitForm("createModalForm"),
 	}
 }
+
 ```
 
 ### 抽屉
@@ -347,29 +351,33 @@ func (p *CreateModal) GetActions(ctx *builder.Context) []interface{} {
 package action
 
 import (
-	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
-	"github.com/quarkcms/quark-go/pkg/component/admin/action"
-	"github.com/quarkcms/quark-go/pkg/component/admin/form"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/action"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/types"
+	"github.com/quarkcms/quark-go/v2/pkg/builder"
 )
 
-type EditDrawer struct {
+type EditDrawerAction struct {
 	actions.Drawer
 }
 
+// 编辑-抽屉类型
+func EditDrawer() *EditDrawerAction {
+	return &EditDrawerAction{}
+}
+
 // 初始化
-func (p *EditDrawer) Init(name string) *EditDrawer {
-	// 初始化父结构
-	p.ParentInit()
+func (p *EditDrawerAction) Init(ctx *builder.Context) interface{} {
+
+	// 文字
+	p.Name = "编辑"
 
 	// 类型
 	p.Type = "link"
 
 	// 设置按钮大小,large | middle | small | default
 	p.Size = "small"
-
-	// 文字
-	p.Name = name
 
 	// 关闭时销毁 Drawer 里的子元素
 	p.DestroyOnClose = true
@@ -384,20 +392,19 @@ func (p *EditDrawer) Init(name string) *EditDrawer {
 }
 
 // 内容
-func (p *EditDrawer) GetBody(ctx *builder.Context) interface{} {
+func (p *EditDrawerAction) GetBody(ctx *builder.Context) interface{} {
+	template := ctx.Template.(types.Resourcer)
 
-	api := ctx.Template.(interface {
-		UpdateApi(*builder.Context) string
-	}).UpdateApi(ctx)
+	// 更新表单的接口
+	api := template.UpdateApi(ctx)
 
-	initApi := ctx.Template.(interface {
-		EditValueApi(*builder.Context) string
-	}).EditValueApi(ctx)
+	// 编辑页面获取表单数据接口
+	initApi := template.EditValueApi(ctx)
 
-	fields := ctx.Template.(interface {
-		UpdateFieldsWithinComponents(*builder.Context) interface{}
-	}).UpdateFieldsWithinComponents(ctx)
+	// 包裹在组件内的编辑页字段
+	fields := template.UpdateFieldsWithinComponents(ctx)
 
+	// 返回数据
 	return (&form.Component{}).
 		Init().
 		SetKey("editDrawerForm", false).
@@ -413,7 +420,7 @@ func (p *EditDrawer) GetBody(ctx *builder.Context) interface{} {
 }
 
 // 弹窗行为
-func (p *EditDrawer) GetActions(ctx *builder.Context) []interface{} {
+func (p *EditDrawerAction) GetActions(ctx *builder.Context) []interface{} {
 
 	return []interface{}{
 		(&action.Component{}).
@@ -439,23 +446,27 @@ func (p *EditDrawer) GetActions(ctx *builder.Context) []interface{} {
 package action
 
 import (
-	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/builder"
 )
 
-type FormSubmit struct {
+type FormSubmitAction struct {
 	actions.Action
 }
 
-// 初始化
-func (p *FormSubmit) Init() *FormSubmit {
-	// 初始化父结构
-	p.ParentInit()
+// 表单提交
+func FormSubmit() *FormSubmitAction {
+	return &FormSubmitAction{}
+}
 
-	// 类型
-	p.Type = "primary"
+// 初始化
+func (p *FormSubmitAction) Init(ctx *builder.Context) interface{} {
 
 	// 文字
 	p.Name = "提交"
+
+	// 类型
+	p.Type = "primary"
 
 	// 行为类型
 	p.ActionType = "submit"
@@ -476,23 +487,27 @@ func (p *FormSubmit) Init() *FormSubmit {
 package action
 
 import (
-	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/builder"
 )
 
-type FormReset struct {
+type FormResetAction struct {
 	actions.Action
 }
 
-// 初始化
-func (p *FormReset) Init() *FormReset {
-	// 初始化父结构
-	p.ParentInit()
+// 表单重置
+func FormReset() *FormResetAction {
+	return &FormResetAction{}
+}
 
-	// 类型
-	p.Type = "default"
+// 初始化
+func (p *FormResetAction) Init(ctx *builder.Context) interface{} {
 
 	// 文字
 	p.Name = "重置"
+
+	// 类型
+	p.Type = "default"
 
 	// 行为类型
 	p.ActionType = "reset"
@@ -510,29 +525,36 @@ func (p *FormReset) Init() *FormReset {
 package action
 
 import (
-	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/builder"
 )
 
-type FormBack struct {
+type FormBackAction struct {
 	actions.Action
 }
 
-// 初始化
-func (p *FormBack) Init() *FormBack {
-	// 初始化父结构
-	p.ParentInit()
+// 返回上一页
+func FormBack() *FormBackAction {
+	return &FormBackAction{}
+}
 
-	// 类型
-	p.Type = "default"
+// 初始化
+func (p *FormBackAction) Init(ctx *builder.Context) interface{} {
 
 	// 文字
 	p.Name = "返回上一页"
 
+	// 类型
+	p.Type = "default"
+
 	// 行为类型
 	p.ActionType = "back"
 
-	// 设置展示位置
-	p.SetShowOnForm().SetShowOnDetail()
+	// 在表单页展示
+	p.SetShowOnForm()
+
+	// 在详情页展示
+	p.SetShowOnDetail()
 
 	return p
 }
@@ -544,18 +566,24 @@ func (p *FormBack) Init() *FormBack {
 package action
 
 import (
-	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/builder"
 )
 
-type MoreActions struct {
+type MoreAction struct {
 	actions.Dropdown
 }
 
-// 初始化
-func (p *MoreActions) Init(name string) *MoreActions {
+// 更多
+func More() *MoreAction {
+	return &MoreAction{}
+}
 
-	// 初始化父结构
-	p.ParentInit()
+// 初始化
+func (p *MoreAction) Init(ctx *builder.Context) interface{} {
+
+	// 文字
+	p.Name = "更多"
 
 	// 下拉框箭头是否显示
 	p.Arrow = true
@@ -577,11 +605,15 @@ func (p *MoreActions) Init(name string) *MoreActions {
 	// 设置按钮大小,large | middle | small | default
 	p.Size = "small"
 
-	// 文字
-	p.Name = name
-
 	// 设置展示位置
 	p.SetOnlyOnIndexTableRow(true)
+
+	return p
+}
+
+// 下拉菜单行为
+func (p *MoreAction) SetActions(actions []interface{}) interface{} {
+	p.Actions = actions
 
 	return p
 }

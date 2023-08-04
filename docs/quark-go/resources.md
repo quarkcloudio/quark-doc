@@ -13,12 +13,13 @@
 www                         WEB部署目录
 ├─internal                  业务目录
 │  ├─admin				    后台业务目录
-│  │  ├─action				行为目录
-│  │  ├─dashboard			仪表盘资源目录
-│  │  ├─metric      		仪表盘指标目录
-│  │  ├─resource         	资源目录
-│  │  ├─searche             搜索目录
-│  │  └─provider.go         服务注册文件
+│  │  ├─service				服务目录
+│  │  │  ├─action			行为目录
+│  │  │  ├─dashboard		仪表盘资源目录
+│  │  │  ├─metric      		仪表盘指标目录
+│  │  │  ├─resource         资源目录
+│  │  │  ├─searche          搜索目录
+│  │  │  └─provider.go      服务注册文件
 │  └─model                  Gorm模型文件目录
 │
 ├─web                   	WEB资源目录
@@ -51,7 +52,7 @@ type Post struct {
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 }
 ```
-5. 打开 resource 目录，创建 [article.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/resource/article.go) 资源文件；
+5. 打开 resource 目录，创建 [article.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/service/resource/article.go) 资源文件；
 6. 在 article.go 资源文件中添加如下代码：
 
 ``` go
@@ -60,25 +61,24 @@ package resource
 import (
 	"time"
 
-	"github.com/quarkcms/quark-go/pkg/app/handler/admin/actions"
-	"github.com/quarkcms/quark-go/pkg/app/handler/admin/searches"
-	"github.com/quarkcms/quark-go/pkg/builder"
-	"github.com/quarkcms/quark-go/pkg/builder/template/adminresource"
-	"github.com/quarkcms/quark-go/pkg/component/admin/form/rule"
-	"github.com/quarkcms/quark-smart/internal/admin/search"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/checkbox"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/radio"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/rule"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/tabs"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/service/actions"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/service/searches"
+	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource"
+	"github.com/quarkcms/quark-go/v2/pkg/builder"
 	"github.com/quarkcms/quark-smart/internal/model"
 	"gorm.io/gorm"
 )
 
 type Article struct {
-	adminresource.Template
+	resource.Template
 }
 
 // 初始化
-func (p *Article) Init() interface{} {
-
-	// 初始化模板
-	p.TemplateInit()
+func (p *Article) Init(ctx *builder.Context) interface{} {
 
 	// 标题
 	p.Title = "文章"
@@ -90,6 +90,11 @@ func (p *Article) Init() interface{} {
 	p.PerPage = 10
 
 	return p
+}
+
+// 只查询文章类型
+func (p *Article) Query(ctx *builder.Context, query *gorm.DB) *gorm.DB {
+	return query.Where("type", "ARTICLE")
 }
 
 func (p *Article) Fields(ctx *builder.Context) []interface{} {
@@ -116,50 +121,38 @@ func (p *Article) Fields(ctx *builder.Context) []interface{} {
 
 // 搜索
 func (p *Article) Searches(ctx *builder.Context) []interface{} {
+	options, _ := (&model.Category{}).TreeSelect(false)
 
 	return []interface{}{
-		(&searches.Input{}).Init("title", "标题"),
-		(&searches.Status{}).Init(),
-		(&searches.DateTimeRange{}).Init("created_at", "创建时间"),
+		searches.Input("title", "标题"),
+		searches.Status(),
+		searches.DatetimeRange("created_at", "创建时间"),
 	}
 }
 
 // 行为
 func (p *Article) Actions(ctx *builder.Context) []interface{} {
-
 	return []interface{}{
-		(&actions.CreateLink{}).Init(p.Title),
-		(&actions.Delete{}).Init("批量删除"),
-		(&actions.Disable{}).Init("批量禁用"),
-		(&actions.Enable{}).Init("批量启用"),
-		(&actions.EditLink{}).Init("编辑"),
-		(&actions.Delete{}).Init("删除"),
-		(&actions.FormSubmit{}).Init(),
-		(&actions.FormReset{}).Init(),
-		(&actions.FormBack{}).Init(),
-		(&actions.FormExtraBack{}).Init(),
+		actions.CreateLink(),
+		actions.BatchDelete(),
+		actions.BatchDisable(),
+		actions.BatchEnable(),
+		actions.EditLink(),
+		actions.Delete(),
+		actions.FormSubmit(),
+		actions.FormReset(),
+		actions.FormBack(),
+		actions.FormExtraBack(),
 	}
-}
-
-// 创建页面显示前回调
-func (p *Article) BeforeCreating(ctx *builder.Context) map[string]interface{} {
-
-	// 表单初始化数据
-	data := map[string]interface{}{
-		"created_at": time.Now().Format("2006-01-02 15:04:05"),
-		"status":     true,
-	}
-
-	return data
 }
 ```
-7. 将资源注册到 [provider.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/provider.go) 文件里，代码如下：
+7. 将资源注册到 [provider.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/service/provider.go) 文件里，代码如下：
 
 ```go
 package admin
 
 import (
-	"github.com/quarkcms/quark-smart/internal/admin/resource"
+	"github.com/quarkcms/quark-smart/internal/admin/service/resource"
 )
 
 // 注册服务
@@ -171,16 +164,6 @@ var Providers = []interface{}{
 8. 修改 main.go 主文件，引入 provider.go包，代码如下：
 ```go
 package main
-
-import (
-	"github.com/quarkcms/quark-go/pkg/app/handler/admin"
-	"github.com/quarkcms/quark-go/pkg/app/install"
-	"github.com/quarkcms/quark-go/pkg/app/middleware"
-	"github.com/quarkcms/quark-go/pkg/builder"
-	adminprovider "github.com/quarkcms/quark-smart/internal/admin"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-)
 
 func main() {
 	// 数据库配置信息
@@ -228,15 +211,14 @@ func main() {
 
 ``` go
 // 初始化
-func (p *Article) Init() interface{} {
-	// 初始化模板
-	p.TemplateInit()
+func (p *Article) Init(ctx *builder.Context) interface{} {
 
 	// 模型
-	p.Model = &models.Post{}
+	p.Model = &model.Post{}
 
 	return p
 }
+
 ```
 
 ## 页面标题
@@ -245,9 +227,7 @@ func (p *Article) Init() interface{} {
 
 ``` go
 // 初始化
-func (p *Article) Init() interface{} {
-	// 初始化模板
-	p.TemplateInit()
+func (p *Article) Init(ctx *builder.Context) interface{} {
 
 	// 标题
 	p.Title = "文章"
@@ -262,10 +242,7 @@ func (p *Article) Init() interface{} {
 
 ```go
 // 初始化
-func (p *Article) Init() interface{} {
-
-	// 初始化模板
-	p.TemplateInit()
+func (p *Article) Init(ctx *builder.Context) interface{} {
 
 	// 分页
 	p.PerPage = 10
@@ -458,7 +435,7 @@ field.TextArea("content", "内容").SetWidth("xs")
 `Radio` 字段：
 
 ``` go
-import ("github.com/quarkcms/quark-go/pkg/component/admin/form/fields/radio")
+import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/radio")
 
 field.Radio("sex", "性别").
 	SetOptions([]*radio.Option{
@@ -472,7 +449,7 @@ field.Radio("sex", "性别").
 `Checkbox` 字段：
 
 ``` go
-import ("github.com/quarkcms/quark-go/pkg/component/admin/form/fields/checkbox")
+import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/checkbox")
 
 field.Checkbox("role_ids", "角色").
 	SetOptions([]*checkbox.Option{
@@ -487,7 +464,7 @@ field.Checkbox("role_ids", "角色").
 `Select` 字段：
 
 ``` go
-import ("github.com/quarkcms/quark-go/pkg/component/admin/form/fields/selectfield")
+import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/selectfield")
 
 // 单选模式
 field.Select("category_id", "分类").
@@ -519,7 +496,7 @@ SetOptions([]*selectfield.Option{
 #### Select 组件联动
 
 ``` go
-import ("github.com/quarkcms/quark-go/pkg/component/admin/form/fields/selectfield")
+import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/selectfield")
 
 field.Selects([]interface{}{
 	field.Select("province", "省").
@@ -649,7 +626,7 @@ field.Icon("icon", "图标")
 
 ### Cascader
 ``` go
-import ("github.com/quarkcms/quark-go/pkg/component/admin/form/fields/cascader")
+import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/cascader")
 
 options := []*cascader.Option{
 	{
@@ -686,7 +663,7 @@ field.Cascader("address", "地址").SetOptions(options1).SetApi("/api/admin/area
 
 #### 接口代码返回数据
 ``` go
-import ("github.com/quarkcms/quark-go/pkg/component/admin/form/fields/cascader")
+import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/cascader")
 
 return ctx.JSONOk("获取成功", "", []*cascader.Option{
 	{
@@ -704,7 +681,7 @@ return ctx.JSONOk("获取成功", "", []*cascader.Option{
 
 ### Search
 ``` go
-import ("github.com/quarkcms/quark-go/pkg/component/admin/form/fields/search")
+import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/search")
 
 // 单选模式
 field.Search("category_id", "分类").
@@ -739,7 +716,7 @@ return ctx.JSONOk("获取成功", "", []*search.Option{
 
 ### Tree
 ``` go
-import ("github.com/quarkcms/quark-go/pkg/component/admin/form/fields/tree")
+import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/tree")
 
 data := []*tree.Option{
 	{
@@ -898,7 +875,7 @@ SetWhen("notIn", []int[7, 8], func () interface{} {
 ### 通用规则
 Form 组件提供了类似PHP中Laravel框架的验证规则来验证表单提交的数据：
 ``` go
-import ("github.com/quarkcms/quark-go/pkg/component/admin/form/rule")
+import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/rule")
 
 field.Text("title", "标题").
 SetRules([]*rule.Rule{
@@ -911,7 +888,7 @@ SetRules([]*rule.Rule{
 ### 创建页规则
 创建页面规则，只在创建表单提交时生效
 ``` go
-import ("github.com/quarkcms/quark-go/pkg/component/admin/form/rule")
+import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/rule")
 
 field.Text("username", "用户名").
 creationRules([]*rule.Rule{
@@ -932,7 +909,7 @@ updateRules([]*rule.Rule{
 ### 数据库unique检查
 一个比较常见的场景是提交表单是检查数据是否已经存在，可以使用下面的方式：
 ``` go
-import ("github.com/quarkcms/quark-go/pkg/component/admin/form/rule")
+import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/rule")
 
 field.Text("username", "用户名").
 creationRules([]*rule.Rule{
@@ -962,7 +939,7 @@ quarkgo 提供了丰富的回调函数，用来重写数据、自定义反馈等
 
 ``` go
 import (
-	"github.com/quarkcms/quark-go/pkg/lister"
+	"github.com/quarkcms/quark-go/v2/pkg/utils/lister"
 )
 
 func (p *Menu) BeforeIndexShowing(ctx *builder.Context, list []map[string]interface{}) []interface{} {
