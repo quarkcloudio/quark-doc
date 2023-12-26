@@ -17,7 +17,7 @@ module.exports = ({
     ],
 
     theme: defaultTheme({
-        repo: 'quarkcms/quark-doc',
+        repo: 'quarkcloudio/quark-doc',
         repoLabel: 'GitHub',
         editLinks: true,
         docsDir: 'docs',
@@ -42,8 +42,8 @@ module.exports = ({
             {
                 text: 'v2',
                 children: [
-                    { text: 'v2', link: 'https://www.quarkcms.com/' },
-                    { text: 'v1', link: 'https://v1.quarkcms.com/' }
+                    { text: 'v2', link: 'https://quarkcloud.io/' },
+                    { text: 'v1', link: 'https://v1.quarkcloud.io/' }
                 ]
               }
         ],
