@@ -24,7 +24,7 @@ QuarkGo 是一个可以帮你快速搭建管理后台的工具；它提供的丰
 * ...
 
 ## 技术支持
-为了避免打扰作者日常工作，请先到[Github](https://github.com/quarkcms/quark-go)上关注此项目，在Github上提交[Issues](https://github.com/quarkcms/quark-go/v2/issues)
+为了避免打扰作者日常工作，请先到[Github](https://github.com/quarkcloudio/quark-go)上关注此项目，在Github上提交[Issues](https://github.com/quarkcloudio/quark-go/v2/issues)
 
 ## License
 QuarkGo is licensed under The MIT License (MIT).

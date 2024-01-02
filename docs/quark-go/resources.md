@@ -61,14 +61,14 @@ package resource
 import (
 	"time"
 
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/checkbox"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/radio"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/rule"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/tabs"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/service/actions"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/service/searches"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/fields/checkbox"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/fields/radio"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/rule"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/tabs"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/service/actions"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/service/searches"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/template/resource"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"github.com/quarkcms/quark-smart/internal/model"
 	"gorm.io/gorm"
 )
@@ -435,7 +435,7 @@ field.TextArea("content", "内容").SetWidth("xs")
 `Radio` 字段：
 
 ``` go
-import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/radio")
+import ("github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/fields/radio")
 
 field.Radio("sex", "性别").
 	SetOptions([]*radio.Option{
@@ -449,7 +449,7 @@ field.Radio("sex", "性别").
 `Checkbox` 字段：
 
 ``` go
-import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/checkbox")
+import ("github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/fields/checkbox")
 
 field.Checkbox("role_ids", "角色").
 	SetOptions([]*checkbox.Option{
@@ -464,7 +464,7 @@ field.Checkbox("role_ids", "角色").
 `Select` 字段：
 
 ``` go
-import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/selectfield")
+import ("github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/fields/selectfield")
 
 // 单选模式
 field.Select("category_id", "分类").
@@ -496,7 +496,7 @@ SetOptions([]*selectfield.Option{
 #### Select 组件联动
 
 ``` go
-import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/selectfield")
+import ("github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/fields/selectfield")
 
 field.Selects([]interface{}{
 	field.Select("province", "省").
@@ -626,7 +626,7 @@ field.Icon("icon", "图标")
 
 ### Cascader
 ``` go
-import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/cascader")
+import ("github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/fields/cascader")
 
 options := []*cascader.Option{
 	{
@@ -663,7 +663,7 @@ field.Cascader("address", "地址").SetOptions(options1).SetApi("/api/admin/area
 
 #### 接口代码返回数据
 ``` go
-import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/cascader")
+import ("github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/fields/cascader")
 
 return ctx.JSONOk("获取成功", "", []*cascader.Option{
 	{
@@ -681,7 +681,7 @@ return ctx.JSONOk("获取成功", "", []*cascader.Option{
 
 ### Search
 ``` go
-import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/search")
+import ("github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/fields/search")
 
 // 单选模式
 field.Search("category_id", "分类").
@@ -716,7 +716,7 @@ return ctx.JSONOk("获取成功", "", []*search.Option{
 
 ### Tree
 ``` go
-import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/tree")
+import ("github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/fields/tree")
 
 data := []*tree.Option{
 	{
@@ -875,7 +875,7 @@ SetWhen("notIn", []int[7, 8], func () interface{} {
 ### 通用规则
 Form 组件提供了类似PHP中Laravel框架的验证规则来验证表单提交的数据：
 ``` go
-import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/rule")
+import ("github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/rule")
 
 field.Text("title", "标题").
 SetRules([]*rule.Rule{
@@ -888,7 +888,7 @@ SetRules([]*rule.Rule{
 ### 创建页规则
 创建页面规则，只在创建表单提交时生效
 ``` go
-import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/rule")
+import ("github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/rule")
 
 field.Text("username", "用户名").
 creationRules([]*rule.Rule{
@@ -909,7 +909,7 @@ updateRules([]*rule.Rule{
 ### 数据库unique检查
 一个比较常见的场景是提交表单是检查数据是否已经存在，可以使用下面的方式：
 ``` go
-import ("github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/rule")
+import ("github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/rule")
 
 field.Text("username", "用户名").
 creationRules([]*rule.Rule{
@@ -939,7 +939,7 @@ quarkgo 提供了丰富的回调函数，用来重写数据、自定义反馈等
 
 ``` go
 import (
-	"github.com/quarkcms/quark-go/v2/pkg/utils/lister"
+	"github.com/quarkcloudio/quark-go/v2/pkg/utils/lister"
 )
 
 func (p *Menu) BeforeIndexShowing(ctx *builder.Context, list []map[string]interface{}) []interface{} {

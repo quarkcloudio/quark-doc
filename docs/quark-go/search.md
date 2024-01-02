@@ -12,8 +12,8 @@
 package search
 
 import (
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/searches"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/template/resource/searches"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"gorm.io/gorm"
 )
 
@@ -71,8 +71,8 @@ quarkgo 内置了如下搜索组件：
 package search
 
 import (
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/searches"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/template/resource/searches"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"gorm.io/gorm"
 )
 
@@ -102,9 +102,9 @@ func (p *InputField) Apply(ctx *builder.Context, query *gorm.DB, value interface
 package search
 
 import (
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/component/form/fields/selectfield"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/searches"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/component/form/fields/selectfield"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/template/resource/searches"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"gorm.io/gorm"
 )
 
@@ -140,8 +140,8 @@ func (p *SelectField) Options(ctx *builder.Context) interface{} {
 package search
 
 import (
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/searches"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/template/resource/searches"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"gorm.io/gorm"
 )
 
@@ -171,8 +171,8 @@ func (p *DateField) Apply(ctx *builder.Context, query *gorm.DB, value interface{
 package search
 
 import (
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/searches"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/template/resource/searches"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"gorm.io/gorm"
 )
 
@@ -207,8 +207,8 @@ func (p *DateRangeField) Apply(ctx *builder.Context, query *gorm.DB, value inter
 package search
 
 import (
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/searches"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/template/resource/searches"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"gorm.io/gorm"
 )
 
@@ -238,8 +238,8 @@ func (p *DatetimeField) Apply(ctx *builder.Context, query *gorm.DB, value interf
 package search
 
 import (
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/template/resource/searches"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/template/resource/searches"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"gorm.io/gorm"
 )
 

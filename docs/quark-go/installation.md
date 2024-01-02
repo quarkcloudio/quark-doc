@@ -17,10 +17,10 @@ go mod init demo/hello
 package main
 
 import (
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/service"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/install"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/middleware"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/service"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/install"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/middleware"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"github.com/glebarez/sqlite""
 	"gorm.io/gorm"
 )
@@ -114,11 +114,11 @@ package main
 import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/quarkcms/quark-go/v2/pkg/adapter/hertzadapter"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/install"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/middleware"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/service"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/adapter/hertzadapter"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/install"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/middleware"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/service"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -178,11 +178,11 @@ package main
 import (
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
-	"github.com/quarkcms/quark-go/v2/pkg/adapter/ginadapter"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/install"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/middleware"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/service"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/adapter/ginadapter"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/install"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/middleware"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/service"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -236,11 +236,11 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/quarkcms/quark-go/v2/pkg/adapter/fiberadapter"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/install"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/middleware"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/service"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/pkg/adapter/fiberadapter"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/install"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/middleware"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/service"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -313,14 +313,14 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/quarkcms/quark-go/v2/examples/zeroadmin/internal/config"
-	"github.com/quarkcms/quark-go/v2/examples/zeroadmin/internal/handler"
-	"github.com/quarkcms/quark-go/v2/examples/zeroadmin/internal/svc"
-	"github.com/quarkcms/quark-go/v2/pkg/adapter/zeroadapter"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/install"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/middleware"
-	"github.com/quarkcms/quark-go/v2/pkg/app/admin/service"
-	"github.com/quarkcms/quark-go/v2/pkg/builder"
+	"github.com/quarkcloudio/quark-go/v2/examples/zeroadmin/internal/config"
+	"github.com/quarkcloudio/quark-go/v2/examples/zeroadmin/internal/handler"
+	"github.com/quarkcloudio/quark-go/v2/examples/zeroadmin/internal/svc"
+	"github.com/quarkcloudio/quark-go/v2/pkg/adapter/zeroadapter"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/install"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/middleware"
+	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/service"
+	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
