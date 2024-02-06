@@ -21,7 +21,7 @@ Quark 是一个可以帮你快速组合页面的工具；它提供的丰富组�
 ## 技术支持
 为了避免打扰作者日常工作，你可以在Github上提交 [Issues](https://github.com/quarkcms/quark/issues)
 
-相关教程，你可以查看 [在线文档](http://www.quarkcms.com/quark/)
+相关教程，你可以查看 [在线文档](http://quarkcloud.io/quark/)
 
 ## License
 Quark is licensed under The MIT License (MIT).

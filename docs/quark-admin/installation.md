@@ -175,7 +175,7 @@ return [
                 'component' => 'icon',
                 'icon' => 'icon-question-circle',
                 'tooltip' => '使用文档',
-                'href' => 'http://www.quarkcms.com/',
+                'href' => 'http://quarkcloud.io/',
                 'target' => '_blank'
             ],
             // [
@@ -241,7 +241,7 @@ return [
     'links' => [
         [
             'title' => 'Quark',
-            'href' => 'http://www.quarkcms.com/'
+            'href' => 'http://quarkcloud.io/'
         ],
         [
             'title' => '爱小圈',
