@@ -52,21 +52,7 @@ success Already up-to-date.
 
 ```bash
 $ yarn start
-
-Starting the development server...
-
-✔ Webpack
-  Compiled successfully in 17.84s
-
- DONE  Compiled successfully in 17842ms                                       8:06:31 PM
-
-
-  App running at:
-  - Local:   http://localhost:8000 (copied to clipboard)
-  - Network: http://192.168.12.34:8000
 ```
-
-在浏览器里打开 [http://localhost:8000/](http://localhost:8000/)，就能看到界面
 
 ## 修改配置
 
@@ -113,28 +99,6 @@ tree ./dist
 ├── umi.css
 └── umi.js
 ```
-
-### 本地验证
-
-发布之前，可以通过 `serve` 做本地验证，
-
-```bash
-$ yarn global add serve
-$ serve ./dist
-
-   ┌────────────────────────────────────────────────────┐
-   │                                                    │
-   │   Serving!                                         │
-   │                                                    │
-   │   - Local:            http://localhost:5000        │
-   │   - On Your Network:  http://192.168.12.34:5000    │
-   │                                                    │
-   │   Copied local address to clipboard!               │
-   │                                                    │
-   └────────────────────────────────────────────────────┘
-```
-
-访问 [http://localhost:5000](http://localhost:5000)，正常情况下应该是和执行 `yarn start` 时是一致的。
 
 ### 部署
 
