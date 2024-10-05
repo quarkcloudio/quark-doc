@@ -12,8 +12,14 @@ hero:
       text: 快速上手 →
       link: /quark-go/
     - theme: alt
-      text: Quark UI
-      link: /quark-ui/
+      text: Go 技术栈
+      link: /quark-go/
+    - theme: alt
+      text: Java 技术栈
+      link: /quark-jar/
+    - theme: alt
+      text: PHP 技术栈
+      link: /quark-per/
 
 features:
   - title: 简约至上
