@@ -14,7 +14,7 @@ export default defineConfig({
     nav: [
       { text: 'QuarkGo', link: '/quark-go/' },
       { text: 'QuarkJar', link: '/quark-jar/' },
-      { text: 'QuarkLar', link: '/quark-lar/' },
+      { text: 'QuarkPer', link: '/quark-per/' },
       { text: 'QuarkUI', link: '/quark-ui/' }
     ],
 
@@ -44,20 +44,20 @@ export default defineConfig({
           ]
         },
       ],
-      '/quark-lar/': [
+      '/quark-per/': [
         {
-          text: 'QuarkLar文档',
-          link: '/quark-lar/',
+          text: 'QuarkPer文档',
+          link: '/quark-per/',
           items: [
-            { text: '前言', link: '/quark-lar/' },
-            { text: '入门', link: '/quark-lar/installation' },
-            { text: '资源', link: '/quark-lar/resources' },
-            { text: '搜索', link: '/quark-lar/search' },
-            { text: '行为', link: '/quark-lar/actions' },
-            { text: '指标', link: '/quark-lar/metrics' },
-            { text: '仪表盘', link: '/quark-lar/dashboards' },
-            { text: '开箱功能', link: '/quark-lar/builtin' },
-            { text: '辅助函数', link: '/quark-lar/helper' },
+            { text: '前言', link: '/quark-per/' },
+            { text: '入门', link: '/quark-per/installation' },
+            { text: '资源', link: '/quark-per/resources' },
+            { text: '搜索', link: '/quark-per/search' },
+            { text: '行为', link: '/quark-per/actions' },
+            { text: '指标', link: '/quark-per/metrics' },
+            { text: '仪表盘', link: '/quark-per/dashboards' },
+            { text: '开箱功能', link: '/quark-per/builtin' },
+            { text: '辅助函数', link: '/quark-per/helper' },
           ]
         },
       ],
