@@ -6,7 +6,7 @@ hero:
   image: /hero.png
   name: "QuarkCloud"
   text: "The Lowcode Management System"
-  tagline: Build Anything With Quark
+  tagline: Build anything with quarks!
   actions:
     - theme: brand
       text: 快速上手 →
