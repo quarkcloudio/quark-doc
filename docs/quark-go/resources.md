@@ -7,13 +7,13 @@
 ## 快速开始
 
 下面我们以内容管理为例，实现一个关于文章的 CURD 功能：
-1. 首先我们以```github.com/quarkcms/quark-smart```命名模块，执行```go mod init github.com/quarkcms/quark-smart```命令，然后参照 [快速开始](./installation.html#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B) 章节，创建好 [main.go](https://github.com/quarkcms/quark-smart/blob/main/main.go) 文件；
+1. 首先我们以```github.com/quarkcloudio/quark-smart```命名模块，执行```go mod init github.com/quarkcloudio/quark-smart```命令，然后参照 [快速开始](./installation.html#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B) 章节，创建好 [main.go](https://github.com/quarkcloudio/quark-smart/blob/main/main.go) 文件；
 2. 根据约定创建如下目录（也可自由命名）：
 ~~~
 www                         WEB部署目录
 ├─internal                  业务目录
-│  ├─admin				    后台业务目录
-│  │  ├─service				服务目录
+│  ├─app				    后台业务目录
+│  │  ├─admin				服务目录
 │  │  │  ├─action			行为目录
 │  │  │  ├─dashboard		仪表盘资源目录
 │  │  │  ├─metric      		仪表盘指标目录
@@ -29,7 +29,7 @@ www                         WEB部署目录
 │
 └─main.go                   主文件
 ~~~
-3. 打开 model 目录，创建 [post.go](https://github.com/quarkcms/quark-smart/blob/main/internal/model/post.go) 模型文件；
+3. 打开 model 目录，创建 [post.go](https://github.com/quarkcloudio/quark-smart/blob/main/internal/model/post.go) 模型文件；
 4. 在 post.go 模型文件中添加如下代码：
 
 ``` go
@@ -52,7 +52,7 @@ type Post struct {
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 }
 ```
-5. 打开 resource 目录，创建 [article.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/service/resource/article.go) 资源文件；
+5. 打开 resource 目录，创建 [article.go](https://github.com/quarkcloudio/quark-smart/blob/main/internal/admin/service/resource/article.go) 资源文件；
 6. 在 article.go 资源文件中添加如下代码：
 
 ``` go
@@ -69,7 +69,7 @@ import (
 	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/service/searches"
 	"github.com/quarkcloudio/quark-go/v2/pkg/app/admin/template/resource"
 	"github.com/quarkcloudio/quark-go/v2/pkg/builder"
-	"github.com/quarkcms/quark-smart/internal/model"
+	"github.com/quarkcloudio/quark-smart/internal/model"
 	"gorm.io/gorm"
 )
 
@@ -146,13 +146,13 @@ func (p *Article) Actions(ctx *builder.Context) []interface{} {
 	}
 }
 ```
-7. 将资源注册到 [provider.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/service/provider.go) 文件里，代码如下：
+7. 将资源注册到 [provider.go](https://github.com/quarkcloudio/quark-smart/blob/main/internal/admin/service/provider.go) 文件里，代码如下：
 
 ```go
 package admin
 
 import (
-	"github.com/quarkcms/quark-smart/internal/admin/service/resource"
+	"github.com/quarkcloudio/quark-smart/internal/admin/service/resource"
 )
 
 // 注册服务
@@ -202,7 +202,7 @@ func main() {
 }
 ```
 
-9. 重启服务后，我们打开 ```http://127.0.0.1:3000/admin/#/index?api=/api/admin/article/index``` 路径，你就可以看到文章的页面了；至此一个简单的 CURD 就完成了，完整的项目代码请打开 [Demo](https://github.com/quarkcms/quark-smart) 链接查看
+9. 重启服务后，我们打开 ```http://127.0.0.1:3000/admin/#/index?api=/api/admin/article/index``` 路径，你就可以看到文章的页面了；至此一个简单的 CURD 就完成了，完整的项目代码请打开 [Demo](https://github.com/quarkcloudio/quark-smart) 链接查看
 
 
 ## 模型
