@@ -55,7 +55,7 @@ func (p *CreateLinkAction) GetHref(ctx *builder.Context) string {
 
 ```
 
-4. 将 create_link.go 注册到对应的资源中，我们以 [post.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/service/resources/post.go) 为例，代码如下：
+4. 将 create_link.go 注册到对应的资源中，我们以 [post.go](https://github.com/quarkcloudio/quark-smart/blob/v2/internal/admin/service/resources/post.go) 为例，代码如下：
 ``` go
 // 引入包，这里省略其他代码 ...
 import (

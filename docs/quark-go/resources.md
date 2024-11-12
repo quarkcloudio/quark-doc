@@ -7,7 +7,7 @@
 ## 快速开始
 
 下面我们以内容管理为例，实现一个关于文章的 CURD 功能：
-1. 首先我们以```github.com/quarkcloudio/quark-smart```命名模块，执行```go mod init github.com/quarkcloudio/quark-smart```命令，然后参照 [快速开始](./installation.html#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B) 章节，创建好 [main.go](https://github.com/quarkcloudio/quark-smart/blob/main/main.go) 文件；
+1. 首先我们以```github.com/quarkcloudio/quark-smart```命名模块，执行```go mod init github.com/quarkcloudio/quark-smart```命令，然后参照 [快速开始](./installation.html#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B) 章节，创建好 [main.go](https://github.com/quarkcloudio/quark-smart/blob/v2/main.go) 文件；
 2. 根据约定创建如下目录（也可自由命名）：
 ~~~
 www                         WEB部署目录
@@ -29,7 +29,7 @@ www                         WEB部署目录
 │
 └─main.go                   主文件
 ~~~
-3. 打开 model 目录，创建 [post.go](https://github.com/quarkcloudio/quark-smart/blob/main/internal/model/post.go) 模型文件；
+3. 打开 model 目录，创建 [post.go](https://github.com/quarkcloudio/quark-smart/blob/v2/internal/model/post.go) 模型文件；
 4. 在 post.go 模型文件中添加如下代码：
 
 ``` go
@@ -52,7 +52,7 @@ type Post struct {
 	DeletedAt gorm.DeletedAt `json:"deleted_at"`
 }
 ```
-5. 打开 resource 目录，创建 [article.go](https://github.com/quarkcloudio/quark-smart/blob/main/internal/app/admin/resource/article.go) 资源文件；
+5. 打开 resource 目录，创建 [article.go](https://github.com/quarkcloudio/quark-smart/blob/v2/internal/app/admin/resource/article.go) 资源文件；
 6. 在 article.go 资源文件中添加如下代码：
 
 ``` go
@@ -299,7 +299,7 @@ func (p *Article) BeforeSaving(ctx *quark.Context, submitData map[string]interfa
 	return submitData, nil
 }
 ```
-7. 将资源注册到 [provider.go](https://github.com/quarkcloudio/quark-smart/blob/main/internal/app/admin/provider.go) 文件里，代码如下：
+7. 将资源注册到 [provider.go](https://github.com/quarkcloudio/quark-smart/blob/v2/internal/app/admin/provider.go) 文件里，代码如下：
 
 ```go
 package admin

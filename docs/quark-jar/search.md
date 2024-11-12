@@ -36,7 +36,7 @@ func (p *InputField) Apply(ctx *builder.Context, query *gorm.DB, value interface
 	return query.Where(p.Column+" LIKE ?", "%"+value.(string)+"%")
 }
 ```
-4. 将 input.go 注册到对应的资源中，我们以 [post.go](https://github.com/quarkcms/quark-smart/blob/main/internal/admin/service/resources/post.go) 为例，代码如下：
+4. 将 input.go 注册到对应的资源中，我们以 [post.go](https://github.com/quarkcloudio/quark-smart/blob/v2/internal/admin/service/resources/post.go) 为例，代码如下：
 ``` go
 // 引入包，这里省略其他代码 ...
 import (
