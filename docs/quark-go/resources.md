@@ -1032,7 +1032,7 @@ import ("github.com/quarkcloudio/quark-go/v3/template/admin/component/form/rule"
 
 field.Text("title", "标题").
 SetRules([]*rule.Rule{
-	rule.Required(true, "用户名必须填写"),
+	rule.Required("用户名必须填写"),
 	rule.Min(6, "用户名不能少于6个字符"),
 	rule.Max(20, "用户名不能超过20个字符"),
 })
@@ -1095,7 +1095,7 @@ import (
 	"github.com/quarkcloudio/quark-go/v2/pkg/utils/lister"
 )
 
-func (p *Menu) BeforeIndexShowing(ctx *builder.Context, list []map[string]interface{}) []interface{} {
+func (p *Menu) BeforeIndexShowing(ctx *quark.Context, list []map[string]interface{}) []interface{} {
 	// 转换成树形表格
 	tree, _ := lister.ListToTree(list, "id", "pid", "children", 0)
 
@@ -1108,7 +1108,7 @@ func (p *Menu) BeforeIndexShowing(ctx *builder.Context, list []map[string]interf
 可以通过此方法重写导出数据
 
 ``` go
-func (p *Menu) BeforeExporting(ctx *builder.Context, list []map[string]interface{}) []interface{} {
+func (p *Menu) BeforeExporting(ctx *quark.Context, list []map[string]interface{}) []interface{} {
 	result := []interface{}{}
 	for _, v := range list {
 		result = append(result, v)
@@ -1123,7 +1123,7 @@ func (p *Menu) BeforeExporting(ctx *builder.Context, list []map[string]interface
 可以通过此方法重写导入数据
 
 ``` go
-func (p *Menu) BeforeImporting(ctx *builder.Context, list [][]interface{}) [][]interface{} {
+func (p *Menu) BeforeImporting(ctx *quark.Context, list [][]interface{}) [][]interface{} {
 	return list
 }
 ```
@@ -1133,7 +1133,7 @@ func (p *Menu) BeforeImporting(ctx *builder.Context, list [][]interface{}) [][]i
 可以通过此方法重写详情页数据
 
 ``` go
-func (p *Menu) BeforeDetailShowing(ctx *builder.Context, data map[string]interface{}) map[string]interface{} {
+func (p *Menu) BeforeDetailShowing(ctx *quark.Context, data map[string]interface{}) map[string]interface{} {
 	return data
 }
 ```
@@ -1143,7 +1143,7 @@ func (p *Menu) BeforeDetailShowing(ctx *builder.Context, data map[string]interfa
 可以通过此方法初始化表单数据
 
 ``` go
-func (p *Menu) BeforeCreating(ctx *builder.Context) map[string]interface{} {
+func (p *Menu) BeforeCreating(ctx *quark.Context) map[string]interface{} {
 	return map[string]interface{}{}
 }
 ```
@@ -1153,7 +1153,7 @@ func (p *Menu) BeforeCreating(ctx *builder.Context) map[string]interface{} {
 可以通过此方法可以重写编辑页数据
 
 ``` go
-func (p *Menu) BeforeEditing(request *builder.Context, data map[string]interface{}) map[string]interface{} {
+func (p *Menu) BeforeEditing(request *quark.Context, data map[string]interface{}) map[string]interface{} {
 	return data
 }
 ```
@@ -1163,7 +1163,7 @@ func (p *Menu) BeforeEditing(request *builder.Context, data map[string]interface
 可以通过此方法可以自定义表单数据
 
 ``` go
-func (p *Menu) BeforeSaving(ctx *builder.Context, submitData map[string]interface{}) (map[string]interface{}, error) {
+func (p *Menu) BeforeSaving(ctx *quark.Context, submitData map[string]interface{}) (map[string]interface{}, error) {
 	return submitData, nil
 }
 ```
@@ -1173,7 +1173,7 @@ func (p *Menu) BeforeSaving(ctx *builder.Context, submitData map[string]interfac
 可以通过此方法可以自定义表单提交成功后的其他操作
 
 ``` go
-func (p *Menu) AfterSaved(ctx *builder.Context, id int, data map[string]interface{}, result *gorm.DB) interface{} {
+func (p *Menu) AfterSaved(ctx *quark.Context, id int, data map[string]interface{}, result *gorm.DB) interface{} {
 	if result.Error != nil {
 		return ctx.JSON(200, msg.Error(result.Error.Error(), ""))
 	}
