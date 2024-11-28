@@ -88,7 +88,7 @@ func (p *Article) Init(ctx *quark.Context) interface{} {
 	p.Model = &model.Post{}
 
 	// 分页
-	p.PerPage = 10
+	p.PageSize = 10
 
 	return p
 }
@@ -391,14 +391,14 @@ func (p *Article) Init(ctx *quark.Context) interface{} {
 
 ## 列表分页
 
-通过资源的`PerPage`属性设置每页数量或者关闭分页，当值未设置时，即关闭了列表分页功能：
+通过资源的`PageSize`属性设置每页数量或者关闭分页，当值未设置时，即关闭了列表分页功能：
 
 ```go
 // 初始化
 func (p *Article) Init(ctx *quark.Context) interface{} {
 
 	// 分页
-	p.PerPage = 10
+	p.PageSize = 10
 
 	return p
 }
